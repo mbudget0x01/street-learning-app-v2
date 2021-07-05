@@ -8,7 +8,7 @@ interface Props {
 }
 export const Map = (props:Props) => {
     return (
-        <MapContainer center={[47.538002, 7.571211]} zoom={13} scrollWheelZoom={true} zoomControl={false} boxZoom={false}>
+        <MapContainer center={[47.538002, 7.571211]} zoom={13} scrollWheelZoom={true} zoomControl={true} boxZoom={false}>
             <LayersControl position="topright">
                 <LayersControl.BaseLayer checked={props.uiMode === 'light'}  name="Light">
                     <TileLayer

@@ -1,8 +1,10 @@
 import { createMuiTheme, Theme } from '@material-ui/core';
 import { AppBar, CssBaseline, makeStyles, ThemeProvider, Toolbar, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
+import { FileSelector } from './learning/FileSelector';
 import { Map } from './map/Map'
 import { ThemeSwitch, ThemeType } from './theme';
+import './App.css'
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -13,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
   },
   main: {
+    offset: theme.mixins.toolbar.height?.valueOf,
     display: 'grid',
     height: '100vh',
     width: '100%',
@@ -24,10 +27,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
     justifySelf: 'start',
   },
+  mainColumn: {
+    width: '100%',
+    gridColumn: 1,
+  },
+  asideColumn: {
+    width: '100%',
+    gridColumn: 2,
+  },
 }))
 
 function App() {
 
+  const testhandleclick = (t:string) => {
+    console.log(t);
+    
+  }
   const classes = useStyles()
 
   const [themeType, setThemeType] = useState<ThemeType>('light')
@@ -49,7 +64,12 @@ function App() {
           </Toolbar>
         </AppBar>
         <div className={classes.main}>
-          <Map uiMode={themeType} />
+          <div className={classes.mainColumn}>
+            <Map uiMode={themeType} />
+          </div>
+          <div className={classes.asideColumn}>
+            <FileSelector files={["test1", "test2"]} onChanged={testhandleclick} />
+          </div>
         </div>
       </div>
     </ThemeProvider>
