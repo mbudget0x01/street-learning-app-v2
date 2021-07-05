@@ -1,10 +1,13 @@
 import { createMuiTheme, Theme } from '@material-ui/core';
 import { AppBar, CssBaseline, makeStyles, ThemeProvider, Toolbar, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FileSelector } from './learning/FileSelector';
 import { Map } from './map/Map'
 import { ThemeSwitch, ThemeType } from './theme';
 import './App.css'
+import { loadFiles } from './learning/FileHandler'
+import { LearningFile } from './learning/LearningFile';
+
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,10 +42,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function App() {
 
-  const testhandleclick = (t:string) => {
+  const testhandleclick = (t: LearningFile) => {
     console.log(t);
-    
+    console.log(t.getStreets().then((streets: string[]) => streets[0])
+    )
   }
+
   const classes = useStyles()
 
   const [themeType, setThemeType] = useState<ThemeType>('light')
@@ -68,7 +73,7 @@ function App() {
             <Map uiMode={themeType} />
           </div>
           <div className={classes.asideColumn}>
-            <FileSelector files={["test1", "test2"]} onChanged={testhandleclick} />
+            <FileSelector files={loadFiles()} onChanged={testhandleclick} />
           </div>
         </div>
       </div>

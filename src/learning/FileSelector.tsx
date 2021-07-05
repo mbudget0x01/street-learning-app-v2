@@ -1,5 +1,7 @@
 import { List, ListItem, ListItemIcon, ListItemText, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { Description } from '@material-ui/icons';
+import { useState } from "react";
+import { LearningFile } from "./LearningFile";
 
 
 interface FileListItemProps {
@@ -19,20 +21,29 @@ const FileListItem = (props: FileListItemProps) => {
 }
 
 interface FileSelectorProps {
-    files: string[],
-    onChanged: (fileTitle:string) => void,
-    //handler
+    files: Promise<LearningFile[]>,
+    onChanged: (selectedFile:LearningFile) => void,
 }
 
 export const FileSelector = (props: FileSelectorProps) => {
     const classes = useStyles();
+    const [values, setValues] = useState<LearningFile[]>([]);
+    props.files.then((files:LearningFile[]) => setValues(files));
+
+    const onClickedHandler = (fileName:string) => {
+        values.forEach(element => {
+            if(element.title === fileName){
+                props.onChanged(element);
+            }
+        });
+    }
 
     return (
         <div className={classes.root}>
             <List component="nav" aria-label="main file-list">
                 {
-                    props.files.map((file: string) => (
-                        <FileListItem fileTitle={file} key={file} onClick={props.onChanged} />
+                    values.map((file: LearningFile) => (
+                        <FileListItem fileTitle={file.title} key={file.title} onClick={onClickedHandler} />
                     ))
                 }
             </List>
