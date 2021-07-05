@@ -44,13 +44,13 @@ function App() {
 
   const testhandleclick = (t: LearningFile) => {
     console.log(t);
-    console.log(t.getStreets().then((streets: string[]) => streets[0])
-    )
+    console.log(t.getStreets().then((streets: string[]) => streets[0]));
   }
 
   const classes = useStyles()
 
   const [themeType, setThemeType] = useState<ThemeType>('light')
+
 
   const theme = createMuiTheme({
     palette: {

@@ -7,11 +7,12 @@ import { LearningFile } from "./LearningFile";
 interface FileListItemProps {
     fileTitle: string,
     onClick: (fileTitle:string) => void,
+    isDisabled: boolean,
 }
 
 const FileListItem = (props: FileListItemProps) => {
     return (
-        <ListItem button onClick={(event) => props.onClick(props.fileTitle)}>
+        <ListItem button onClick={(event) => props.onClick(props.fileTitle)} disabled={props.isDisabled}>
             <ListItemIcon >
                 <Description />
             </ListItemIcon>
@@ -28,6 +29,7 @@ interface FileSelectorProps {
 export const FileSelector = (props: FileSelectorProps) => {
     const classes = useStyles();
     const [values, setValues] = useState<LearningFile[]>([]);
+    const [isDisabled, setDisabled] = useState<boolean>(false)
     props.files.then((files:LearningFile[]) => setValues(files));
 
     const onClickedHandler = (fileName:string) => {
@@ -36,6 +38,7 @@ export const FileSelector = (props: FileSelectorProps) => {
                 props.onChanged(element);
             }
         });
+        setDisabled(true);
     }
 
     return (
@@ -43,7 +46,7 @@ export const FileSelector = (props: FileSelectorProps) => {
             <List component="nav" aria-label="main file-list">
                 {
                     values.map((file: LearningFile) => (
-                        <FileListItem fileTitle={file.title} key={file.title} onClick={onClickedHandler} />
+                        <FileListItem fileTitle={file.title} key={file.title} onClick={onClickedHandler} isDisabled={isDisabled}/>
                     ))
                 }
             </List>
