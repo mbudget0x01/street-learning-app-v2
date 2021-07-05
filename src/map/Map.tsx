@@ -1,19 +1,28 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { LayersControl, MapContainer, TileLayer } from "react-leaflet";
 import 'leaflet/dist/leaflet.css';
 import './Map.css'
+import { ThemeType } from "../theme";
 
-export const Map = () => {
+interface Props {
+    uiMode: ThemeType
+}
+export const Map = (props:Props) => {
     return (
-        <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
-            <TileLayer
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={[51.505, -0.09]}>
-                <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-            </Marker>
+        <MapContainer center={[47.538002, 7.571211]} zoom={13} scrollWheelZoom={true} zoomControl={false} boxZoom={false}>
+            <LayersControl position="topright">
+                <LayersControl.BaseLayer checked={props.uiMode === 'light'}  name="Light">
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                        url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+                    />
+                </LayersControl.BaseLayer>
+                <LayersControl.BaseLayer checked={props.uiMode === 'dark'} name="Dark">
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                        url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
+                    />
+                </LayersControl.BaseLayer>
+            </LayersControl>
         </MapContainer>
     )
 }
