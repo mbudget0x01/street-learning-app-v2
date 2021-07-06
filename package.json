@@ -39,7 +39,6 @@
         "not op_mini all"
     ],
     "devDependencies": {
-        "@types/leaflet": "^1.7.3",
-        "@types/xml2js": "^0.4.9"
+        "@types/leaflet": "^1.7.3"
     }
 }
