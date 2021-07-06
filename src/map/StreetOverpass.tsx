@@ -13,8 +13,15 @@ export const StreetOverpass = (props: Props) => {
 
     const [waypoints, setSetWaypoints] = useState<LatLngExpression[][]>([])
     const [fetchCompleted, setFetchCompleted] = useState<boolean>(false)
+    const [lastQuery, setLastQuery] = useState<string>("")
+    
+    
+    if(lastQuery !== props.query){
+        setFetchCompleted(false)
+    }
 
-    if (!fetchCompleted) {
+    if (!fetchCompleted && props.query !== "") {
+        setLastQuery(props.query.valueOf())
         setFetchCompleted(true)
         fetchStreet(props.query, props.OverpassAreaId).then((resp) => {
             if (resp == null) {

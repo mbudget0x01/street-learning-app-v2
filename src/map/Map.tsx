@@ -5,7 +5,8 @@ import { ThemeType } from "../theme";
 import { StreetOverpass } from "./StreetOverpass";
 
 interface Props {
-    uiMode: ThemeType
+    uiMode: ThemeType,
+    query: string
 }
 export const Map = (props: Props) => {
 
@@ -25,7 +26,7 @@ export const Map = (props: Props) => {
                     />
                 </LayersControl.BaseLayer>
             </LayersControl>
-            <StreetOverpass OverpassAreaId={"3601683625"} query={"Hauptstrasse"}/>
+            <StreetOverpass OverpassAreaId={"3601683625"} query={props.query}/>
         </MapContainer>
     )
 }

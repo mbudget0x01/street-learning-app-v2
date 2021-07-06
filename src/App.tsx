@@ -9,6 +9,7 @@ import { loadFiles } from './fileHandling/FileHandler'
 import { LearningFile } from './fileHandling/LearningFile';
 import { AdvanceQuestionButton } from './ui/AdvanceQuestionButton';
 import { ProgressHandler } from './progress/ProgressHandler';
+import { QuestionDisplay } from './ui/QuestionDisplay';
 
 
 
@@ -48,6 +49,13 @@ function App() {
     setProgressHandler(new ProgressHandler(file, afterLoadEventHandler))
   }
 
+  const handleCheckClick = () => {
+    if(activeQuestion === undefined){
+      return
+    }
+    setActiveQuery(activeQuestion)
+  }
+
   const afterLoadEventHandler = () => {
     setGameIsReady(true);
   }
@@ -63,16 +71,14 @@ function App() {
     }
 
     setActiveQuestion(progressHandler.getNextStreet())
-    console.log("active Question", activeQuestion);
-
-
   }
   const classes = useStyles()
 
   const [themeType, setThemeType] = useState<ThemeType>('light')
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
   const [progressHandler, setProgressHandler] = useState<ProgressHandler | null>(null)
-  const [activeQuestion, setActiveQuestion] = useState<String | undefined>(undefined)
+  const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
+  const [activeQuery, setActiveQuery] = useState<string>("")
 
 
   const theme = createMuiTheme({
@@ -91,9 +97,12 @@ function App() {
             <ThemeSwitch themeType={themeType} onThemeChange={setThemeType} />
           </Toolbar>
         </AppBar>
+        <div>
+          <QuestionDisplay activeQuestion={activeQuestion} isDisabled={!gameIsReady} onCheckCklickHandler={handleCheckClick} />
+        </div>
         <div className={classes.main}>
           <div className={classes.mainColumn}>
-            <Map uiMode={themeType} />
+            <Map uiMode={themeType} query={activeQuery} />
           </div>
           <div className={classes.asideColumn}>
             <FileSelector files={loadFiles()} onChanged={handleFileListClick} />

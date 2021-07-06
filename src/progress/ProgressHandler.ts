@@ -26,6 +26,7 @@ export class ProgressHandler {
     public getNextStreet(): string {
         let i:number =  Math.floor(Math.random() * this.missingProgress.length) -1
         console.log("i", i);
+        if(i < 0){i=0}
         
         return this.missingProgress[i].trim()
     }
