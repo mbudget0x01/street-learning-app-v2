@@ -19,7 +19,6 @@ export const fetchStreet = async (
 ): Promise<Elements[]> => {
   try {
     const query = `[out:json][timeout:25];area(${OverpassAreaId})->.searchArea;(node["name"="${streetName}"](area.searchArea);way["name"="${streetName}"](area.searchArea);relation["name"="${streetName}"](area.searchArea););out body;>;out skel qt;`;
-    console.log("query",query);
     
     const formBody = "data=" + encodeURIComponent(query);
     const requestOptions = {
