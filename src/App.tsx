@@ -7,6 +7,8 @@ import { ThemeSwitch, ThemeType } from './theme';
 import './App.css'
 import { loadFiles } from './fileHandling/FileHandler'
 import { LearningFile } from './fileHandling/LearningFile';
+import { AdvanceQuestionButton } from './ui/AdvanceQuestionButton';
+import { ProgressHandler } from './progress/ProgressHandler';
 
 
 
@@ -42,14 +44,35 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function App() {
 
-  const testhandleclick = (t: LearningFile) => {
-    console.log(t);
-    console.log(t.getStreets().then((streets: string[]) => streets[0]));
+  const handleFileListClick = (file: LearningFile) => {
+    setProgressHandler(new ProgressHandler(file, afterLoadEventHandler))
   }
 
+  const afterLoadEventHandler = () => {
+    setGameIsReady(true);
+  }
+
+  const buttonAdvanceClickHandler = () => {
+    if (progressHandler == null) {
+      return
+    }
+
+    if (!progressHandler.hasNextStreet()) {
+      console.log("empty");
+
+    }
+
+    setActiveQuestion(progressHandler.getNextStreet())
+    console.log("active Question", activeQuestion);
+
+
+  }
   const classes = useStyles()
 
   const [themeType, setThemeType] = useState<ThemeType>('light')
+  const [gameIsReady, setGameIsReady] = useState<boolean>(false)
+  const [progressHandler, setProgressHandler] = useState<ProgressHandler | null>(null)
+  const [activeQuestion, setActiveQuestion] = useState<String | undefined>(undefined)
 
 
   const theme = createMuiTheme({
@@ -73,7 +96,8 @@ function App() {
             <Map uiMode={themeType} />
           </div>
           <div className={classes.asideColumn}>
-            <FileSelector files={loadFiles()} onChanged={testhandleclick} />
+            <FileSelector files={loadFiles()} onChanged={handleFileListClick} />
+            <AdvanceQuestionButton isDisabled={!gameIsReady} onClickHandler={buttonAdvanceClickHandler} />
           </div>
         </div>
       </div>

@@ -14,15 +14,10 @@ export async function loadFiles(): Promise<LearningFile[]> {
     return resp;
 }
 
-export async function loadStreets(fileName:string) {
-    console.log(fileName);
-    
+export async function loadStreets(fileName:string) { 
     let response = await fetch('assets/streets/'+ fileName)
     let text = await response.text()
-
-
     let a: string[] = JSON.parse(text);
-    console.log(a);
     
     return a;
 }
