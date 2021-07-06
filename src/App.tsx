@@ -41,6 +41,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     gridColumn: 2,
   },
+  responsiveCard:{
+    [theme.breakpoints.up('sm')]: {
+      position: 'fixed !important',
+      bottom: '0px',
+      zIndex: 1002,
+      width: '100vw'
+    },
+  }
 }))
 
 function App() {
@@ -98,8 +106,8 @@ function App() {
             <ThemeSwitch themeType={themeType} onThemeChange={setThemeType} />
           </Toolbar>
         </AppBar>
-        <div>
-          <QuestionDisplay activeQuestion={activeQuestion} isDisabled={!gameIsReady} onCheckCklickHandler={buttonDisplayClickHandler} />
+        <div className={classes.responsiveCard}>
+          <QuestionDisplay activeQuestion={activeQuestion} isDisabled={!gameIsReady} onCheckCklickHandler={buttonDisplayClickHandler}/>
         </div>
         <div className={classes.main}>
           <div className={classes.mainColumn}>

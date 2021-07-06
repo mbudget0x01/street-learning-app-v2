@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme: Theme) =>
             width: "100%",
             display: "flex",
             alignItems: 'center',
-            columnGap: '20px'
+            columnGap: '20px',
+            paddingLeft: '5px',
         },
         button: {
             marginTop: '5px',
