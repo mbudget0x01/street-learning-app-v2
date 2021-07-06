@@ -1,67 +1,114 @@
-import { createMuiTheme, Theme } from '@material-ui/core';
-import { AppBar, CssBaseline, makeStyles, ThemeProvider, Toolbar, Typography } from '@material-ui/core';
-import { useState } from 'react';
-import { FileSelector } from './fileHandling/FileSelector';
-import { Map } from './map/Map'
+import React, { useState } from 'react';
+import clsx from 'clsx';
+import { makeStyles, Theme, createStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import { ThemeSwitch, ThemeType } from './theme';
-import './App.css'
+import { Map } from './map/Map'
+import { FileSelector } from './fileHandling/FileSelector';
 import { loadFiles } from './fileHandling/FileHandler'
-import { LearningFile } from './fileHandling/LearningFile';
-import { AdvanceQuestionButton } from './ui/AdvanceQuestionButton';
 import { ProgressHandler } from './progress/ProgressHandler';
+import { LearningFile } from './fileHandling/LearningFile';
+import { version } from '../package.json'
+import CodeIcon from '@material-ui/icons/Code';
 import { QuestionDisplay } from './ui/QuestionDisplay';
-import {version} from '../package.json'
 
+const drawerWidth = 240;
 
-const useStyles = makeStyles((theme: Theme) => ({
-  toolbar: {
-    ...theme.mixins.toolbar,
-    display: 'flex',
-    justifyItems: 'end',
-    flexGrow: 1,
-  },
-  main: {
-    offset: theme.mixins.toolbar.height?.valueOf,
-    display: 'grid',
-    height: '100vh',
-    width: '100%',
-    gridTemplateColumns: '1fr',
-    justifyItems: 'center',
-    overflow: 'auto',
-  },
-  title: {
-    flexGrow: 1,
-    justifySelf: 'start',
-  },
-  mainColumn: {
-    width: '100%',
-    gridColumn: 1,
-  },
-  asideColumn: {
-    width: '100%',
-    gridColumn: 2,
-  },
-  responsiveCard:{
-    [theme.breakpoints.up('sm')]: {
-      position: 'fixed !important',
-      bottom: '0px',
-      zIndex: 1002,
-      width: '100vw'
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
     },
-  }
-}))
-
-function App() {
-
-  const hooseFileClickHandler = (file: LearningFile) => {
-    setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler))
-  }
-
-  const buttonDisplayClickHandler = () => {
-    if(activeQuestion === undefined){
-      return
+    appBar: {
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+    appBarShift: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    hide: {
+      display: 'none',
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+    drawerPaper: {
+      width: drawerWidth,
+    },
+    drawerHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
+      justifyContent: 'flex-end',
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      marginLeft: -drawerWidth,
+    },
+    contentShift: {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    },
+    map: {
+      height: '80vh'
     }
-    setActiveQuery(activeQuestion)
+  }),
+);
+
+export default function PersistentDrawerLeft() {
+  const classes = useStyles();
+  //const theme = useTheme();
+  const [open, setOpen] = React.useState(true);
+  const [themeType, setThemeType] = useState<ThemeType>('light')
+  const [gameIsReady, setGameIsReady] = useState<boolean>(false)
+  const [progressHandler, setProgressHandler] = useState<ProgressHandler | null>(null)
+  const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
+  const [activeQuery, setActiveQuery] = useState<string>("")
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const chooseFileClickHandler = (file: LearningFile) => {
+    setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler))
   }
 
   const afterProgressHandlerLoadEventHandler = () => {
@@ -72,22 +119,18 @@ function App() {
     if (progressHandler == null) {
       return
     }
-
     if (!progressHandler.hasNextStreet()) {
       console.log("empty");
-
     }
-
     setActiveQuestion(progressHandler.getNextStreet())
   }
-  const classes = useStyles()
 
-  const [themeType, setThemeType] = useState<ThemeType>('light')
-  const [gameIsReady, setGameIsReady] = useState<boolean>(false)
-  const [progressHandler, setProgressHandler] = useState<ProgressHandler | null>(null)
-  const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
-  const [activeQuery, setActiveQuery] = useState<string>("")
-
+  const buttonDisplayClickHandler = () => {
+    if (activeQuestion === undefined) {
+      return
+    }
+    setActiveQuery(activeQuestion)
+  }
 
   const theme = createMuiTheme({
     palette: {
@@ -96,32 +139,70 @@ function App() {
   })
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <div>
-        <AppBar>
-          <Toolbar className={classes.toolbar}>
-            <Typography variant="h6" className={classes.title}>Street Learning App V2</Typography>
-            <Typography variant="subtitle1" className={classes.title}>{"Version " + version}</Typography>
+    <div className={classes.root}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              Street Learning App V2
+            </Typography>
             <ThemeSwitch themeType={themeType} onThemeChange={setThemeType} />
           </Toolbar>
         </AppBar>
-        <div className={classes.responsiveCard}>
-          <QuestionDisplay activeQuestion={activeQuestion} isDisabled={!gameIsReady} onCheckCklickHandler={buttonDisplayClickHandler}/>
-        </div>
-        <div className={classes.main}>
-          <div className={classes.mainColumn}>
+        <Drawer
+          className={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.drawerHeader}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            <ListItem>
+              <ListItemIcon><CodeIcon /></ListItemIcon>
+              <ListItemText primary={"Version " + version} />
+            </ListItem>
+          </List>
+          <Divider />
+          <FileSelector files={loadFiles()} onChanged={chooseFileClickHandler} />
+        </Drawer>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.drawerHeader} />
+          <div>
+            <QuestionDisplay activeQuestion={activeQuestion} isDisabled={!gameIsReady} onCheckCklickHandler={buttonDisplayClickHandler} onAdvanceClickHandler={buttonAdvanceClickHandler} />
+          </div>
+          <div id="map-wrapper" className={classes.map}>
             <Map uiMode={themeType} query={activeQuery} />
           </div>
-          <div className={classes.asideColumn}>
-            <FileSelector files={loadFiles()} onChanged={hooseFileClickHandler} />
-            <AdvanceQuestionButton isDisabled={!gameIsReady} onClickHandler={buttonAdvanceClickHandler} />
-            <Typography variant="caption">{"Version " + version}</Typography>
-          </div>
-        </div>
-      </div>
-    </ThemeProvider>
+
+        </main>
+      </ThemeProvider>
+    </div>
   );
 }
-
-export default App;
