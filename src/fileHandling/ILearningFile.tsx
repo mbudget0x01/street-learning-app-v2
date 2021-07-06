@@ -4,4 +4,5 @@ export interface ILearningFile{
     zipCode: string;
     city: string;
     countryCode: string;
+    OverpassAreaId: string;
 } 

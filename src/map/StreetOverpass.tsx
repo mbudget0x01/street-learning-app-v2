@@ -4,7 +4,7 @@ import { Polyline } from 'react-leaflet'
 import { fetchStreet, Elements } from './overpass/OverpassApi'
 
 interface Props {
-    city: string,
+    OverpassAreaId: string,
     query: string
 }
 
@@ -16,7 +16,7 @@ export const StreetOverpass = (props: Props) => {
 
     if (!fetchCompleted) {
         setFetchCompleted(true)
-        fetchStreet(props.query, props.city).then((resp) => {
+        fetchStreet(props.query, props.OverpassAreaId).then((resp) => {
             console.log(resp);
             if (resp == null) {
                 return

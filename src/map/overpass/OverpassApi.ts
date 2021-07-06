@@ -15,10 +15,10 @@ export type Elements = {
 
 export const fetchStreet = async (
   streetName: string,
-  city: string
+  OverpassAreaId: string
 ): Promise<Elements[]> => {
   try {
-    const query = `[out:json][timeout:25];area(3601683625)->.searchArea;(node["name"="${streetName}"](area.searchArea);way["name"="${streetName}"](area.searchArea);relation["name"="${streetName}"](area.searchArea););out body;>;out skel qt;`;
+    const query = `[out:json][timeout:25];area(${OverpassAreaId})->.searchArea;(node["name"="${streetName}"](area.searchArea);way["name"="${streetName}"](area.searchArea);relation["name"="${streetName}"](area.searchArea););out body;>;out skel qt;`;
     console.log("query",query);
     
     const formBody = "data=" + encodeURIComponent(query);
