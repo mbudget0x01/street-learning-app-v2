@@ -1,17 +1,8 @@
 [{
-        "title": "Binningen BL",
-        "fileName": "binningen-bl.json",
-        "countryCode": "ch",
-        "city": "Binningen",
-        "zipCode": "4102",
-        "OverpassAreaId": "3601683625"
-    },
-    {
-        "title": "Binningen BL Test",
-        "fileName": "binningen-bl.json",
-        "countryCode": "ch",
-        "city": "Binningen",
-        "zipCode": "4102",
-        "OverpassAreaId": "3601683625"
-    }
-]
+    "title": "Binningen BL",
+    "fileName": "binningen-bl.json",
+    "countryCode": "ch",
+    "city": "Binningen",
+    "zipCode": "4102",
+    "OverpassAreaId": "3601683625"
+}]

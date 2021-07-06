@@ -45,18 +45,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function App() {
 
-  const handleFileListClick = (file: LearningFile) => {
-    setProgressHandler(new ProgressHandler(file, afterLoadEventHandler))
+  const hooseFileClickHandler = (file: LearningFile) => {
+    setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler))
   }
 
-  const handleCheckClick = () => {
+  const buttonDisplayClickHandler = () => {
     if(activeQuestion === undefined){
       return
     }
     setActiveQuery(activeQuestion)
   }
 
-  const afterLoadEventHandler = () => {
+  const afterProgressHandlerLoadEventHandler = () => {
     setGameIsReady(true);
   }
 
@@ -98,14 +98,14 @@ function App() {
           </Toolbar>
         </AppBar>
         <div>
-          <QuestionDisplay activeQuestion={activeQuestion} isDisabled={!gameIsReady} onCheckCklickHandler={handleCheckClick} />
+          <QuestionDisplay activeQuestion={activeQuestion} isDisabled={!gameIsReady} onCheckCklickHandler={buttonDisplayClickHandler} />
         </div>
         <div className={classes.main}>
           <div className={classes.mainColumn}>
             <Map uiMode={themeType} query={activeQuery} />
           </div>
           <div className={classes.asideColumn}>
-            <FileSelector files={loadFiles()} onChanged={handleFileListClick} />
+            <FileSelector files={loadFiles()} onChanged={hooseFileClickHandler} />
             <AdvanceQuestionButton isDisabled={!gameIsReady} onClickHandler={buttonAdvanceClickHandler} />
           </div>
         </div>
