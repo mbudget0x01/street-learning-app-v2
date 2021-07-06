@@ -3,7 +3,8 @@ import 'leaflet/dist/leaflet.css';
 import './Map.css'
 import { ThemeType } from "../theme";
 import { EsriProvider } from 'leaflet-geosearch'
-import { Street } from "./Street";
+import { StreetPolyline } from "./StreetPolyline";
+import { StreetOverpass } from "./StreetOverpass";
 
 interface Props {
     uiMode: ThemeType
@@ -30,7 +31,7 @@ export const Map = (props: Props) => {
                     />
                 </LayersControl.BaseLayer>
             </LayersControl>
-            <Street provider={provider} query={query} />
+            <StreetOverpass city={"Binningen"} query={"Hauptstrasse"}/>
         </MapContainer>
     )
 }

@@ -10,7 +10,7 @@ interface Props {
 }
 
 
-export const Street = (props: Props) => {
+export const StreetPolyline = (props: Props) => {
 
     const [bounds, setBounds] = useState<LatLngExpression[] | LatLngExpression[][]>([latLng(0, 0)])
     const [resolvedQuery, setResolvedQuery] = useState<string>("")
