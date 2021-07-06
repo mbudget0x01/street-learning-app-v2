@@ -5,3 +5,7 @@ To add new Streets you just need to add a new .json file. After this add your fi
 Now you are ready to go. ;-)
 
 If needed open an issue and i try to help out as far as i can :-)
+
+## Deployment
+
+As I love to dockerize everything. All you need is the Dockerfile and you are ready to go :-)
