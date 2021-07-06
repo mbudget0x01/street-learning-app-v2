@@ -1,12 +1,12 @@
 import { createMuiTheme, Theme } from '@material-ui/core';
 import { AppBar, CssBaseline, makeStyles, ThemeProvider, Toolbar, Typography } from '@material-ui/core';
 import { useState } from 'react';
-import { FileSelector } from './learning/FileSelector';
+import { FileSelector } from './fileHandling/FileSelector';
 import { Map } from './map/Map'
 import { ThemeSwitch, ThemeType } from './theme';
 import './App.css'
-import { loadFiles } from './learning/FileHandler'
-import { LearningFile } from './learning/LearningFile';
+import { loadFiles } from './fileHandling/FileHandler'
+import { LearningFile } from './fileHandling/LearningFile';
 
 
 
