@@ -10,7 +10,7 @@ import { LearningFile } from './fileHandling/LearningFile';
 import { AdvanceQuestionButton } from './ui/AdvanceQuestionButton';
 import { ProgressHandler } from './progress/ProgressHandler';
 import { QuestionDisplay } from './ui/QuestionDisplay';
-
+import {version} from '../package.json'
 
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -94,6 +94,7 @@ function App() {
         <AppBar>
           <Toolbar className={classes.toolbar}>
             <Typography variant="h6" className={classes.title}>Street Learning App V2</Typography>
+            <Typography variant="subtitle1" className={classes.title}>{"Version " + version}</Typography>
             <ThemeSwitch themeType={themeType} onThemeChange={setThemeType} />
           </Toolbar>
         </AppBar>
@@ -107,6 +108,7 @@ function App() {
           <div className={classes.asideColumn}>
             <FileSelector files={loadFiles()} onChanged={hooseFileClickHandler} />
             <AdvanceQuestionButton isDisabled={!gameIsReady} onClickHandler={buttonAdvanceClickHandler} />
+            <Typography variant="caption">{"Version " + version}</Typography>
           </div>
         </div>
       </div>
