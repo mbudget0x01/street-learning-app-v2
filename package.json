@@ -40,6 +40,8 @@
         "not op_mini all"
     ],
     "devDependencies": {
+        "@iconify-icons/mdi": "^1.1.15",
+        "@iconify/react": "^1.1.4",
         "@types/leaflet": "^1.7.3"
     }
 }
