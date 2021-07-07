@@ -14,12 +14,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 interface QuestionListItemProps{
-    question: IQuestion
+    question: IQuestion,
+    onClick: (question:IQuestion) => void,
 }
 
 const QuestionListItem = (props: QuestionListItemProps) => {
     return (
-        <ListItem>
+        <ListItem button onClick={(event) => props.onClick(props.question)}>
             <ListItemIcon >
                 {props.question.answerdCorrect ? <Check/> : <Clear/>}
             </ListItemIcon>
@@ -30,6 +31,7 @@ const QuestionListItem = (props: QuestionListItemProps) => {
 
 interface Props{
     questions:IQuestion[]
+    onQuestionClick: (question:IQuestion) => void,
 }
 
 export const ProgressList = (props:Props) =>{
@@ -44,7 +46,7 @@ export const ProgressList = (props:Props) =>{
             }>
                 {
                     props.questions.map((question:IQuestion) => (
-                        <QuestionListItem question={question} key={question.street}/>
+                        <QuestionListItem question={question} key={question.street} onClick={props.onQuestionClick}/>
                     ))
                 }
             </List>

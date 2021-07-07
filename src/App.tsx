@@ -139,6 +139,10 @@ export default function PersistentDrawerLeft() {
     setActiveQuery(activeQuestion)
   }
 
+  const onQuestionClickHandler = (question:IQuestion) => {
+    setActiveQuery(question.street)
+  }
+
   const theme = createMuiTheme({
     palette: {
       type: themeType,
@@ -199,7 +203,7 @@ export default function PersistentDrawerLeft() {
           <Divider />
           <FileSelector files={loadFiles()} onChanged={chooseFileClickHandler} />
           <Divider />
-          <ProgressList questions={streets} />
+          <ProgressList questions={streets} onQuestionClick={onQuestionClickHandler}/>
         </Drawer>
         <main
           className={clsx(classes.content, {
