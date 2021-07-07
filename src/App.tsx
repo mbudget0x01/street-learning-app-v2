@@ -25,6 +25,8 @@ import { version } from '../package.json'
 import CodeIcon from '@material-ui/icons/Code';
 import { QuestionDisplay } from './ui/QuestionDisplay';
 import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
+import { ProgressList } from './progress/ProgressList';
+import { IQuestion } from './progress/IQuestion';
 
 const drawerWidth = 240;
 
@@ -97,6 +99,7 @@ export default function PersistentDrawerLeft() {
   const [themeType, setThemeType] = useState<ThemeType>('light')
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
   const [progressHandler, setProgressHandler] = useState<ProgressHandler | null>(null)
+  const [streets, setStreets] = useState<IQuestion[]>([])
   const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
   const [activeQuery, setActiveQuery] = useState<string>("")
 
@@ -112,8 +115,11 @@ export default function PersistentDrawerLeft() {
     setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler))
   }
 
-  const afterProgressHandlerLoadEventHandler = () => {
+  const afterProgressHandlerLoadEventHandler = (instance:ProgressHandler) => {
     setGameIsReady(true);
+    setStreets(instance.allQuestions)
+    //we can set it already via instance
+    setActiveQuestion(instance.getNextStreet())
   }
 
   const buttonAdvanceClickHandler = () => {
@@ -192,6 +198,8 @@ export default function PersistentDrawerLeft() {
           </List>
           <Divider />
           <FileSelector files={loadFiles()} onChanged={chooseFileClickHandler} />
+          <Divider />
+          <ProgressList questions={streets} />
         </Drawer>
         <main
           className={clsx(classes.content, {
