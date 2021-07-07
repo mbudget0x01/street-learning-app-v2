@@ -18,13 +18,13 @@ Or build it yourself an deploy it.
 
 1. Download or copy just the `Dockerfile`
 2. Build the docker container. The container will clone this repo itself in the build stage.
-3. After the build you are left with a nxinx container, containing the built app
+3. After the build you are left with a `nginx` container, containing the built app
 4. you are ready to go.
 
 ## Add new StreetFiles
 
-All the related files are loacted under `assets/public/streets`.
-1. If you wan't to provid this to everyone. Fork this repo.
+All the related files are loacted under `/public/assets/streets`.
+1. If you want to provid this to everyone. Fork this repo.
 2. Add a new StreetFiles. You need to provide a `.json` file containing all the streets as simple list. The name of the file doesn't matter much. A reference can be found below.
 ```javascript
 ["street1","street2",...]
@@ -46,10 +46,15 @@ All the related files are loacted under `assets/public/streets`.
 
 If you find a bug or have a request. Just open an issue here on github.
 Use the following labels
-* `bug` for bugs
-* `enhancement` for feauture requests
+* `bug` for bugs 🐞
+* `enhancement` for feauture requests ✨
 
-## Used components
+## Contributing
+
+As this is my first react project, any advice help and contributions are welcome.
+Thanks in advance.😊
+
+## Used Components
  * leaflet maps
  * overpass api
  * OpenStreetMaps
