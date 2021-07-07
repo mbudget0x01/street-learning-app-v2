@@ -24,6 +24,7 @@ import { LearningFile } from './fileHandling/LearningFile';
 import { version } from '../package.json'
 import CodeIcon from '@material-ui/icons/Code';
 import { QuestionDisplay } from './ui/QuestionDisplay';
+import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
 
 const drawerWidth = 240;
 
@@ -180,6 +181,10 @@ export default function PersistentDrawerLeft() {
           </div>
           <Divider />
           <List>
+          <ListItem button component="a" href="https://github.com/mbudget0x01/street-learning-app-v2" target="blank">
+                <ListItemIcon><GitHubMaterialIcon/></ListItemIcon>
+                <ListItemText primary={"Visit Project"} />
+            </ListItem>
             <ListItem>
               <ListItemIcon><CodeIcon /></ListItemIcon>
               <ListItemText primary={"Version " + version} />
