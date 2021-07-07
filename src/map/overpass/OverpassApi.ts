@@ -1,7 +1,9 @@
 const BASE_URL = "https://overpass.osm.ch/api/interpreter";
 
 export type Elements = {
+  //be aware way nodes don't have this
   lat: number;
+  //be aware way nodes don't have this
   lon: number;
   id: number;
   type: string,
@@ -19,7 +21,7 @@ export const fetchStreet = async (
 ): Promise<Elements[]> => {
   try {
     const query = `[out:json][timeout:25];area(${OverpassAreaId})->.searchArea;(node["name"="${streetName}"](area.searchArea);way["name"="${streetName}"](area.searchArea);relation["name"="${streetName}"](area.searchArea););out body;>;out skel qt;`;
-    
+
     const formBody = "data=" + encodeURIComponent(query);
     const requestOptions = {
       method: "POST",
