@@ -44,7 +44,7 @@ export const FileSelector = (props: FileSelectorProps) => {
     return (
         <div className={classes.root}>
             <List component="nav" aria-label="main file-list" subheader={
-                <ListSubheader component="div" id="file-list-subheader">
+                <ListSubheader component="div" id="file-list-subheader" disableSticky={true}>
                     Available Files
                 </ListSubheader>
             }>
