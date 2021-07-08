@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemIcon, ListItemText, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { List, ListItem, ListItemIcon, ListItemText, createStyles, makeStyles, Theme, ListSubheader } from "@material-ui/core";
 import { Description } from '@material-ui/icons';
 import { useState } from "react";
 import { LearningFile } from "./LearningFile";
@@ -6,7 +6,7 @@ import { LearningFile } from "./LearningFile";
 
 interface FileListItemProps {
     fileTitle: string,
-    onClick: (fileTitle:string) => void,
+    onClick: (fileTitle: string) => void,
     isDisabled: boolean,
 }
 
@@ -23,18 +23,18 @@ const FileListItem = (props: FileListItemProps) => {
 
 interface FileSelectorProps {
     files: Promise<LearningFile[]>,
-    onChanged: (selectedFile:LearningFile) => void,
+    onChanged: (selectedFile: LearningFile) => void,
 }
 
 export const FileSelector = (props: FileSelectorProps) => {
     const classes = useStyles();
     const [values, setValues] = useState<LearningFile[]>([]);
     const [isDisabled, setDisabled] = useState<boolean>(false)
-    props.files.then((files:LearningFile[]) => setValues(files));
+    props.files.then((files: LearningFile[]) => setValues(files));
 
-    const onClickedHandler = (fileName:string) => {
+    const onClickedHandler = (fileName: string) => {
         values.forEach(element => {
-            if(element.title === fileName){
+            if (element.title === fileName) {
                 props.onChanged(element);
             }
         });
@@ -43,10 +43,14 @@ export const FileSelector = (props: FileSelectorProps) => {
 
     return (
         <div className={classes.root}>
-            <List component="nav" aria-label="main file-list">
+            <List component="nav" aria-label="main file-list" subheader={
+                <ListSubheader component="div" id="file-list-subheader" disableSticky={true}>
+                    Available Files
+                </ListSubheader>
+            }>
                 {
                     values.map((file: LearningFile) => (
-                        <FileListItem fileTitle={file.title} key={file.title} onClick={onClickedHandler} isDisabled={isDisabled}/>
+                        <FileListItem fileTitle={file.title} key={file.title} onClick={onClickedHandler} isDisabled={isDisabled} />
                     ))
                 }
             </List>

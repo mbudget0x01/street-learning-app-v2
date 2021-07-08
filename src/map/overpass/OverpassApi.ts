@@ -6,10 +6,11 @@ export type Elements = {
   //be aware way nodes don't have this
   lon: number;
   id: number;
-  type: string,
+  type: string;
   tags: {
     name: string;
     website: string;
+    public_transport: string;
   };
   //be aware not all have this
   nodes: number[],

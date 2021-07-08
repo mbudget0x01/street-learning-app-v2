@@ -1,13 +1,14 @@
 import { LearningFile } from "../fileHandling/LearningFile";
+import { IQuestion } from "./IQuestion";
 
 export class ProgressHandler {
 
     private baseFile: LearningFile;
-    private missingProgress: string[] = [];
-    private onReadyHandler:() => void;
+    //private missingProgress: string[] = [];
+    private onReadyHandler:(caller:ProgressHandler) => void;
+    public allQuestions:IQuestion[] = []
 
-
-    constructor(baseFile: LearningFile, onReadyHandler:() => void) {
+    constructor(baseFile: LearningFile, onReadyHandler:(caller:ProgressHandler) => void) {
         this.baseFile = baseFile;
         this.resetProgress();
         this.onReadyHandler = onReadyHandler;
@@ -15,28 +16,46 @@ export class ProgressHandler {
 
     public resetProgress() {
         this.baseFile.getStreets().then((streets: string[]) =>{
-            this.missingProgress = Object.assign([], streets)
+            //we don't want any reference
+            this.allQuestions = Object.assign([], streets).map((q:string) => {
+                //lint wants me to do so
+                let a:IQuestion = {
+                    street: q.trim(),
+                    answerdCorrect: false
+                }
+                return a
+            })
+            
             if(this.onReadyHandler !== null){
-                this.onReadyHandler()
+                this.onReadyHandler(this)
             }
         }
         )
     }
 
     public getNextStreet(): string {
-        let i:number =  Math.floor(Math.random() * this.missingProgress.length) -1
+        let openQuestions:IQuestion[] = this.allQuestions.filter((question:IQuestion) => {
+            return !question.answerdCorrect
+        })
+        let i:number =  Math.floor(Math.random() * openQuestions.length) -1
         if(i < 0){i=0}     
-        return this.missingProgress[i].trim()
+        return openQuestions[i].street
     }
 
     public processAnswer(street: string, isCorrect: boolean): void {
         if (isCorrect) {
-            this.missingProgress = this.missingProgress.filter((entry: string) => entry.trim() !== street.trim());
-            this.onReadyHandler();
+            let q:IQuestion | undefined = this.allQuestions.find((entry: IQuestion) => entry.street === street);
+            if(q !== undefined){
+                q.answerdCorrect = true
+            }
         }
     }
 
     public hasNextStreet():boolean{
-        return this.missingProgress.length !== 0;
+        return this.allQuestions.length !== 0;
+    }
+
+    public getStreets():IQuestion[]{
+        return this.allQuestions;
     }
 }

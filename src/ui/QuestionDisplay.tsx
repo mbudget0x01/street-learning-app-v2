@@ -1,5 +1,4 @@
 import { Button, Card, createStyles, makeStyles, Theme, Typography } from "@material-ui/core"
-import { AdvanceQuestionButton } from "./AdvanceQuestionButton";
 
 interface Props{
     activeQuestion:string | undefined,
@@ -30,8 +29,8 @@ export const QuestionDisplay = (props:Props) => {
     return(
         <Card variant="outlined" className={classes.card}>
             <Typography variant="h6">{"Active Question: " + props.activeQuestion }</Typography>
-            <Button variant="contained" color="primary" disabled={props.isDisabled} onClick={props.onCheckCklickHandler} className={classes.button}>Display</Button>
-            <AdvanceQuestionButton isDisabled={props.isDisabled} onClickHandler={props.onAdvanceClickHandler} />
+            <Button variant="contained" color="primary" disabled={props.isDisabled} onClick={props.onCheckCklickHandler} className={classes.button}>Check</Button>
+            <Button variant="contained" color="primary" disabled={props.isDisabled} onClick={props.onAdvanceClickHandler}>Next Question</Button>
         </Card>
     )
 }

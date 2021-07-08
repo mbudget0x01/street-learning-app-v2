@@ -35,7 +35,7 @@ export const StreetOverpass = (props: Props) => {
 
             //split descriptive nodes from waypoints
             resp.forEach(element => {
-                if (element.type === "way") {
+                if (element.type === "way" && element.tags.public_transport !== "platform") {
                     wayNodes.push(element);
                 }
                 if (element.type === "node") {

@@ -25,6 +25,10 @@ import { version } from '../package.json'
 import CodeIcon from '@material-ui/icons/Code';
 import { QuestionDisplay } from './ui/QuestionDisplay';
 import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
+import { ProgressList } from './progress/ProgressList';
+import { IQuestion } from './progress/IQuestion';
+import { LatLng } from 'leaflet';
+import { isSameStreet } from './progress/GeocodeChecker';
 
 const drawerWidth = 240;
 
@@ -97,8 +101,10 @@ export default function PersistentDrawerLeft() {
   const [themeType, setThemeType] = useState<ThemeType>('light')
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
   const [progressHandler, setProgressHandler] = useState<ProgressHandler | null>(null)
+  const [streets, setStreets] = useState<IQuestion[]>([])
   const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
   const [activeQuery, setActiveQuery] = useState<string>("")
+  const [lastGuessedPosition, setLastGuessedPosition] = useState<LatLng>(new LatLng(0, 0))
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -112,8 +118,11 @@ export default function PersistentDrawerLeft() {
     setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler))
   }
 
-  const afterProgressHandlerLoadEventHandler = () => {
+  const afterProgressHandlerLoadEventHandler = (instance: ProgressHandler) => {
     setGameIsReady(true);
+    setStreets(instance.allQuestions)
+    //we can set it already via instance
+    setActiveQuestion(instance.getNextStreet())
   }
 
   const buttonAdvanceClickHandler = () => {
@@ -126,11 +135,27 @@ export default function PersistentDrawerLeft() {
     setActiveQuestion(progressHandler.getNextStreet())
   }
 
-  const buttonDisplayClickHandler = () => {
+  const buttonCheckClickHandler = () => {
     if (activeQuestion === undefined) {
       return
     }
     setActiveQuery(activeQuestion)
+    isSameStreet(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
+      progressHandler?.processAnswer(activeQuestion, isTrue);
+      alert(isTrue)
+    }).catch((error: any) => {
+      alert(error); 
+    }).finally(() => {
+      if (progressHandler !== null) {
+        //seems pointless but forces rerender thanks react 
+        setStreets(progressHandler.getStreets().concat([]))
+      }
+    }
+    )
+  }
+
+  const onQuestionClickHandler = (question: IQuestion) => {
+    setActiveQuery(question.street)
   }
 
   const theme = createMuiTheme({
@@ -181,9 +206,9 @@ export default function PersistentDrawerLeft() {
           </div>
           <Divider />
           <List>
-          <ListItem button component="a" href="https://github.com/mbudget0x01/street-learning-app-v2" target="blank">
-                <ListItemIcon><GitHubMaterialIcon/></ListItemIcon>
-                <ListItemText primary={"Visit Project"} />
+            <ListItem button component="a" href="https://github.com/mbudget0x01/street-learning-app-v2" target="blank">
+              <ListItemIcon><GitHubMaterialIcon /></ListItemIcon>
+              <ListItemText primary={"Visit Project"} />
             </ListItem>
             <ListItem>
               <ListItemIcon><CodeIcon /></ListItemIcon>
@@ -192,6 +217,8 @@ export default function PersistentDrawerLeft() {
           </List>
           <Divider />
           <FileSelector files={loadFiles()} onChanged={chooseFileClickHandler} />
+          <Divider />
+          <ProgressList questions={streets} onQuestionClick={onQuestionClickHandler} />
         </Drawer>
         <main
           className={clsx(classes.content, {
@@ -200,10 +227,15 @@ export default function PersistentDrawerLeft() {
         >
           <div className={classes.drawerHeader} />
           <div>
-            <QuestionDisplay activeQuestion={activeQuestion} isDisabled={!gameIsReady} onCheckCklickHandler={buttonDisplayClickHandler} onAdvanceClickHandler={buttonAdvanceClickHandler} />
+            <QuestionDisplay
+              activeQuestion={activeQuestion}
+              isDisabled={!gameIsReady}
+              onCheckCklickHandler={buttonCheckClickHandler}
+              onAdvanceClickHandler={buttonAdvanceClickHandler}
+            />
           </div>
           <div id="map-wrapper" className={classes.map}>
-            <Map uiMode={themeType} query={activeQuery} />
+            <Map uiMode={themeType} query={activeQuery} onGuessLocationUpdate={setLastGuessedPosition} />
           </div>
 
         </main>
