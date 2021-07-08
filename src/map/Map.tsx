@@ -31,9 +31,8 @@ export const Map = (props: Props) => {
 
 
     const onMapClickedEventHandler:LeafletMouseEventHandlerFn = (event:LeafletMouseEvent) => {
-        console.log("clicked", event);
-        
         setMarkerPos(event.latlng)
+        props.onGuessLocationUpdate(event.latlng)
     }
     
     const onGuessMarkerPosUpdate = (position:LatLng) => {
