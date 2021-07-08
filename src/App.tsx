@@ -29,6 +29,9 @@ import { ProgressList } from './progress/ProgressList';
 import { IQuestion } from './progress/IQuestion';
 import { LatLng } from 'leaflet';
 import { isSameStreet } from './progress/GeocodeChecker';
+import { ErrorDialog } from './ui/ErrorDialog';
+import { QuestionFeedbackDialog } from './ui/QuestionFeedbackDialog';
+import { GeneralDescriptionDialog } from './ui/GeneralDescriptionDialog';
 
 const drawerWidth = 240;
 
@@ -105,6 +108,12 @@ export default function PersistentDrawerLeft() {
   const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
   const [activeQuery, setActiveQuery] = useState<string>("")
   const [lastGuessedPosition, setLastGuessedPosition] = useState<LatLng>(new LatLng(0, 0))
+  const [errorDialogOpen, setErrorDialogOpen] = useState<boolean>(false)
+  const [answerDialogOpen, setAnswerDialogOpen] = useState<boolean>(false)
+  const [answerWasCorrect, setAnswerWasCorrect] = useState<boolean>(false)
+  const [errorDialogText, setErrorDialogText] = useState<string>("")
+  const [generalDescriptionOpen, setGeneralDescriptionOpen] = useState<boolean>(true)
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -142,9 +151,11 @@ export default function PersistentDrawerLeft() {
     setActiveQuery(activeQuestion)
     isSameStreet(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
       progressHandler?.processAnswer(activeQuestion, isTrue);
-      alert(isTrue)
+      setAnswerWasCorrect(isTrue)
+      setAnswerDialogOpen(true)
     }).catch((error: any) => {
-      alert(error); 
+      setErrorDialogText("Could reach server to check selected Location.")
+      setErrorDialogOpen(true)
     }).finally(() => {
       if (progressHandler !== null) {
         //seems pointless but forces rerender thanks react 
@@ -236,8 +247,10 @@ export default function PersistentDrawerLeft() {
           </div>
           <div id="map-wrapper" className={classes.map}>
             <Map uiMode={themeType} query={activeQuery} onGuessLocationUpdate={setLastGuessedPosition} question={activeQuestion} />
-          </div>
-
+          </div>          
+          <QuestionFeedbackDialog buttonCloseClicked={() =>setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
+          <ErrorDialog buttonCloseClicked={() =>setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
+          <GeneralDescriptionDialog buttonCloseClicked={() =>setGeneralDescriptionOpen(false)} isOpen={generalDescriptionOpen}  />
         </main>
       </ThemeProvider>
     </div>
