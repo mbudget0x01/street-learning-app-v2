@@ -5,7 +5,7 @@ import * as Nominatim from "nominatim-browser"
 export async function isSameStreet(position:LatLng, streetName:string):Promise<boolean>{
 
     //prevent stupid requests
-    if(streetName == "" || (position.lat === 0 && position.lng === 0)){
+    if(streetName === "" || (position.lat === 0 && position.lng === 0)){
         return false
     }
 
