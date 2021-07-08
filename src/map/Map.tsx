@@ -10,6 +10,7 @@ import { GuessMarker } from "./GuessMarker";
 interface Props {
     uiMode: ThemeType,
     query: string,
+    question: string | undefined,
     onGuessLocationUpdate: (position:LatLng) => void
 }
 export const Map = (props: Props) => {
@@ -56,7 +57,7 @@ export const Map = (props: Props) => {
                 </LayersControl.BaseLayer>
             </LayersControl>
             <StreetOverpass OverpassAreaId={"3601683625"} query={props.query} onCenterChanged={flyToPos} />
-            <GuessMarker position={markerPos} question={props.query} onPositionUpdate={onGuessMarkerPosUpdate} />
+            <GuessMarker position={markerPos} question={props.question} onPositionUpdate={onGuessMarkerPosUpdate} />
         </MapContainer>
     )
 }

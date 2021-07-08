@@ -6,7 +6,7 @@ import { useMemo, useRef } from "react";
 
 interface Props {
     position: LatLngExpression,
-    question: string,
+    question: string | undefined,
     onPositionUpdate:(position:LatLng) => void,
 }
 
@@ -26,12 +26,16 @@ export const GuessMarker = (props: Props) => {
       [onPosUppdate],
     )
 
+    const markerText = () =>{
+      if(props.question === undefined){
+        return "No question loaded"
+      }
+      return `Your guess for: ${props.question}`
+    }
   
     return (
         <Marker position={props.position} draggable={true} icon={IconGuess} ref={markerRef} eventHandlers={eventHandlers}>
-            <Popup>
-                {`Your guess for: ${props.question}`}
-            </Popup>
+            <Popup>{markerText()}</Popup>
         </Marker>
     )
 }
