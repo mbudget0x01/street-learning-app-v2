@@ -6,6 +6,11 @@ Street Learning App V2 is a small react app. It is reinterpretation of an old ap
 This App provides a simple Homepage. The purpose of this homepage is to learn the location of streets using provided street names.
 At the time it is only possible to add Streets via the source. For more information see Add new StreetFiles.
 
+## How to play the game
+
+Choose your learning file in the drawer on the left side. Guess the street. Once you beliefe you guess right, press the button check.
+Pretty simple ;-)
+
 ## Getting started
 
 There are two options how you can use this app.
