@@ -4,11 +4,13 @@ import './Map.css'
 import { ThemeType } from "../theme";
 import { StreetOverpass } from "./StreetOverpass";
 import { useState } from "react";
-import { LatLngExpression, Map as LeafletMap } from 'leaflet';
+import { LatLng, LatLngExpression, Map as LeafletMap } from 'leaflet';
+import { GuessMarker } from "./GuessMarker";
 
 interface Props {
     uiMode: ThemeType,
-    query: string
+    query: string,
+    onGuessLocationUpdate: (position:LatLng) => void
 }
 export const Map = (props: Props) => {
 
@@ -37,6 +39,7 @@ export const Map = (props: Props) => {
                 </LayersControl.BaseLayer>
             </LayersControl>
             <StreetOverpass OverpassAreaId={"3601683625"} query={props.query} onCenterChanged={flyToPos} />
+            <GuessMarker position={[47.538002, 7.571211]} question={props.query} onPositionUpdate={props.onGuessLocationUpdate} />
         </MapContainer>
     )
 }

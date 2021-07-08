@@ -27,6 +27,8 @@ import { QuestionDisplay } from './ui/QuestionDisplay';
 import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
 import { ProgressList } from './progress/ProgressList';
 import { IQuestion } from './progress/IQuestion';
+import { LatLng } from 'leaflet';
+import { isSameStreet } from './progress/GeocodeChecker';
 
 const drawerWidth = 240;
 
@@ -102,6 +104,7 @@ export default function PersistentDrawerLeft() {
   const [streets, setStreets] = useState<IQuestion[]>([])
   const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
   const [activeQuery, setActiveQuery] = useState<string>("")
+  const [lastGuessedPosition, setLastGuessedPosition] = useState<LatLng>(new LatLng(0,0))
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -132,11 +135,19 @@ export default function PersistentDrawerLeft() {
     setActiveQuestion(progressHandler.getNextStreet())
   }
 
-  const buttonDisplayClickHandler = () => {
+  const buttonCheckClickHandler = () => {
     if (activeQuestion === undefined) {
       return
     }
     setActiveQuery(activeQuestion)
+    isSameStreet(lastGuessedPosition,activeQuestion).then((isTrue:boolean) => {
+       progressHandler?.processAnswer(activeQuestion,isTrue);
+       alert(isTrue)
+    }).catch((error:any) => {
+      console.log(error);
+      alert(error);
+    }
+    )
   }
 
   const onQuestionClickHandler = (question:IQuestion) => {
@@ -212,10 +223,15 @@ export default function PersistentDrawerLeft() {
         >
           <div className={classes.drawerHeader} />
           <div>
-            <QuestionDisplay activeQuestion={activeQuestion} isDisabled={!gameIsReady} onCheckCklickHandler={buttonDisplayClickHandler} onAdvanceClickHandler={buttonAdvanceClickHandler} />
+            <QuestionDisplay 
+            activeQuestion={activeQuestion} 
+            isDisabled={!gameIsReady} 
+            onCheckCklickHandler={buttonCheckClickHandler} 
+            onAdvanceClickHandler={buttonAdvanceClickHandler} 
+            />
           </div>
           <div id="map-wrapper" className={classes.map}>
-            <Map uiMode={themeType} query={activeQuery} />
+            <Map uiMode={themeType} query={activeQuery} onGuessLocationUpdate={setLastGuessedPosition} />
           </div>
 
         </main>

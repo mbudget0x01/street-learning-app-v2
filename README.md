@@ -1,6 +1,7 @@
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/mbudget0x01/street-learning-app-v2?style=for-the-badge) ![GitHub](https://img.shields.io/github/license/mbudget0x01/street-learning-app-v2?style=for-the-badge) ![GitHub top language](https://img.shields.io/github/languages/top/mbudget0x01/street-learning-app-v2?style=for-the-badge)
 
 # Street Learning App V2
+
 Street Learning App V2 is a small react app. It is reinterpretation of an old app, which proofed usefull but never left the development stage.
 This App provides a simple Homepage. The purpose of this homepage is to learn the location of streets using provided street names.
 At the time it is only possible to add Streets via the source. For more information see Add new StreetFiles.
@@ -24,12 +25,16 @@ Or build it yourself an deploy it.
 ## Add new StreetFiles
 
 All the related files are loacted under `/public/assets/streets`.
+
 1. If you want to provid this to everyone. Fork this repo.
 2. Add a new StreetFiles. You need to provide a `.json` file containing all the streets as simple list. The name of the file doesn't matter much. A reference can be found below.
+
 ```javascript
 ["street1","street2",...]
 ````
-3. Add the necessary data to the `descriptor.json` Use this as reference for your entry: 
+
+3. Add the necessary data to the `descriptor.json` Use this as reference for your entry:
+
 ```javascript
 {
     "title": "Your title to Display",
@@ -40,12 +45,14 @@ All the related files are loacted under `/public/assets/streets`.
     "OverpassAreaId": "0000000"
 }
 ```
+
 4. If you want to provide this for everyone create a pull request😉. I would appreciate this.
 
 ## Bugs and Requests
 
 If you find a bug or have a request. Just open an issue here on github.
 Use the following labels
+
 * `bug` for bugs 🐞
 * `enhancement` for feauture requests ✨
 
@@ -54,8 +61,17 @@ Use the following labels
 As this is my first react project, any advice help and contributions are welcome.
 Thanks in advance.😊
 
-## Used Components
- * leaflet maps
- * overpass api
- * OpenStreetMaps
- * leaflet ESRI geocoder
+## Credits
+
+### Used Components
+
+* leaflet maps
+* overpass api
+* OpenStreetMaps
+* leaflet ESRI geocoder
+* Nominatim Browser
+
+### Icons
+
+* [DinosoftLabs](https://www.flaticon.com/de/autoren/dinosoftlabs)
+* [Freepik](https://www.freepik.com)
