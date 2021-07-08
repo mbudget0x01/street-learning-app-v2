@@ -235,7 +235,7 @@ export default function PersistentDrawerLeft() {
             />
           </div>
           <div id="map-wrapper" className={classes.map}>
-            <Map uiMode={themeType} query={activeQuery} onGuessLocationUpdate={setLastGuessedPosition} />
+            <Map uiMode={themeType} query={activeQuery} onGuessLocationUpdate={setLastGuessedPosition} question={activeQuestion} />
           </div>
 
         </main>
