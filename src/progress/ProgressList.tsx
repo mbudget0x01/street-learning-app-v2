@@ -20,7 +20,7 @@ interface QuestionListItemProps{
 
 const QuestionListItem = (props: QuestionListItemProps) => {
     return (
-        <ListItem button onClick={(event) => props.onClick(props.question)}>
+        <ListItem button onClick={(_event) => props.onClick(props.question)}>
             <ListItemIcon >
                 {props.question.answerdCorrect ? <Check/> : <Clear/>}
             </ListItemIcon>

@@ -104,7 +104,7 @@ export default function PersistentDrawerLeft() {
   const [streets, setStreets] = useState<IQuestion[]>([])
   const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
   const [activeQuery, setActiveQuery] = useState<string>("")
-  const [lastGuessedPosition, setLastGuessedPosition] = useState<LatLng>(new LatLng(0,0))
+  const [lastGuessedPosition, setLastGuessedPosition] = useState<LatLng>(new LatLng(0, 0))
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -118,7 +118,7 @@ export default function PersistentDrawerLeft() {
     setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler))
   }
 
-  const afterProgressHandlerLoadEventHandler = (instance:ProgressHandler) => {
+  const afterProgressHandlerLoadEventHandler = (instance: ProgressHandler) => {
     setGameIsReady(true);
     setStreets(instance.allQuestions)
     //we can set it already via instance
@@ -140,17 +140,21 @@ export default function PersistentDrawerLeft() {
       return
     }
     setActiveQuery(activeQuestion)
-    isSameStreet(lastGuessedPosition,activeQuestion).then((isTrue:boolean) => {
-       progressHandler?.processAnswer(activeQuestion,isTrue);
-       alert(isTrue)
-    }).catch((error:any) => {
-      console.log(error);
-      alert(error);
+    isSameStreet(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
+      progressHandler?.processAnswer(activeQuestion, isTrue);
+      alert(isTrue)
+    }).catch((error: any) => {
+      alert(error); 
+    }).finally(() => {
+      if (progressHandler !== null) {
+        //seems pointless but forces rerender thanks react 
+        setStreets(progressHandler.getStreets().concat([]))
+      }
     }
     )
   }
 
-  const onQuestionClickHandler = (question:IQuestion) => {
+  const onQuestionClickHandler = (question: IQuestion) => {
     setActiveQuery(question.street)
   }
 
@@ -202,9 +206,9 @@ export default function PersistentDrawerLeft() {
           </div>
           <Divider />
           <List>
-          <ListItem button component="a" href="https://github.com/mbudget0x01/street-learning-app-v2" target="blank">
-                <ListItemIcon><GitHubMaterialIcon/></ListItemIcon>
-                <ListItemText primary={"Visit Project"} />
+            <ListItem button component="a" href="https://github.com/mbudget0x01/street-learning-app-v2" target="blank">
+              <ListItemIcon><GitHubMaterialIcon /></ListItemIcon>
+              <ListItemText primary={"Visit Project"} />
             </ListItem>
             <ListItem>
               <ListItemIcon><CodeIcon /></ListItemIcon>
@@ -214,7 +218,7 @@ export default function PersistentDrawerLeft() {
           <Divider />
           <FileSelector files={loadFiles()} onChanged={chooseFileClickHandler} />
           <Divider />
-          <ProgressList questions={streets} onQuestionClick={onQuestionClickHandler}/>
+          <ProgressList questions={streets} onQuestionClick={onQuestionClickHandler} />
         </Drawer>
         <main
           className={clsx(classes.content, {
@@ -223,11 +227,11 @@ export default function PersistentDrawerLeft() {
         >
           <div className={classes.drawerHeader} />
           <div>
-            <QuestionDisplay 
-            activeQuestion={activeQuestion} 
-            isDisabled={!gameIsReady} 
-            onCheckCklickHandler={buttonCheckClickHandler} 
-            onAdvanceClickHandler={buttonAdvanceClickHandler} 
+            <QuestionDisplay
+              activeQuestion={activeQuestion}
+              isDisabled={!gameIsReady}
+              onCheckCklickHandler={buttonCheckClickHandler}
+              onAdvanceClickHandler={buttonAdvanceClickHandler}
             />
           </div>
           <div id="map-wrapper" className={classes.map}>
