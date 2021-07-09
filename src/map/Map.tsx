@@ -3,7 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import './Map.css'
 import { ThemeType } from "../theme";
 import { StreetOverpass } from "./StreetOverpass";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LatLng, LatLngExpression, LeafletMouseEvent, LeafletMouseEventHandlerFn, Map as LeafletMap } from 'leaflet';
 import { GuessMarker } from "./GuessMarker";
 
@@ -11,19 +11,20 @@ interface Props {
     uiMode: ThemeType,
     query: string,
     question: string | undefined,
-    onGuessLocationUpdate: (position:LatLng) => void
+    onGuessLocationUpdate: (position:LatLng) => void,
+    initialCoordinates: LatLngExpression,
 }
 export const Map = (props: Props) => {
 
     const [mapObject, setMapObject] = useState<LeafletMap>()
-    const [markerPos, setMarkerPos] = useState<LatLngExpression>([47.538002, 7.571211])
+    const [markerPos, setMarkerPos] = useState<LatLngExpression>(props.initialCoordinates)
     
 
-    const flyToPos = (pos: LatLngExpression) => {
+    const flyToPos = useCallback((pos: LatLngExpression) => {
         if (mapObject) {
             mapObject?.flyTo(pos);
         }
-    }
+    },[mapObject])
 
     const onMapCreated = (map:LeafletMap) => {
         setMapObject(map)
@@ -40,8 +41,15 @@ export const Map = (props: Props) => {
         setMarkerPos(position)
         props.onGuessLocationUpdate(position)
     }
+
+
+    useEffect(() => {
+        flyToPos(props.initialCoordinates)
+        setMarkerPos(props.initialCoordinates)
+      },[props.initialCoordinates, flyToPos]);
+
     return (
-        <MapContainer center={[47.538002, 7.571211]} zoom={20} scrollWheelZoom={true} zoomControl={true} boxZoom={false} whenCreated={onMapCreated}>
+        <MapContainer center={props.initialCoordinates} zoom={20} scrollWheelZoom={true} zoomControl={true} boxZoom={false} whenCreated={onMapCreated}>
             <LayersControl position="topright">
                 <LayersControl.BaseLayer checked={props.uiMode === 'light'} name="Light" >
                     <TileLayer

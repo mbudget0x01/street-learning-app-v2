@@ -47,7 +47,8 @@ All the related files are loacted under `/public/assets/streets`.
     "countryCode": "fr",
     "city": "Paris",
     "zipCode": "75000",
-    "OverpassAreaId": "0000000"
+    "OverpassAreaId": "0000000",
+    "startCoordinates": [48.858093, 2.294694]
 }
 ```
 

@@ -4,5 +4,6 @@
     "countryCode": "ch",
     "city": "Binningen",
     "zipCode": "4102",
-    "OverpassAreaId": "3601683625"
+    "overpassAreaId": "3601683625",
+    "startCoordinates": [47.538002, 7.571211]
 }]

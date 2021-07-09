@@ -7,7 +7,8 @@ export class LearningFile implements ILearningFile {
     zipCode: string;
     city: string;
     countryCode: string;
-    OverpassAreaId: string;
+    overpassAreaId: string;
+    startCoordinates: [number, number] = [0.0, 0.0];
     private streets: string[] =["abc"];
     //arrays can't be null and I cant be sure nonempty so...
     private streetsLoaded: boolean = false;
@@ -30,7 +31,8 @@ export class LearningFile implements ILearningFile {
         this.zipCode = intrfce.zipCode;
         this.city = intrfce.city;
         this.countryCode = intrfce.countryCode;
-        this.OverpassAreaId = intrfce.OverpassAreaId;
+        this.overpassAreaId = intrfce.overpassAreaId;
+        this.startCoordinates = intrfce.startCoordinates;
     }
     
     
