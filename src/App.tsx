@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function PersistentDrawerLeft() {
   const classes = useStyles();
   //const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState<boolean>(true);
   const [themeType, setThemeType] = useState<ThemeType>('light')
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
   const [progressHandler, setProgressHandler] = useState<ProgressHandler | null>(null)
@@ -113,6 +113,7 @@ export default function PersistentDrawerLeft() {
   const [answerWasCorrect, setAnswerWasCorrect] = useState<boolean>(false)
   const [errorDialogText, setErrorDialogText] = useState<string>("")
   const [generalDescriptionOpen, setGeneralDescriptionOpen] = useState<boolean>(true)
+  const [startCoordinates, setStartCoordinates] = useState<[number,number]>([48.858093, 2.294694])
 
 
   const handleDrawerOpen = () => {
@@ -125,6 +126,7 @@ export default function PersistentDrawerLeft() {
 
   const chooseFileClickHandler = (file: LearningFile) => {
     setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler))
+    setStartCoordinates(file.startCoordinates)
   }
 
   const afterProgressHandlerLoadEventHandler = (instance: ProgressHandler) => {
@@ -246,7 +248,7 @@ export default function PersistentDrawerLeft() {
             />
           </div>
           <div id="map-wrapper" className={classes.map}>
-            <Map uiMode={themeType} query={activeQuery} onGuessLocationUpdate={setLastGuessedPosition} question={activeQuestion} />
+            <Map uiMode={themeType} query={activeQuery} onGuessLocationUpdate={setLastGuessedPosition} question={activeQuestion} initialCoordinates={startCoordinates}/>
           </div>          
           <QuestionFeedbackDialog buttonCloseClicked={() =>setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
           <ErrorDialog buttonCloseClicked={() =>setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
