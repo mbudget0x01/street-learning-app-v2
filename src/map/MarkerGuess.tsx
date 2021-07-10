@@ -1,6 +1,6 @@
 import { Marker as MarkerObject, LatLngExpression, LatLng } from "leaflet"
 import { Marker, Popup } from "react-leaflet"
-import { IconGuess } from "./MarkerIcon"
+import { IconGuess } from "./MarkerIcons"
 import { useMemo, useRef } from "react";
 
 
@@ -10,7 +10,7 @@ interface Props {
     onPositionUpdate:(position:LatLng) => void,
 }
 
-export const GuessMarker = (props: Props) => {
+export const MarkerGuess = (props: Props) => {
     const markerRef = useRef<MarkerObject>(null)
     const onPosUppdate:(position:LatLng) => void =props.onPositionUpdate
 

@@ -28,10 +28,15 @@ import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
 import { ProgressList } from './progress/ProgressList';
 import { IQuestion } from './progress/IQuestion';
 import { LatLng } from 'leaflet';
-import { isSameStreet } from './progress/GeocodeChecker';
+import { isSameStreetOverpass } from './geocode/GeocodeChecker';
 import { ErrorDialog } from './ui/ErrorDialog';
 import { QuestionFeedbackDialog } from './ui/QuestionFeedbackDialog';
 import { GeneralDescriptionDialog } from './ui/GeneralDescriptionDialog';
+import { GeocodeError } from './geocode/GeocodeError';
+import IDrawableStreet from './geocode/IDrawableStreet';
+import { OverpassStreetQuery } from './geocode/overpass/OverpassStreetQuery';
+import { generateQuerySuffix } from './geocode/esri/EsriHelper';
+import { EsriStreetQuery } from './geocode/esri/EsriStreetQuerry';
 
 const drawerWidth = 240;
 
@@ -83,6 +88,8 @@ const useStyles = makeStyles((theme: Theme) =>
         duration: theme.transitions.duration.leavingScreen,
       }),
       marginLeft: -drawerWidth,
+      //hopefully makes with 100% on smaller devices
+      width: "100%"
     },
     contentShift: {
       transition: theme.transitions.create('margin', {
@@ -106,15 +113,17 @@ export default function PersistentDrawerLeft() {
   const [progressHandler, setProgressHandler] = useState<ProgressHandler | null>(null)
   const [streets, setStreets] = useState<IQuestion[]>([])
   const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
-  const [activeQuery, setActiveQuery] = useState<string>("")
   const [lastGuessedPosition, setLastGuessedPosition] = useState<LatLng>(new LatLng(0, 0))
   const [errorDialogOpen, setErrorDialogOpen] = useState<boolean>(false)
   const [answerDialogOpen, setAnswerDialogOpen] = useState<boolean>(false)
   const [answerWasCorrect, setAnswerWasCorrect] = useState<boolean>(false)
   const [errorDialogText, setErrorDialogText] = useState<string>("")
   const [generalDescriptionOpen, setGeneralDescriptionOpen] = useState<boolean>(true)
-  const [startCoordinates, setStartCoordinates] = useState<[number,number]>([48.858093, 2.294694])
-
+  const [startCoordinates, setStartCoordinates] = useState<[number, number]>([48.858093, 2.294694])
+  //does this belong here?
+  const [displayedStreet, setDisplayedStreet] = useState<IDrawableStreet>()
+  const [overpassAreaId, setOverpassAreaId] = useState<string>()
+  const [esriQuerySuffix, setEsriQuerySuffix] = useState<string>()
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -125,8 +134,11 @@ export default function PersistentDrawerLeft() {
   };
 
   const chooseFileClickHandler = (file: LearningFile) => {
-    setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler))
-    setStartCoordinates(file.startCoordinates)
+    handleDrawerClose();
+    setOverpassAreaId(file.overpassAreaId)
+    setEsriQuerySuffix(generateQuerySuffix(file))
+    setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler));
+    setStartCoordinates(file.startCoordinates);
   }
 
   const afterProgressHandlerLoadEventHandler = (instance: ProgressHandler) => {
@@ -150,13 +162,13 @@ export default function PersistentDrawerLeft() {
     if (activeQuestion === undefined) {
       return
     }
-    setActiveQuery(activeQuestion)
-    isSameStreet(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
+    displayStreet(activeQuestion)
+    isSameStreetOverpass(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
       progressHandler?.processAnswer(activeQuestion, isTrue);
       setAnswerWasCorrect(isTrue)
       setAnswerDialogOpen(true)
-    }).catch((error: any) => {
-      setErrorDialogText("Could reach server to check selected Location.")
+    }).catch((error: GeocodeError) => {
+      setErrorDialogText(`${error.geocodeErrorCause}. ${error.message}`)
       setErrorDialogOpen(true)
     }).finally(() => {
       if (progressHandler !== null) {
@@ -167,8 +179,67 @@ export default function PersistentDrawerLeft() {
     )
   }
 
+
+  const displayStreetESRI = async (streetName: string): Promise<void> => {
+    if (esriQuerySuffix !== undefined) {
+      let esriQuery = new EsriStreetQuery(streetName, esriQuerySuffix)
+      await esriQuery.execute().then(() => {
+        setDisplayedStreet(
+          esriQuery.getDrawableStreet()
+        )
+      })
+    }
+  }
+
+  /**
+   * !USE displayStreet()!
+   * Displays the street on the map using the Overpass Api
+   * @param streetName Name of the Street to display
+   */
+  const displayStreetOverpass = async (streetName: string): Promise<void> => {
+    //display using overpass api 
+    if (overpassAreaId !== undefined) {
+      let opQuery = new OverpassStreetQuery(streetName, overpassAreaId)
+      await opQuery.execute().then(() => {
+        setDisplayedStreet(
+          opQuery.getDrawableStreet()
+        )
+      })
+    }
+  }
+
+  /**
+   * Displays the Street
+   * 1. Tries overpass
+   * 2. Tries ESRI
+   * @param streetName Name of the Street to display
+   */
+  const displayStreet = (streetName: string): void => {
+    displayStreetOverpass(streetName).catch(() => {
+      displayStreetESRI(streetName)
+    }).catch(() =>{
+      setErrorDialogText(`Unfortunatly the App was not able to resolve ${streetName}. The primary and secondary Geocoder are exhausted.`)
+      setErrorDialogOpen(true)
+    })
+    
+    /*
+    try {
+      displayStreetOverpass(streetName)
+      return
+    } catch (error) {
+      console.log("Overpass failed");
+    }
+    try {
+      displayStreetESRI(streetName)
+    } catch (error) {
+      console.log("ESRI Failed");
+
+    }
+    */
+  }
+
   const onQuestionClickHandler = (question: IQuestion) => {
-    setActiveQuery(question.street)
+    displayStreet(question.street)
   }
 
   const theme = createMuiTheme({
@@ -248,11 +319,15 @@ export default function PersistentDrawerLeft() {
             />
           </div>
           <div id="map-wrapper" className={classes.map}>
-            <Map uiMode={themeType} query={activeQuery} onGuessLocationUpdate={setLastGuessedPosition} question={activeQuestion} initialCoordinates={startCoordinates}/>
-          </div>          
-          <QuestionFeedbackDialog buttonCloseClicked={() =>setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
-          <ErrorDialog buttonCloseClicked={() =>setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
-          <GeneralDescriptionDialog buttonCloseClicked={() =>setGeneralDescriptionOpen(false)} isOpen={generalDescriptionOpen}  />
+            <Map uiMode={themeType}
+              onGuessLocationUpdate={setLastGuessedPosition}
+              initialCoordinates={startCoordinates}
+              displayedStreet={displayedStreet}
+            />
+          </div>
+          <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
+          <ErrorDialog buttonCloseClicked={() => setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
+          <GeneralDescriptionDialog buttonCloseClicked={() => setGeneralDescriptionOpen(false)} isOpen={generalDescriptionOpen} />
         </main>
       </ThemeProvider>
     </div>
