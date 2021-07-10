@@ -2,20 +2,17 @@ import { LayersControl, MapContainer, TileLayer } from "react-leaflet";
 import 'leaflet/dist/leaflet.css';
 import './Map.css'
 import { ThemeType } from "../theme";
-import { StreetOverpass } from "./StreetOverpass";
 import { useCallback, useEffect, useState } from "react";
 import { LatLng, LatLngExpression, LeafletMouseEvent, LeafletMouseEventHandlerFn, Map as LeafletMap } from 'leaflet';
 import { MarkerGuess } from "./MarkerGuess";
-import { GeocodeError } from "../geocode/GeocodeError";
+import { Street } from "./Street";
+import IDrawableStreet from "../geocode/IDrawableStreet";
 
 interface Props {
     uiMode: ThemeType,
-    query: string,
-    question: string | undefined,
     onGuessLocationUpdate: (position: LatLng) => void,
     initialCoordinates: LatLngExpression,
-    //is this needed?
-    onGeocodeError: (error: GeocodeError) => void,
+    displayedStreet: IDrawableStreet | undefined,
 }
 export const Map = (props: Props) => {
 
@@ -45,11 +42,6 @@ export const Map = (props: Props) => {
         props.onGuessLocationUpdate(position)
     }
 
-    const onOverpassGeocodeErrror = (error:GeocodeError) => {
-        props.onGeocodeError(error)
-        //insert ESRI stuff here
-    }
-
 
     useEffect(() => {
         flyToPos(props.initialCoordinates)
@@ -72,8 +64,8 @@ export const Map = (props: Props) => {
                     />
                 </LayersControl.BaseLayer>
             </LayersControl>
-            <StreetOverpass OverpassAreaId={"3601683625"} query={props.query} onCenterChanged={flyToPos} onGeocodeError={onOverpassGeocodeErrror} />
-            <MarkerGuess position={markerPos} question={props.question} onPositionUpdate={onGuessMarkerPosUpdate} />
+            <Street drawableStreet={props.displayedStreet} onCenterChanged={(pos:LatLngExpression)=> flyToPos(pos)} />
+            <MarkerGuess position={markerPos} question={props.displayedStreet?.name} onPositionUpdate={onGuessMarkerPosUpdate} />
         </MapContainer>
     )
 }

@@ -40,6 +40,7 @@ export class OverpassStreetQuery {
         }
 
         let resp: Elements[] = await fetchStreet(this.streetName, this.overpassAreaID)
+        
 
         let wayNodes: Elements[] = [];
         let tmpArray: LatLng[][] = [];
@@ -92,7 +93,7 @@ export class OverpassStreetQuery {
         if (this.drawableWayPoints === undefined) {
             return undefined
         }
-        if (this.center == undefined) {
+        if (this.center === undefined) {
             this.center = this.calculateCenter()
         }
 

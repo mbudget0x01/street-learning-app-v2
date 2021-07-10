@@ -33,6 +33,8 @@ import { ErrorDialog } from './ui/ErrorDialog';
 import { QuestionFeedbackDialog } from './ui/QuestionFeedbackDialog';
 import { GeneralDescriptionDialog } from './ui/GeneralDescriptionDialog';
 import { GeocodeError } from './geocode/GeocodeError';
+import IDrawableStreet from './geocode/IDrawableStreet';
+import { OverpassStreetQuery } from './geocode/overpass/OverpassStreetQuery';
 
 const drawerWidth = 240;
 
@@ -107,7 +109,6 @@ export default function PersistentDrawerLeft() {
   const [progressHandler, setProgressHandler] = useState<ProgressHandler | null>(null)
   const [streets, setStreets] = useState<IQuestion[]>([])
   const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
-  const [activeQuery, setActiveQuery] = useState<string>("")
   const [lastGuessedPosition, setLastGuessedPosition] = useState<LatLng>(new LatLng(0, 0))
   const [errorDialogOpen, setErrorDialogOpen] = useState<boolean>(false)
   const [answerDialogOpen, setAnswerDialogOpen] = useState<boolean>(false)
@@ -115,6 +116,9 @@ export default function PersistentDrawerLeft() {
   const [errorDialogText, setErrorDialogText] = useState<string>("")
   const [generalDescriptionOpen, setGeneralDescriptionOpen] = useState<boolean>(true)
   const [startCoordinates, setStartCoordinates] = useState<[number,number]>([48.858093, 2.294694])
+  //does this belong here?
+  const [displayedStreet, setDisplayedStreet] = useState<IDrawableStreet>()
+  const [overpassAreaId, setOverpassAreaId] = useState<string>()
 
 
   const handleDrawerOpen = () => {
@@ -127,6 +131,7 @@ export default function PersistentDrawerLeft() {
 
   const chooseFileClickHandler = (file: LearningFile) => {
     handleDrawerClose();
+    setOverpassAreaId(file.overpassAreaId)
     setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler));
     setStartCoordinates(file.startCoordinates);
   }
@@ -152,7 +157,7 @@ export default function PersistentDrawerLeft() {
     if (activeQuestion === undefined) {
       return
     }
-    setActiveQuery(activeQuestion)
+    updateStreetDisplay(activeQuestion)
     isSameStreetOverpass(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
       progressHandler?.processAnswer(activeQuestion, isTrue);
       setAnswerWasCorrect(isTrue)
@@ -169,8 +174,20 @@ export default function PersistentDrawerLeft() {
     )
   }
 
+  const updateStreetDisplay = (streetName:string) => {
+    if(overpassAreaId === undefined){
+      return
+    }
+    let opQuery= new OverpassStreetQuery(streetName,overpassAreaId)
+    opQuery.execute().then(()=>{
+      setDisplayedStreet(
+         opQuery.getDrawableStreet()
+        )
+    })
+  }
+
   const onQuestionClickHandler = (question: IQuestion) => {
-    setActiveQuery(question.street)
+    updateStreetDisplay(question.street)
   }
 
   const theme = createMuiTheme({
@@ -251,11 +268,9 @@ export default function PersistentDrawerLeft() {
           </div>
           <div id="map-wrapper" className={classes.map}>
             <Map uiMode={themeType}
-             query={activeQuery}
              onGuessLocationUpdate={setLastGuessedPosition}
-             question={activeQuestion}
              initialCoordinates={startCoordinates}
-             onGeocodeError={(error:GeocodeError)=> console.log(error)}
+             displayedStreet={displayedStreet}
              />
           </div>          
           <QuestionFeedbackDialog buttonCloseClicked={() =>setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
