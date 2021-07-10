@@ -1,12 +1,14 @@
 import { LatLng, LatLngExpression } from 'leaflet'
 import { useState } from 'react'
 import { Polyline } from 'react-leaflet'
-import { fetchStreet, Elements } from './overpass/OverpassApi'
+import { GeocodeError } from '../geocode/GeocodeError'
+import { fetchStreet, Elements } from '../geocode/overpass/OverpassApi'
 
 interface Props {
     OverpassAreaId: string,
     query: string,
     onCenterChanged: (pos: LatLng) => void,
+    onGeocodeError: (error: GeocodeError) => void,
 }
 
 export const StreetOverpass = (props: Props) => {
@@ -75,7 +77,10 @@ export const StreetOverpass = (props: Props) => {
                 props.onCenterChanged(new LatLng(latCenter, lngCenter))
             }
         }
-        )
+        ).catch((error:GeocodeError) => {
+            setSetWaypoints([])
+            props.onGeocodeError(error)
+        })
     }
     return (
         <div>

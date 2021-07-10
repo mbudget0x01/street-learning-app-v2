@@ -28,10 +28,11 @@ import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
 import { ProgressList } from './progress/ProgressList';
 import { IQuestion } from './progress/IQuestion';
 import { LatLng } from 'leaflet';
-import { isSameStreet } from './progress/GeocodeChecker';
+import { isSameStreetOverpass } from './geocode/GeocodeChecker';
 import { ErrorDialog } from './ui/ErrorDialog';
 import { QuestionFeedbackDialog } from './ui/QuestionFeedbackDialog';
 import { GeneralDescriptionDialog } from './ui/GeneralDescriptionDialog';
+import { GeocodeError } from './geocode/GeocodeError';
 
 const drawerWidth = 240;
 
@@ -125,8 +126,9 @@ export default function PersistentDrawerLeft() {
   };
 
   const chooseFileClickHandler = (file: LearningFile) => {
-    setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler))
-    setStartCoordinates(file.startCoordinates)
+    handleDrawerClose();
+    setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler));
+    setStartCoordinates(file.startCoordinates);
   }
 
   const afterProgressHandlerLoadEventHandler = (instance: ProgressHandler) => {
@@ -151,12 +153,12 @@ export default function PersistentDrawerLeft() {
       return
     }
     setActiveQuery(activeQuestion)
-    isSameStreet(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
+    isSameStreetOverpass(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
       progressHandler?.processAnswer(activeQuestion, isTrue);
       setAnswerWasCorrect(isTrue)
       setAnswerDialogOpen(true)
-    }).catch((error: any) => {
-      setErrorDialogText("Could reach server to check selected Location.")
+    }).catch((error: GeocodeError) => {
+      setErrorDialogText(`${error.geocodeErrorCause}. ${error.message}`)
       setErrorDialogOpen(true)
     }).finally(() => {
       if (progressHandler !== null) {
@@ -248,7 +250,13 @@ export default function PersistentDrawerLeft() {
             />
           </div>
           <div id="map-wrapper" className={classes.map}>
-            <Map uiMode={themeType} query={activeQuery} onGuessLocationUpdate={setLastGuessedPosition} question={activeQuestion} initialCoordinates={startCoordinates}/>
+            <Map uiMode={themeType}
+             query={activeQuery}
+             onGuessLocationUpdate={setLastGuessedPosition}
+             question={activeQuestion}
+             initialCoordinates={startCoordinates}
+             onGeocodeError={(error:GeocodeError)=> console.log(error)}
+             />
           </div>          
           <QuestionFeedbackDialog buttonCloseClicked={() =>setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
           <ErrorDialog buttonCloseClicked={() =>setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
