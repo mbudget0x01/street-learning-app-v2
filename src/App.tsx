@@ -86,6 +86,8 @@ const useStyles = makeStyles((theme: Theme) =>
         duration: theme.transitions.duration.leavingScreen,
       }),
       marginLeft: -drawerWidth,
+      //hopefully makes with 100% on smaller devices
+      width: "100%"
     },
     contentShift: {
       transition: theme.transitions.create('margin', {
@@ -115,7 +117,7 @@ export default function PersistentDrawerLeft() {
   const [answerWasCorrect, setAnswerWasCorrect] = useState<boolean>(false)
   const [errorDialogText, setErrorDialogText] = useState<string>("")
   const [generalDescriptionOpen, setGeneralDescriptionOpen] = useState<boolean>(true)
-  const [startCoordinates, setStartCoordinates] = useState<[number,number]>([48.858093, 2.294694])
+  const [startCoordinates, setStartCoordinates] = useState<[number, number]>([48.858093, 2.294694])
   //does this belong here?
   const [displayedStreet, setDisplayedStreet] = useState<IDrawableStreet>()
   const [overpassAreaId, setOverpassAreaId] = useState<string>()
@@ -174,15 +176,15 @@ export default function PersistentDrawerLeft() {
     )
   }
 
-  const updateStreetDisplay = (streetName:string) => {
-    if(overpassAreaId === undefined){
+  const updateStreetDisplay = (streetName: string) => {
+    if (overpassAreaId === undefined) {
       return
     }
-    let opQuery= new OverpassStreetQuery(streetName,overpassAreaId)
-    opQuery.execute().then(()=>{
+    let opQuery = new OverpassStreetQuery(streetName, overpassAreaId)
+    opQuery.execute().then(() => {
       setDisplayedStreet(
-         opQuery.getDrawableStreet()
-        )
+        opQuery.getDrawableStreet()
+      )
     })
   }
 
@@ -268,14 +270,14 @@ export default function PersistentDrawerLeft() {
           </div>
           <div id="map-wrapper" className={classes.map}>
             <Map uiMode={themeType}
-             onGuessLocationUpdate={setLastGuessedPosition}
-             initialCoordinates={startCoordinates}
-             displayedStreet={displayedStreet}
-             />
-          </div>          
-          <QuestionFeedbackDialog buttonCloseClicked={() =>setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
-          <ErrorDialog buttonCloseClicked={() =>setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
-          <GeneralDescriptionDialog buttonCloseClicked={() =>setGeneralDescriptionOpen(false)} isOpen={generalDescriptionOpen}  />
+              onGuessLocationUpdate={setLastGuessedPosition}
+              initialCoordinates={startCoordinates}
+              displayedStreet={displayedStreet}
+            />
+          </div>
+          <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
+          <ErrorDialog buttonCloseClicked={() => setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
+          <GeneralDescriptionDialog buttonCloseClicked={() => setGeneralDescriptionOpen(false)} isOpen={generalDescriptionOpen} />
         </main>
       </ThemeProvider>
     </div>
