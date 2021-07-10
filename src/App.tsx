@@ -222,20 +222,6 @@ export default function PersistentDrawerLeft() {
       setErrorDialogOpen(true)
     })
     
-    /*
-    try {
-      displayStreetOverpass(streetName)
-      return
-    } catch (error) {
-      console.log("Overpass failed");
-    }
-    try {
-      displayStreetESRI(streetName)
-    } catch (error) {
-      console.log("ESRI Failed");
-
-    }
-    */
   }
 
   const onQuestionClickHandler = (question: IQuestion) => {
