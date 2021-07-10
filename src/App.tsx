@@ -35,6 +35,8 @@ import { GeneralDescriptionDialog } from './ui/GeneralDescriptionDialog';
 import { GeocodeError } from './geocode/GeocodeError';
 import IDrawableStreet from './geocode/IDrawableStreet';
 import { OverpassStreetQuery } from './geocode/overpass/OverpassStreetQuery';
+import { generateQuerySuffix } from './geocode/esri/EsriHelper';
+import { EsriStreetQuery } from './geocode/esri/EsriStreetQuerry';
 
 const drawerWidth = 240;
 
@@ -121,7 +123,7 @@ export default function PersistentDrawerLeft() {
   //does this belong here?
   const [displayedStreet, setDisplayedStreet] = useState<IDrawableStreet>()
   const [overpassAreaId, setOverpassAreaId] = useState<string>()
-
+  const [esriQuerySuffix, setEsriQuerySuffix] = useState<string>()
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -134,6 +136,7 @@ export default function PersistentDrawerLeft() {
   const chooseFileClickHandler = (file: LearningFile) => {
     handleDrawerClose();
     setOverpassAreaId(file.overpassAreaId)
+    setEsriQuerySuffix(generateQuerySuffix(file))
     setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler));
     setStartCoordinates(file.startCoordinates);
   }
@@ -159,7 +162,7 @@ export default function PersistentDrawerLeft() {
     if (activeQuestion === undefined) {
       return
     }
-    updateStreetDisplay(activeQuestion)
+    displayStreet(activeQuestion)
     isSameStreetOverpass(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
       progressHandler?.processAnswer(activeQuestion, isTrue);
       setAnswerWasCorrect(isTrue)
@@ -176,20 +179,67 @@ export default function PersistentDrawerLeft() {
     )
   }
 
-  const updateStreetDisplay = (streetName: string) => {
-    if (overpassAreaId === undefined) {
-      return
+
+  const displayStreetESRI = async (streetName: string): Promise<void> => {
+    if (esriQuerySuffix !== undefined) {
+      let esriQuery = new EsriStreetQuery(streetName, esriQuerySuffix)
+      await esriQuery.execute().then(() => {
+        setDisplayedStreet(
+          esriQuery.getDrawableStreet()
+        )
+      })
     }
-    let opQuery = new OverpassStreetQuery(streetName, overpassAreaId)
-    opQuery.execute().then(() => {
-      setDisplayedStreet(
-        opQuery.getDrawableStreet()
-      )
+  }
+
+  /**
+   * !USE displayStreet()!
+   * Displays the street on the map using the Overpass Api
+   * @param streetName Name of the Street to display
+   */
+  const displayStreetOverpass = async (streetName: string): Promise<void> => {
+    //display using overpass api 
+    if (overpassAreaId !== undefined) {
+      let opQuery = new OverpassStreetQuery(streetName, overpassAreaId)
+      await opQuery.execute().then(() => {
+        setDisplayedStreet(
+          opQuery.getDrawableStreet()
+        )
+      })
+    }
+  }
+
+  /**
+   * Displays the Street
+   * 1. Tries overpass
+   * 2. Tries ESRI
+   * @param streetName Name of the Street to display
+   */
+  const displayStreet = (streetName: string): void => {
+    displayStreetOverpass(streetName).catch(() => {
+      displayStreetESRI(streetName)
+    }).catch(() =>{
+      setErrorDialogText(`Unfortunatly the App was not able to resolve ${streetName}. The primary and secondary Geocoder are exhausted.`)
+      setErrorDialogOpen(true)
     })
+    
+    /*
+    try {
+      displayStreetOverpass(streetName)
+      return
+    } catch (error) {
+      console.log("Overpass failed");
+    }
+    try {
+      displayStreetESRI(streetName)
+    } catch (error) {
+      console.log("ESRI Failed");
+
+    }
+    */
   }
 
   const onQuestionClickHandler = (question: IQuestion) => {
-    updateStreetDisplay(question.street)
+    displayStreet(question.street)
   }
 
   const theme = createMuiTheme({

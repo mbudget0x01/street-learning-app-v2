@@ -5,5 +5,5 @@ export default interface IDrawableStreet{
     name:string,
     pathOption: PathOptions,
     center:LatLng,
-    polyLines: IDrawablePolyLine[],
+    polyLines: IDrawablePolyLine[] | undefined,
 }
