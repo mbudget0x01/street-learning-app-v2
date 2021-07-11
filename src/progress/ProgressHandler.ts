@@ -10,11 +10,11 @@ export class ProgressHandler {
 
     constructor(baseFile: LearningFile, onReadyHandler:(caller:ProgressHandler) => void) {
         this.baseFile = baseFile;
-        this.resetProgress();
+        this.loadFiles();
         this.onReadyHandler = onReadyHandler;
     }
 
-    public resetProgress() {
+    private loadFiles() {
         this.baseFile.getStreets().then((streets: string[]) =>{
             //we don't want any reference
             this.allQuestions = Object.assign([], streets).map((q:string) => {
@@ -33,10 +33,18 @@ export class ProgressHandler {
         )
     }
 
-    public getNextStreet(): string {
-        let openQuestions:IQuestion[] = this.allQuestions.filter((question:IQuestion) => {
+    public resetProgress(){
+        this.allQuestions.forEach((question) =>{question.answerdCorrect = false})
+    }
+
+    private getUnanswerdStreets():IQuestion[]{
+        return this.allQuestions.filter((question:IQuestion) => {
             return !question.answerdCorrect
         })
+    }
+
+    public getNextStreet(): string {
+        let openQuestions:IQuestion[] = this.getUnanswerdStreets()
         let i:number =  Math.floor(Math.random() * openQuestions.length) -1
         if(i < 0){i=0}     
         return openQuestions[i].street
@@ -52,7 +60,7 @@ export class ProgressHandler {
     }
 
     public hasNextStreet():boolean{
-        return this.allQuestions.length !== 0;
+        return this.getUnanswerdStreets().length !== 0;
     }
 
     public getStreets():IQuestion[]{

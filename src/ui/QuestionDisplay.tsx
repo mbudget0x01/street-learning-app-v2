@@ -6,6 +6,8 @@ interface Props{
     isDisabled:boolean,
     onCheckCklickHandler: () => void,
     onAdvanceClickHandler: () => void,
+    onDisplayManualAnswerClickHandler: () => void,
+    manualAnswerPending:boolean,
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,6 +46,7 @@ export const QuestionDisplay = (props:Props) => {
             <Typography variant="h6">{"Active Question: " + props.activeQuestion }</Typography>
             <Button variant="contained" color="primary" disabled={answerd || props.isDisabled} onClick={onCheckCklickHandler} className={classes.button}>Check</Button>
             <Button variant="contained" color="primary" disabled={!answerd || props.isDisabled} onClick={onAdvanceClickHandler}>Next Question</Button>
+            <Button variant="contained" color="primary" disabled={!props.manualAnswerPending} onClick={props.onDisplayManualAnswerClickHandler}>Answer Manually</Button>
         </Card>
     )
 }
