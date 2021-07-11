@@ -37,6 +37,8 @@ import IDrawableStreet from './geocode/IDrawableStreet';
 import { OverpassStreetQuery } from './geocode/overpass/OverpassStreetQuery';
 import { generateQuerySuffix } from './geocode/esri/EsriHelper';
 import { EsriStreetQuery } from './geocode/esri/EsriStreetQuerry';
+import { ManualDecisionDialog } from './ui/ManualDecisionDialog';
+import { ResetProgressDialog } from './ui/ResetProgressDialog';
 
 const drawerWidth = 240;
 
@@ -119,11 +121,14 @@ export default function PersistentDrawerLeft() {
   const [answerWasCorrect, setAnswerWasCorrect] = useState<boolean>(false)
   const [errorDialogText, setErrorDialogText] = useState<string>("")
   const [generalDescriptionOpen, setGeneralDescriptionOpen] = useState<boolean>(true)
+  const [manualAnswerDialogOpen, setManualAnswerDialogOpen] = useState<boolean>(false)
+  const [manualAnswerPending, setManualAnswerPending] = useState<boolean>(false)
   const [startCoordinates, setStartCoordinates] = useState<[number, number]>([48.858093, 2.294694])
   //does this belong here?
   const [displayedStreet, setDisplayedStreet] = useState<IDrawableStreet>()
   const [overpassAreaId, setOverpassAreaId] = useState<string>()
   const [esriQuerySuffix, setEsriQuerySuffix] = useState<string>()
+  const [resetProgressDialogOpen, setResetProgressDialogOpen] = useState<boolean>(false)
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -132,6 +137,20 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const setAnswer = (isCorrect: boolean, displayFeedbackDialog:boolean) => {
+    if (activeQuestion !== undefined) {
+      progressHandler?.processAnswer(activeQuestion, isCorrect);
+    }
+    setAnswerWasCorrect(isCorrect)
+    if(displayFeedbackDialog){
+      setAnswerDialogOpen(true)
+    }
+    if (progressHandler !== null && !progressHandler.hasNextStreet()) {
+      setResetProgressDialogOpen(true)
+      return
+    }
+  }
 
   const chooseFileClickHandler = (file: LearningFile) => {
     handleDrawerClose();
@@ -153,8 +172,10 @@ export default function PersistentDrawerLeft() {
       return
     }
     if (!progressHandler.hasNextStreet()) {
-      console.log("empty");
+      //if nothing loaded keep here
+      return
     }
+
     setActiveQuestion(progressHandler.getNextStreet())
   }
 
@@ -164,12 +185,9 @@ export default function PersistentDrawerLeft() {
     }
     displayStreet(activeQuestion)
     isSameStreetOverpass(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
-      progressHandler?.processAnswer(activeQuestion, isTrue);
-      setAnswerWasCorrect(isTrue)
-      setAnswerDialogOpen(true)
+      setAnswer(isTrue, true)
     }).catch((error: GeocodeError) => {
-      setErrorDialogText(`${error.geocodeErrorCause}. ${error.message}`)
-      setErrorDialogOpen(true)
+      displayManualAnswerDialog()
     }).finally(() => {
       if (progressHandler !== null) {
         //seems pointless but forces rerender thanks react 
@@ -177,6 +195,18 @@ export default function PersistentDrawerLeft() {
       }
     }
     )
+  }
+
+  const displayManualAnswerDialog = () => {
+    setManualAnswerPending(true)
+    setManualAnswerDialogOpen(true)
+  }
+
+  const manualAnswerSelected = (wasCorrect: boolean) => {
+    setManualAnswerDialogOpen(false)
+    setManualAnswerPending(false)
+
+    setAnswer(wasCorrect, false)
   }
 
 
@@ -217,15 +247,22 @@ export default function PersistentDrawerLeft() {
   const displayStreet = (streetName: string): void => {
     displayStreetOverpass(streetName).catch(() => {
       displayStreetESRI(streetName)
-    }).catch(() =>{
+    }).catch(() => {
       setErrorDialogText(`Unfortunatly the App was not able to resolve ${streetName}. The primary and secondary Geocoder are exhausted.`)
       setErrorDialogOpen(true)
     })
-    
+
   }
 
   const onQuestionClickHandler = (question: IQuestion) => {
     displayStreet(question.street)
+  }
+
+  const onResetProgressOkClick = () => {
+    setResetProgressDialogOpen(false)
+    if (progressHandler !== null) {
+      progressHandler.resetProgress()
+    }
   }
 
   const theme = createMuiTheme({
@@ -302,6 +339,8 @@ export default function PersistentDrawerLeft() {
               isDisabled={!gameIsReady}
               onCheckCklickHandler={buttonCheckClickHandler}
               onAdvanceClickHandler={buttonAdvanceClickHandler}
+              onDisplayManualAnswerClickHandler={() => setManualAnswerDialogOpen(true)}
+              manualAnswerPending={manualAnswerPending}
             />
           </div>
           <div id="map-wrapper" className={classes.map}>
@@ -314,6 +353,8 @@ export default function PersistentDrawerLeft() {
           <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
           <ErrorDialog buttonCloseClicked={() => setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
           <GeneralDescriptionDialog buttonCloseClicked={() => setGeneralDescriptionOpen(false)} isOpen={generalDescriptionOpen} />
+          <ManualDecisionDialog buttonCloseClicked={() => setManualAnswerDialogOpen(false)} isOpen={manualAnswerDialogOpen} buttonAnswerClicked={manualAnswerSelected} />
+          <ResetProgressDialog isOpen={resetProgressDialogOpen} buttonCloseClicked={onResetProgressOkClick} />
         </main>
       </ThemeProvider>
     </div>
