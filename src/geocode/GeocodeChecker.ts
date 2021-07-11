@@ -37,9 +37,14 @@ async function isSameStreetNominatim(position: LatLng, streetName: string): Prom
     return result.address.road === streetName
 }
 /**
- * If distance of positions is greater than this return false
+ * If distance of positions is greater then this returns false
  */
 const maxDistance:number = 1000;
+
+/**
+ * If distance is below this value then this returns true
+ */
+const correctThreshold:number = 10;
 
 /**
  * Compares if the guessed location is in the street provided
@@ -52,9 +57,15 @@ export async function isSameStreet(guessedPosition: LatLngExpression, streetGeom
     try {
         return await isSameStreetNominatim(latLng(guessedPosition), streetName)
     }catch(error){
+        
+        let distance:number = latLng(guessedPosition).distanceTo(latLng(streetGeometricCenter))
         //as this usually concernes small roads, if distance > 1000m we return false
-        if(latLng(guessedPosition).distanceTo(latLng(streetGeometricCenter)) > maxDistance){
+        if( distance > maxDistance){
             return false
+        }
+        //if is within 10m from marker its save to say its correct
+        if(distance <= correctThreshold){
+            return true
         }
         //not possible to identify
         return undefined
