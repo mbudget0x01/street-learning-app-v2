@@ -184,9 +184,7 @@ export default function PersistentDrawerLeft() {
     setActiveQuestion(progressHandler.getNextStreet())
   }
 
-  const buttonCheckClickHandler = async () => {
-    console.log("aq", activeQuestion);
-    
+  const buttonCheckClickHandler = async () => {  
     if (activeQuestion === undefined) {
       return
     }
@@ -196,8 +194,6 @@ export default function PersistentDrawerLeft() {
       return
     }
     isSameStreet(lastGuessedPosition, street.center, activeQuestion).then((response: boolean | undefined) => {
-      console.log(response);
-      
       if (response === undefined) {
         displayManualAnswerDialog()
         return
