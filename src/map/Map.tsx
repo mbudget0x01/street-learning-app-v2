@@ -13,6 +13,7 @@ interface Props {
     onGuessLocationUpdate: (position: LatLng) => void,
     initialCoordinates: LatLngExpression,
     displayedStreet: IDrawableStreet | undefined,
+    activeQuestion: string | undefined,
 }
 export const Map = (props: Props) => {
 
@@ -65,7 +66,7 @@ export const Map = (props: Props) => {
                 </LayersControl.BaseLayer>
             </LayersControl>
             <Street drawableStreet={props.displayedStreet} onCenterChanged={(pos:LatLngExpression)=> flyToPos(pos)} />
-            <MarkerGuess position={markerPos} question={props.displayedStreet?.name} onPositionUpdate={onGuessMarkerPosUpdate} />
+            <MarkerGuess position={markerPos} question={props.activeQuestion} onPositionUpdate={onGuessMarkerPosUpdate} />
         </MapContainer>
     )
 }

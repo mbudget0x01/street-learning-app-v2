@@ -209,7 +209,11 @@ export default function PersistentDrawerLeft() {
     setAnswer(wasCorrect, false)
   }
 
-
+  /**
+   * !USE displayStreet()!
+   * Displays the street on the map using the ESRI Api
+   * @param streetName Name of the Street to display
+   */
   const displayStreetESRI = async (streetName: string): Promise<void> => {
     if (esriQuerySuffix !== undefined) {
       let esriQuery = new EsriStreetQuery(streetName, esriQuerySuffix)
@@ -348,6 +352,7 @@ export default function PersistentDrawerLeft() {
               onGuessLocationUpdate={setLastGuessedPosition}
               initialCoordinates={startCoordinates}
               displayedStreet={displayedStreet}
+              activeQuestion={activeQuestion}
             />
           </div>
           <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
