@@ -27,19 +27,18 @@ import { QuestionDisplay } from './ui/QuestionDisplay';
 import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
 import { ProgressList } from './progress/ProgressList';
 import { IQuestion } from './progress/IQuestion';
-import { LatLng } from 'leaflet';
-import { isSameStreetOverpass } from './geocode/GeocodeChecker';
+import { latLng, LatLng } from 'leaflet';
+import { isSameStreet } from './geocode/GeocodeChecker';
 import { ErrorDialog } from './ui/ErrorDialog';
 import { QuestionFeedbackDialog } from './ui/QuestionFeedbackDialog';
 import { GeneralDescriptionDialog } from './ui/GeneralDescriptionDialog';
-import { GeocodeError } from './geocode/GeocodeError';
 import IDrawableStreet from './geocode/IDrawableStreet';
-import { OverpassStreetQuery } from './geocode/overpass/OverpassStreetQuery';
 import { generateQuerySuffix } from './geocode/esri/EsriHelper';
-import { EsriStreetQuery } from './geocode/esri/EsriStreetQuerry';
 import { ManualDecisionDialog } from './ui/ManualDecisionDialog';
 import { ResetProgressDialog } from './ui/ResetProgressDialog';
+import { StreetGeocoder } from './geocode/StreetGeocoder';
 
+//#region style
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -106,8 +105,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+//#endregion
+
 export default function PersistentDrawerLeft() {
   const classes = useStyles();
+  const streetGeocoder = StreetGeocoder.getInstance();
   //const theme = useTheme();
   const [open, setOpen] = React.useState<boolean>(true);
   const [themeType, setThemeType] = useState<ThemeType>('light')
@@ -138,12 +140,12 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
-  const setAnswer = (isCorrect: boolean, displayFeedbackDialog:boolean) => {
+  const setAnswer = (isCorrect: boolean, displayFeedbackDialog: boolean) => {
     if (activeQuestion !== undefined) {
       progressHandler?.processAnswer(activeQuestion, isCorrect);
     }
     setAnswerWasCorrect(isCorrect)
-    if(displayFeedbackDialog){
+    if (displayFeedbackDialog) {
       setAnswerDialogOpen(true)
     }
     if (progressHandler !== null && !progressHandler.hasNextStreet()) {
@@ -158,6 +160,7 @@ export default function PersistentDrawerLeft() {
     setEsriQuerySuffix(generateQuerySuffix(file))
     setProgressHandler(new ProgressHandler(file, afterProgressHandlerLoadEventHandler));
     setStartCoordinates(file.startCoordinates);
+    setLastGuessedPosition(latLng(file.startCoordinates))
   }
 
   const afterProgressHandlerLoadEventHandler = (instance: ProgressHandler) => {
@@ -179,15 +182,21 @@ export default function PersistentDrawerLeft() {
     setActiveQuestion(progressHandler.getNextStreet())
   }
 
-  const buttonCheckClickHandler = () => {
+  const buttonCheckClickHandler = async () => {  
     if (activeQuestion === undefined) {
       return
     }
-    displayStreet(activeQuestion)
-    isSameStreetOverpass(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
-      setAnswer(isTrue, true)
-    }).catch((error: GeocodeError) => {
-      displayManualAnswerDialog()
+    let street:IDrawableStreet | undefined = await geocodeStreet(activeQuestion)
+    setDisplayedStreet(street)
+    if (street === undefined) {
+      return
+    }
+    isSameStreet(lastGuessedPosition, street.center, activeQuestion).then((response: boolean | undefined) => {
+      if (response === undefined) {
+        displayManualAnswerDialog()
+        return
+      }
+      setAnswer(response, true)
     }).finally(() => {
       if (progressHandler !== null) {
         //seems pointless but forces rerender thanks react 
@@ -209,53 +218,41 @@ export default function PersistentDrawerLeft() {
     setAnswer(wasCorrect, false)
   }
 
-
-  const displayStreetESRI = async (streetName: string): Promise<void> => {
-    if (esriQuerySuffix !== undefined) {
-      let esriQuery = new EsriStreetQuery(streetName, esriQuerySuffix)
-      await esriQuery.execute().then(() => {
-        setDisplayedStreet(
-          esriQuery.getDrawableStreet()
-        )
-      })
-    }
+  const displayError = (errorText: string) => {
+    setErrorDialogText(errorText)
+    setErrorDialogOpen(true)
   }
 
   /**
-   * !USE displayStreet()!
-   * Displays the street on the map using the Overpass Api
+   * Geocodes the street using StreetGeocoder
    * @param streetName Name of the Street to display
+   * @returns the geocoded street
    */
-  const displayStreetOverpass = async (streetName: string): Promise<void> => {
-    //display using overpass api 
-    if (overpassAreaId !== undefined) {
-      let opQuery = new OverpassStreetQuery(streetName, overpassAreaId)
-      await opQuery.execute().then(() => {
-        setDisplayedStreet(
-          opQuery.getDrawableStreet()
-        )
-      })
+  const geocodeStreet = async (streetName: string): Promise<IDrawableStreet | undefined> => {
+    if (!overpassAreaId || !esriQuerySuffix) {
+      displayError("Can't geocode! Check descriptor.json.")
+      return undefined
     }
+    let displStrt: IDrawableStreet | undefined = undefined;
+    
+    //catch network issues
+    try{
+      displStrt = await streetGeocoder.geocodeStreet(streetName, overpassAreaId, esriQuerySuffix)
+    } catch {
+      displayError("There is an network issue. Could not reach the API(s)")
+      return undefined
+    }
+    
+    if (!displStrt) {
+      displayError(`Unfortunatly the App was not able to resolve ${streetName}. The primary and secondary Geocoder are exhausted.`)
+      return undefined
+    }    
+    return displStrt
   }
 
-  /**
-   * Displays the Street
-   * 1. Tries overpass
-   * 2. Tries ESRI
-   * @param streetName Name of the Street to display
-   */
-  const displayStreet = (streetName: string): void => {
-    displayStreetOverpass(streetName).catch(() => {
-      displayStreetESRI(streetName)
-    }).catch(() => {
-      setErrorDialogText(`Unfortunatly the App was not able to resolve ${streetName}. The primary and secondary Geocoder are exhausted.`)
-      setErrorDialogOpen(true)
-    })
-
-  }
-
-  const onQuestionClickHandler = (question: IQuestion) => {
-    displayStreet(question.street)
+  const onQuestionClickHandler = async (question: IQuestion) => {
+    let street:IDrawableStreet | undefined = await geocodeStreet(question.street)
+    setDisplayedStreet(street)
   }
 
   const onResetProgressOkClick = () => {
@@ -348,6 +345,7 @@ export default function PersistentDrawerLeft() {
               onGuessLocationUpdate={setLastGuessedPosition}
               initialCoordinates={startCoordinates}
               displayedStreet={displayedStreet}
+              activeQuestion={activeQuestion}
             />
           </div>
           <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />

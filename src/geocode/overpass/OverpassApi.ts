@@ -43,8 +43,6 @@ export const fetchStreet = async (
 
 
   if (elements.length === 0) {
-    console.log("error");
-
     throw new GeocodeError("Street Name is unknown to the Overpass API.", 'NotResolvable')
   }
   return elements;

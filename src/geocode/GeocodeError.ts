@@ -1,9 +1,13 @@
 export class GeocodeError extends Error {
-    geocodeErrorCause : GeocodeErrorCause
+    private geocodeErrorCause : GeocodeErrorCause
     
     constructor(message: string, cause:GeocodeErrorCause){
         super(message);
         this.geocodeErrorCause = cause;
+    }
+
+    public getCause():GeocodeErrorCause{
+        return this.geocodeErrorCause
     }
 }
 
