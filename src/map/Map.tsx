@@ -64,8 +64,14 @@ export const Map = (props: Props) => {
                         url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
                     />
                 </LayersControl.BaseLayer>
+                <LayersControl.BaseLayer name="Satellite">
+                    <TileLayer
+                        attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                    />
+                </LayersControl.BaseLayer>
             </LayersControl>
-            <Street drawableStreet={props.displayedStreet} onCenterChanged={(pos:LatLngExpression)=> flyToPos(pos)} />
+            <Street drawableStreet={props.displayedStreet} onCenterChanged={(pos: LatLngExpression) => flyToPos(pos)} />
             <MarkerGuess position={markerPos} question={props.activeQuestion} onPositionUpdate={onGuessMarkerPosUpdate} />
         </MapContainer>
     )
