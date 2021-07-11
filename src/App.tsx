@@ -28,11 +28,10 @@ import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
 import { ProgressList } from './progress/ProgressList';
 import { IQuestion } from './progress/IQuestion';
 import { LatLng } from 'leaflet';
-import { isSameStreetNominatim } from './geocode/GeocodeChecker';
+import { isSameStreet } from './geocode/GeocodeChecker';
 import { ErrorDialog } from './ui/ErrorDialog';
 import { QuestionFeedbackDialog } from './ui/QuestionFeedbackDialog';
 import { GeneralDescriptionDialog } from './ui/GeneralDescriptionDialog';
-import { GeocodeError } from './geocode/GeocodeError';
 import IDrawableStreet from './geocode/IDrawableStreet';
 import { OverpassStreetQuery } from './geocode/overpass/OverpassStreetQuery';
 import { generateQuerySuffix } from './geocode/esri/EsriHelper';
@@ -184,15 +183,15 @@ export default function PersistentDrawerLeft() {
       return
     }
     displayStreet(activeQuestion)
-    isSameStreetNominatim(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
-      setAnswer(isTrue, true)
-    }).catch((error: GeocodeError) => {
-      //if distance from center of the street to center of resolved point is > 1000 set false as normally this concernes small streets
-      if(displayedStreet !== undefined && displayedStreet?.center.distanceTo(lastGuessedPosition)> 1000){
-        setAnswer(false, true)
+    if(displayedStreet === undefined){
+      return
+    }
+    isSameStreet(lastGuessedPosition, displayedStreet.center , activeQuestion).then((response:boolean|undefined) => {
+      if(response === undefined){
+        displayManualAnswerDialog()
         return
       }
-      displayManualAnswerDialog()
+      setAnswer(response, true)
     }).finally(() => {
       if (progressHandler !== null) {
         //seems pointless but forces rerender thanks react 
@@ -247,6 +246,7 @@ export default function PersistentDrawerLeft() {
     }
   }
 
+  //make this Async!!!
   /**
    * Displays the Street
    * 1. Tries overpass
