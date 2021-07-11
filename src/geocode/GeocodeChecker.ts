@@ -3,7 +3,7 @@ import { CustomNominatimResponse } from "./nominatim/CustomNominatimResponse";
 import * as Nominatim from "nominatim-browser"
 import { GeocodeError } from "./GeocodeError";
 
-export async function isSameStreetOverpass(position: LatLng, streetName: string): Promise<boolean> {
+export async function isSameStreetNominatim(position: LatLng, streetName: string): Promise<boolean> {
 
     let result: CustomNominatimResponse
     try {

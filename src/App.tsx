@@ -28,7 +28,7 @@ import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
 import { ProgressList } from './progress/ProgressList';
 import { IQuestion } from './progress/IQuestion';
 import { LatLng } from 'leaflet';
-import { isSameStreetOverpass } from './geocode/GeocodeChecker';
+import { isSameStreetNominatim } from './geocode/GeocodeChecker';
 import { ErrorDialog } from './ui/ErrorDialog';
 import { QuestionFeedbackDialog } from './ui/QuestionFeedbackDialog';
 import { GeneralDescriptionDialog } from './ui/GeneralDescriptionDialog';
@@ -184,9 +184,14 @@ export default function PersistentDrawerLeft() {
       return
     }
     displayStreet(activeQuestion)
-    isSameStreetOverpass(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
+    isSameStreetNominatim(lastGuessedPosition, activeQuestion).then((isTrue: boolean) => {
       setAnswer(isTrue, true)
     }).catch((error: GeocodeError) => {
+      //if distance from center of the street to center of resolved point is > 1000 set false as normally this concernes small streets
+      if(displayedStreet !== undefined && displayedStreet?.center.distanceTo(lastGuessedPosition)> 1000){
+        setAnswer(false, true)
+        return
+      }
       displayManualAnswerDialog()
     }).finally(() => {
       if (progressHandler !== null) {
