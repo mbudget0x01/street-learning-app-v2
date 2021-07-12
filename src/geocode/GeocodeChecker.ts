@@ -33,8 +33,6 @@ async function isSameStreetNominatim(position: LatLng, streetName: string): Prom
         throw new GeocodeError("Street Name is unknown to the Nominatim API.", 'NotResolvable')
     }
     
-    console.log("eq", streetsConsideredEqual(result.address.road, streetName, [ Number(result.lat),Number(result.lon)],position));
-    
     return streetsConsideredEqual(result.address.road, streetName, [ Number(result.lat),Number(result.lon)],position)
     //return result.address.road === streetName
 }
@@ -62,7 +60,6 @@ export async function isSameStreet(guessedPosition: LatLngExpression, streetGeom
         
         //last effort calculating the distance to the supplied approximate position
         let distance:number = latLng(guessedPosition).distanceTo(latLng(streetGeometricCenter))
-        console.log(distance);
         
         
         //as this usually concernes small roads, if distance > 1000m we return false per default
@@ -95,11 +92,6 @@ function streetsConsideredEqual(street1Name:string, street2Name:string, street1C
         
         const s1:string = removeStreetNamePrefix(prefix, internalStreet1Name)
         const s2:string = removeStreetNamePrefix(prefix, internalStreet2Name)
-
-        console.log(latLng(street1Center).distanceTo(street2Center));
-        console.log(latLng(street1Center).distanceTo(street2Center) <= considerdEqualDistanceThreshold);
-        
-        
 
         if(s1 === s2 && latLng(street1Center).distanceTo(street2Center) <= considerdEqualDistanceThreshold ){           
             return true
