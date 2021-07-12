@@ -152,13 +152,14 @@ export default function PersistentDrawerLeft() {
       progressHandler?.processAnswer(activeQuestion, isCorrect);
     }
     setAnswerWasCorrect(isCorrect)
-    if (displayFeedbackDialog) {
-      setAnswerDialogOpen(true)
-    }
     if (progressHandler !== null && !progressHandler.hasNextStreet()) {
       setResetProgressDialogOpen(true)
       return
     }
+    if (displayFeedbackDialog) {
+      setAnswerDialogOpen(true)
+    }
+    
   }
 
   const chooseFileClickHandler = (file: LearningFile) => {
@@ -193,9 +194,7 @@ export default function PersistentDrawerLeft() {
       }
       setAnswer(response, true)
     }).finally(() => {
-      if (progressHandler !== null) {
-        //seems pointless but forces rerender thanks react 
-        //setStreets(progressHandler.getStreets().concat([]))
+      if (progressHandler !== null && progressHandler.hasNextStreet()) {
         setActiveQuestion(progressHandler.getNextStreet())
       }
     }
