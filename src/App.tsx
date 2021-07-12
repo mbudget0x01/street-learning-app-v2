@@ -37,6 +37,7 @@ import { generateQuerySuffix } from './geocode/esri/EsriHelper';
 import { ManualDecisionDialog } from './ui/ManualDecisionDialog';
 import { ResetProgressDialog } from './ui/ResetProgressDialog';
 import { StreetGeocoder } from './geocode/StreetGeocoder';
+import { Hidden } from '@material-ui/core';
 
 //#region style
 const drawerWidth = 240;
@@ -101,6 +102,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     map: {
       height: '80vh'
+    },
+    toolbar: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '100%',
+      alignItems: 'center',
     }
   }),
 );
@@ -170,23 +177,11 @@ export default function PersistentDrawerLeft() {
     setActiveQuestion(instance.getNextStreet())
   }
 
-  const buttonAdvanceClickHandler = () => {
-    if (progressHandler == null) {
-      return
-    }
-    if (!progressHandler.hasNextStreet()) {
-      //if nothing loaded keep here
-      return
-    }
-
-    setActiveQuestion(progressHandler.getNextStreet())
-  }
-
-  const buttonCheckClickHandler = async () => {  
+  const buttonCheckClickHandler = async () => {
     if (activeQuestion === undefined) {
       return
     }
-    let street:IDrawableStreet | undefined = await geocodeStreet(activeQuestion)
+    let street: IDrawableStreet | undefined = await geocodeStreet(activeQuestion)
     setDisplayedStreet(street)
     if (street === undefined) {
       return
@@ -200,7 +195,8 @@ export default function PersistentDrawerLeft() {
     }).finally(() => {
       if (progressHandler !== null) {
         //seems pointless but forces rerender thanks react 
-        setStreets(progressHandler.getStreets().concat([]))
+        //setStreets(progressHandler.getStreets().concat([]))
+        setActiveQuestion(progressHandler.getNextStreet())
       }
     }
     )
@@ -234,24 +230,24 @@ export default function PersistentDrawerLeft() {
       return undefined
     }
     let displStrt: IDrawableStreet | undefined = undefined;
-    
+
     //catch network issues
-    try{
+    try {
       displStrt = await streetGeocoder.geocodeStreet(streetName, overpassAreaId, esriQuerySuffix)
     } catch {
       displayError("There is an network issue. Could not reach the API(s)")
       return undefined
     }
-    
+
     if (!displStrt) {
       displayError(`Unfortunatly the App was not able to resolve ${streetName}. The primary and secondary Geocoder are exhausted.`)
       return undefined
-    }    
+    }
     return displStrt
   }
 
   const onQuestionClickHandler = async (question: IQuestion) => {
-    let street:IDrawableStreet | undefined = await geocodeStreet(question.street)
+    let street: IDrawableStreet | undefined = await geocodeStreet(question.street)
     setDisplayedStreet(street)
   }
 
@@ -278,7 +274,8 @@ export default function PersistentDrawerLeft() {
             [classes.appBarShift]: open,
           })}
         >
-          <Toolbar>
+          <Toolbar >
+
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -288,10 +285,22 @@ export default function PersistentDrawerLeft() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
-              Street Learning App V2
-            </Typography>
-            <ThemeSwitch themeType={themeType} onThemeChange={setThemeType} />
+            <div className={classes.toolbar}>
+              <div>
+                <Hidden smUp><Typography variant="h6" noWrap>
+                  SLA V2
+                </Typography>
+                </Hidden>
+                <Hidden xsDown>
+                  <Typography variant="h6" noWrap>
+                    Street Learning App V2
+                  </Typography>
+                </Hidden>
+              </div>
+              <div>
+                <ThemeSwitch themeType={themeType} onThemeChange={setThemeType} />
+              </div>
+            </div>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -335,7 +344,6 @@ export default function PersistentDrawerLeft() {
               activeQuestion={activeQuestion}
               isDisabled={!gameIsReady}
               onCheckCklickHandler={buttonCheckClickHandler}
-              onAdvanceClickHandler={buttonAdvanceClickHandler}
               onDisplayManualAnswerClickHandler={() => setManualAnswerDialogOpen(true)}
               manualAnswerPending={manualAnswerPending}
             />
@@ -348,7 +356,7 @@ export default function PersistentDrawerLeft() {
               activeQuestion={activeQuestion}
             />
           </div>
-          <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
+          <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} nextQuestion={activeQuestion} />
           <ErrorDialog buttonCloseClicked={() => setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
           <GeneralDescriptionDialog buttonCloseClicked={() => setGeneralDescriptionOpen(false)} isOpen={generalDescriptionOpen} />
           <ManualDecisionDialog buttonCloseClicked={() => setManualAnswerDialogOpen(false)} isOpen={manualAnswerDialogOpen} buttonAnswerClicked={manualAnswerSelected} />
