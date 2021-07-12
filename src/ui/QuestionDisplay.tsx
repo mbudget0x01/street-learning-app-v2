@@ -1,19 +1,16 @@
-import { Button, Card, createStyles, Hidden, makeStyles, Theme, Typography } from "@material-ui/core"
+import { Button, Card, createStyles, Hidden, makeStyles, Typography } from "@material-ui/core"
 import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
-import LabelImportantOutlinedIcon from '@material-ui/icons/LabelImportantOutlined';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
-import { useState } from "react";
 
 interface Props {
     activeQuestion: string | undefined,
     isDisabled: boolean,
     onCheckCklickHandler: () => void,
-    onAdvanceClickHandler: () => void,
     onDisplayManualAnswerClickHandler: () => void,
     manualAnswerPending: boolean,
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
     createStyles({
         card: {
             width: "100%",
@@ -44,17 +41,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const QuestionDisplay = (props: Props) => {
     const classes = useStyles()
-    const [answerd, setAnswerd] = useState<boolean>(false)
-
-    const onCheckCklickHandler = () => {
-        props.onCheckCklickHandler()
-        setAnswerd(true)
-    }
-
-    const onAdvanceClickHandler = () => {
-        props.onAdvanceClickHandler()
-        setAnswerd(false)
-    }
 
     return (
         <Card variant="outlined" className={classes.card}>
@@ -67,21 +53,12 @@ export const QuestionDisplay = (props: Props) => {
             <div className={classes.cardDivButton}>
                 <Button variant="contained"
                     color="primary"
-                    disabled={answerd || props.isDisabled}
-                    onClick={onCheckCklickHandler}
+                    disabled={props.manualAnswerPending || props.isDisabled}
+                    onClick={props.onCheckCklickHandler}
                     className={classes.button}
                     startIcon={<Hidden xsDown><CheckCircleOutlineOutlinedIcon /></Hidden>}>
                     <Hidden smUp><CheckCircleOutlineOutlinedIcon /></Hidden>
                     <Hidden xsDown>Check</Hidden>
-                </Button>
-                <Button variant="contained"
-                    color="primary"
-                    disabled={!answerd || props.isDisabled || props.manualAnswerPending}
-                    onClick={onAdvanceClickHandler}
-                    className={classes.button}
-                    startIcon={<Hidden xsDown><LabelImportantOutlinedIcon /></Hidden>}>
-                    <Hidden smUp><LabelImportantOutlinedIcon /></Hidden>
-                    <Hidden xsDown>Next Question</Hidden>
                 </Button>
                 <Button variant="contained"
                     color="primary"

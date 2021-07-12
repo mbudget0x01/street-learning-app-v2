@@ -177,18 +177,6 @@ export default function PersistentDrawerLeft() {
     setActiveQuestion(instance.getNextStreet())
   }
 
-  const buttonAdvanceClickHandler = () => {
-    if (progressHandler == null) {
-      return
-    }
-    if (!progressHandler.hasNextStreet()) {
-      //if nothing loaded keep here
-      return
-    }
-
-    setActiveQuestion(progressHandler.getNextStreet())
-  }
-
   const buttonCheckClickHandler = async () => {
     if (activeQuestion === undefined) {
       return
@@ -207,7 +195,8 @@ export default function PersistentDrawerLeft() {
     }).finally(() => {
       if (progressHandler !== null) {
         //seems pointless but forces rerender thanks react 
-        setStreets(progressHandler.getStreets().concat([]))
+        //setStreets(progressHandler.getStreets().concat([]))
+        setActiveQuestion(progressHandler.getNextStreet())
       }
     }
     )
@@ -355,7 +344,6 @@ export default function PersistentDrawerLeft() {
               activeQuestion={activeQuestion}
               isDisabled={!gameIsReady}
               onCheckCklickHandler={buttonCheckClickHandler}
-              onAdvanceClickHandler={buttonAdvanceClickHandler}
               onDisplayManualAnswerClickHandler={() => setManualAnswerDialogOpen(true)}
               manualAnswerPending={manualAnswerPending}
             />
@@ -368,7 +356,7 @@ export default function PersistentDrawerLeft() {
               activeQuestion={activeQuestion}
             />
           </div>
-          <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} />
+          <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} nextQuestion={activeQuestion} />
           <ErrorDialog buttonCloseClicked={() => setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
           <GeneralDescriptionDialog buttonCloseClicked={() => setGeneralDescriptionOpen(false)} isOpen={generalDescriptionOpen} />
           <ManualDecisionDialog buttonCloseClicked={() => setManualAnswerDialogOpen(false)} isOpen={manualAnswerDialogOpen} buttonAnswerClicked={manualAnswerSelected} />

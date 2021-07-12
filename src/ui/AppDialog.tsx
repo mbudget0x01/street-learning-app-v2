@@ -15,16 +15,40 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-interface Props{
-    title:string,
-    content:string,
-    buttonText:string
-    buttonCloseClicked:()=> void
-    isOpen:boolean
+interface Props {
+  title: string,
+  content: string | JSX.Element,
+  buttonText: string
+  buttonCloseClicked: () => void
+  isOpen: boolean
 }
 
-export default function AppDialog(props:Props) {
+export default function AppDialog(props: Props) {
 
+  //if it is only a content string
+  if (typeof props.content === "string") {
+    return (
+      <div>
+        <Dialog
+          open={props.isOpen}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={props.buttonCloseClicked}
+          aria-labelledby="alert-dialog-slide-title"
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle id="alert-dialog-slide-title">{props.title}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">{props.content}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={props.buttonCloseClicked} color="primary">{props.buttonText}</Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
+  //if i want to pass some complexer contenr
   return (
     <div>
       <Dialog
@@ -36,13 +60,12 @@ export default function AppDialog(props:Props) {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title">{props.title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">{props.content}</DialogContentText>
-        </DialogContent>
+        {props.content}
         <DialogActions>
           <Button onClick={props.buttonCloseClicked} color="primary">{props.buttonText}</Button>
         </DialogActions>
       </Dialog>
     </div>
   );
+
 }
