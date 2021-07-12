@@ -44,8 +44,8 @@ export const ManualDecisionDialog = (props: Props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={buttonWrongClicked} color="primary">Wrong</Button>
-                    <Button onClick={buttonCorrectClicked} color="primary">Correct, I knew it!</Button>
-                    <Button onClick={props.buttonCloseClicked} color="primary">Close, let me check again!</Button>
+                    <Button onClick={buttonCorrectClicked} color="primary">I knew it!</Button>
+                    <Button onClick={props.buttonCloseClicked} color="primary">Let me check again!</Button>
                 </DialogActions>
             </Dialog>
         </div>
