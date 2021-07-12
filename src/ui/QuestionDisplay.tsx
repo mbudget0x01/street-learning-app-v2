@@ -76,7 +76,7 @@ export const QuestionDisplay = (props: Props) => {
                 </Button>
                 <Button variant="contained"
                     color="primary"
-                    disabled={!answerd || props.isDisabled}
+                    disabled={!answerd || props.isDisabled || props.manualAnswerPending}
                     onClick={onAdvanceClickHandler}
                     className={classes.button}
                     startIcon={<Hidden xsDown><LabelImportantOutlinedIcon /></Hidden>}>
