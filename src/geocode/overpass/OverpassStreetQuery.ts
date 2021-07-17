@@ -40,7 +40,7 @@ export class OverpassStreetQuery {
         }
 
         let resp: Elements[] = await fetchStreet(this.streetName, this.overpassAreaID)
-        
+
 
         let wayNodes: Elements[] = [];
         let tmpArray: LatLng[][] = [];
@@ -58,12 +58,15 @@ export class OverpassStreetQuery {
         //order waypoints to multiple arrays representing a polygon line
         wayNodes.forEach(n => {
             let nodeWaypoints: LatLng[] = [];
-            n.nodes.forEach(element => {
-                let searchedElement = this.wayPointElements.find((s) => s.id === element)
-                if (searchedElement !== undefined) {
-                    nodeWaypoints.push(new LatLng(searchedElement.lat, searchedElement.lon))
-                }
-            });
+            if (!n.nodes) { 
+                return
+            }
+                n.nodes.forEach(element => {
+                    let searchedElement = this.wayPointElements.find((s) => s.id === element)
+                    if (searchedElement !== undefined && searchedElement.lat && searchedElement.lon) {
+                        nodeWaypoints.push(new LatLng(searchedElement.lat, searchedElement.lon))
+                    }
+                })
 
             tmpArray.push(nodeWaypoints)
 
@@ -109,8 +112,10 @@ export class OverpassStreetQuery {
         let latTotal: number = 0;
         let lngTotal: number = 0;
         this.wayPointElements.forEach(element => {
-            latTotal += element.lat
-            lngTotal += element.lon
+            if (element.lat && element.lon) {
+                latTotal += element.lat
+                lngTotal += element.lon
+            }
         });
         let latCenter = latTotal / this.wayPointElements.length
         let lngCenter = lngTotal / this.wayPointElements.length
@@ -119,6 +124,10 @@ export class OverpassStreetQuery {
 
     }
 
+    /**
+     * Returns an instance of IDrawableStreet to pass to the map 
+     * @returns IDrawable Street if data is loaded or undefined if not execute() is called or api call is in progress
+     */
     public getDrawableStreet(): IDrawableStreet | undefined {
         let center = this.getCenter()
 

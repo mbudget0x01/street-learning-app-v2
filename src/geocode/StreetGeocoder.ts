@@ -3,6 +3,9 @@ import { GeocodeError } from "./GeocodeError"
 import IDrawableStreet from "./IDrawableStreet"
 import { OverpassStreetQuery } from "./overpass/OverpassStreetQuery"
 
+/**
+ * Internal Interface to store streets with identifiers
+ */
 interface GeocodedStreet {
     street: IDrawableStreet | undefined
     streetName: string
@@ -57,8 +60,6 @@ export class StreetGeocoder {
             geocodedStreet = await this.geocodeStreetEsri(streetName, esriQuerySuffix)
             this.geocodedStreets.push({ street: geocodedStreet, streetName: streetName })
         } catch (error) {
-            console.log(error);
-
             throw new GeocodeError("API error. Could not geocode the street", 'NetworkFailure')
         }
         //returns undefined if not resolvable

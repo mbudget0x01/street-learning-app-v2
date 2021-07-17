@@ -4,6 +4,9 @@ import { SearchResult } from "leaflet-geosearch/dist/providers/provider";
 import { GeocodeError } from "../GeocodeError";
 import IDrawableStreet from "../IDrawableStreet";
 
+/**
+ * Class representing a Street Query to the esri Provider
+ */
 export class EsriStreetQuery {
     private querySuffix: string;
     private provider: EsriProvider = new EsriProvider();
@@ -11,6 +14,11 @@ export class EsriStreetQuery {
     private streetName: string;
     private executed: boolean = false;
 
+    /**
+     * 
+     * @param streetName The Name of the Street to query
+     * @param querySuffix The esri query suffix
+     */
     constructor(streetName: string, querySuffix: string) {
         this.streetName = streetName;
         this.querySuffix = querySuffix;
