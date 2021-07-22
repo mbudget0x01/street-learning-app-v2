@@ -5,29 +5,23 @@ import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import { ThemeSwitch, ThemeType } from './theme';
-import { Map } from './map'
 import { ProgressHandler } from './progress/ProgressHandler';
-import { version } from '../package.json'
-import CodeIcon from '@material-ui/icons/Code';
 import { ProgressList } from './progress/ProgressList';
 import { IQuestion } from './progress/IQuestion';
 import { latLng, LatLng } from 'leaflet';
-import { StreetGeocoder,isSameStreet, IDrawableStreet} from './geocode';
+import { StreetGeocoder, isSameStreet, IDrawableStreet } from './geocode';
 import { generateQuerySuffix } from './geocode/esri';
 import { Hidden } from '@material-ui/core';
 import { FileSelector, LearningFile, loadLearningFiles } from './learningFileHandling';
-import { GitHubMaterialIcon, QuestionDisplay, QuestionFeedbackDialog, ErrorDialog, GeneralDescriptionDialog, ManualDecisionDialog, ResetProgressDialog } from './ui';
+import { ContentMain, AppProjectInfo } from './ui';
+import { DialogType } from './ui/ContentMainDialogeFactory';
 
 
 //#region style
@@ -116,19 +110,19 @@ export default function PersistentDrawerLeft() {
   const [streets, setStreets] = useState<IQuestion[]>([])
   const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
   const [lastGuessedPosition, setLastGuessedPosition] = useState<LatLng>(new LatLng(0, 0))
-  const [errorDialogOpen, setErrorDialogOpen] = useState<boolean>(false)
-  const [answerDialogOpen, setAnswerDialogOpen] = useState<boolean>(false)
   const [answerWasCorrect, setAnswerWasCorrect] = useState<boolean>(false)
   const [errorDialogText, setErrorDialogText] = useState<string>("")
-  const [generalDescriptionOpen, setGeneralDescriptionOpen] = useState<boolean>(true)
-  const [manualAnswerDialogOpen, setManualAnswerDialogOpen] = useState<boolean>(false)
   const [manualAnswerPending, setManualAnswerPending] = useState<boolean>(false)
   const [startCoordinates, setStartCoordinates] = useState<[number, number]>([48.858093, 2.294694])
   //does this belong here?
   const [displayedStreet, setDisplayedStreet] = useState<IDrawableStreet>()
   const [overpassAreaId, setOverpassAreaId] = useState<string>()
   const [esriQuerySuffix, setEsriQuerySuffix] = useState<string>()
-  const [resetProgressDialogOpen, setResetProgressDialogOpen] = useState<boolean>(false)
+
+  //Dialog rebuild
+  const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(true)
+  const [dialogType, setDialogType] = useState<DialogType>("generalDescription")
+
 
 
   const handleDrawerOpen = () => {
@@ -145,13 +139,15 @@ export default function PersistentDrawerLeft() {
     }
     setAnswerWasCorrect(isCorrect)
     if (progressHandler !== null && !progressHandler.hasNextStreet()) {
-      setResetProgressDialogOpen(true)
+      setDialogType("resetProgress")
+      setDialogIsOpen(true)
       return
     }
     if (displayFeedbackDialog) {
-      setAnswerDialogOpen(true)
+      setDialogIsOpen(true)
+      setDialogType("questionFeedback")
     }
-    
+
   }
 
   const chooseFileClickHandler = (file: LearningFile) => {
@@ -195,19 +191,15 @@ export default function PersistentDrawerLeft() {
 
   const displayManualAnswerDialog = () => {
     setManualAnswerPending(true)
-    setManualAnswerDialogOpen(true)
+    setDialogType("manualDecision")
+    setDialogIsOpen(true)
   }
 
-  const manualAnswerSelected = (wasCorrect: boolean) => {
-    setManualAnswerDialogOpen(false)
-    setManualAnswerPending(false)
-
-    setAnswer(wasCorrect, false)
-  }
 
   const displayError = (errorText: string) => {
+    setDialogType("error")
     setErrorDialogText(errorText)
-    setErrorDialogOpen(true)
+    setDialogIsOpen(true)
   }
 
   /**
@@ -242,11 +234,22 @@ export default function PersistentDrawerLeft() {
     setDisplayedStreet(street)
   }
 
-  const onResetProgressOkClick = () => {
-    setResetProgressDialogOpen(false)
-    if (progressHandler !== null) {
-      progressHandler.resetProgress()
+
+  const onDialogClickHandler = (dialogResult: boolean | undefined) => {
+    setDialogIsOpen(false)
+    switch (dialogType) {
+      case "resetProgress":
+        if (progressHandler !== null) {
+          progressHandler.resetProgress()
+        }
+        break
+      case "manualDecision":
+        if(dialogResult !== undefined){
+          setManualAnswerPending(false)
+          setAnswer(dialogResult, false)
+        }
     }
+
   }
 
   const theme = createMuiTheme({
@@ -309,16 +312,7 @@ export default function PersistentDrawerLeft() {
             </IconButton>
           </div>
           <Divider />
-          <List>
-            <ListItem button component="a" href="https://github.com/mbudget0x01/street-learning-app-v2" target="blank">
-              <ListItemIcon><GitHubMaterialIcon /></ListItemIcon>
-              <ListItemText primary={"Visit Project"} />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon><CodeIcon /></ListItemIcon>
-              <ListItemText primary={"Version " + version} />
-            </ListItem>
-          </List>
+          <AppProjectInfo />
           <Divider />
           <FileSelector files={loadLearningFiles()} onChanged={chooseFileClickHandler} />
           <Divider />
@@ -330,29 +324,24 @@ export default function PersistentDrawerLeft() {
           })}
         >
           <div className={classes.drawerHeader} />
-          <div>
-            <QuestionDisplay
-              activeQuestion={activeQuestion}
-              isDisabled={!gameIsReady}
-              onCheckCklickHandler={buttonCheckClickHandler}
-              onDisplayManualAnswerClickHandler={() => setManualAnswerDialogOpen(true)}
-              manualAnswerPending={manualAnswerPending}
-            />
-          </div>
-          <div id="map-wrapper" className={classes.map}>
-            <Map uiMode={themeType}
-              onGuessLocationUpdate={setLastGuessedPosition}
-              initialCoordinates={startCoordinates}
-              displayedStreet={displayedStreet}
-              activeQuestion={activeQuestion}
-            />
-          </div>
-          <QuestionFeedbackDialog buttonCloseClicked={() => setAnswerDialogOpen(false)} isOpen={answerDialogOpen} wasCorrect={answerWasCorrect} nextQuestion={activeQuestion} />
-          <ErrorDialog buttonCloseClicked={() => setErrorDialogOpen(false)} isOpen={errorDialogOpen} errorFriendlyDescription={errorDialogText} />
-          <GeneralDescriptionDialog buttonCloseClicked={() => setGeneralDescriptionOpen(false)} isOpen={generalDescriptionOpen} />
-          <ManualDecisionDialog buttonCloseClicked={() => setManualAnswerDialogOpen(false)} isOpen={manualAnswerDialogOpen} buttonAnswerClicked={manualAnswerSelected} />
-          <ResetProgressDialog isOpen={resetProgressDialogOpen} buttonCloseClicked={onResetProgressOkClick} />
-        </main>
+
+          <ContentMain
+            activeQuestion={activeQuestion}
+            isDisabled={!gameIsReady}
+            onButtonCheckClickHandler={buttonCheckClickHandler}
+            onDisplayManualAnswerClickHandler={() => displayManualAnswerDialog()}
+            displayedStreet={displayedStreet}
+            initialCoordinates={startCoordinates}
+            manualAnswerIsPending={manualAnswerPending}
+            onGuessLocationUpdate={setLastGuessedPosition}
+            uiMode={themeType}
+            dialogIsOpen={dialogIsOpen}
+            dialogType={dialogType}
+            lastAnswerCorrect={answerWasCorrect}
+            lastError={errorDialogText}
+            onDialogCloseClick={onDialogClickHandler}
+          />
+          </main>
       </ThemeProvider>
     </div>
   );

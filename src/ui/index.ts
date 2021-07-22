@@ -1,7 +1,15 @@
-export * from "./ErrorDialog"
-export * from "./GeneralDescriptionDialog"
+export * from "./dialog/ErrorDialog"
+// TODO remove
+export * from "./dialog/GeneralDescriptionDialog"
 export * from "./GithubMaterialIcon"
-export * from "./ManualDecisionDialog"
+// TODO remove
+export * from "./dialog/ManualDecisionDialog"
+// TODO remove
 export * from "./QuestionDisplay"
-export * from "./QuestionFeedbackDialog"
-export * from "./ResetProgressDialog"
+// TODO remove
+export * from "./dialog/QuestionFeedbackDialog"
+// TODO remove
+export * from "./dialog/ResetProgressDialog"
+
+export * from "./ContentMain"
+export * from "./AppProjectInfo"
