@@ -17,10 +17,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { ThemeSwitch, ThemeType } from './theme';
 import { Map } from './map/Map'
-import { FileSelector } from './fileHandling/FileSelector';
-import { loadFiles } from './fileHandling/FileHandler'
+import { FileSelector } from './learningFileHandling/FileSelector';
+import { loadLearningFiles } from './learningFileHandling/FileHandler'
 import { ProgressHandler } from './progress/ProgressHandler';
-import { LearningFile } from './fileHandling/LearningFile';
+import { LearningFile } from './learningFileHandling/LearningFile';
 import { version } from '../package.json'
 import CodeIcon from '@material-ui/icons/Code';
 import { QuestionDisplay } from './ui/QuestionDisplay';
@@ -138,6 +138,7 @@ export default function PersistentDrawerLeft() {
   const [overpassAreaId, setOverpassAreaId] = useState<string>()
   const [esriQuerySuffix, setEsriQuerySuffix] = useState<string>()
   const [resetProgressDialogOpen, setResetProgressDialogOpen] = useState<boolean>(false)
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -328,7 +329,7 @@ export default function PersistentDrawerLeft() {
             </ListItem>
           </List>
           <Divider />
-          <FileSelector files={loadFiles()} onChanged={chooseFileClickHandler} />
+          <FileSelector files={loadLearningFiles()} onChanged={chooseFileClickHandler} />
           <Divider />
           <ProgressList questions={streets} onQuestionClick={onQuestionClickHandler} />
         </Drawer>

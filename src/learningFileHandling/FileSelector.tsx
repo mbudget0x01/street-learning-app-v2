@@ -3,16 +3,24 @@ import { Description } from '@material-ui/icons';
 import { useState } from "react";
 import { LearningFile } from "./LearningFile";
 
-
+/**
+ * Internal interface to populate the child elements
+ */
 interface FileListItemProps {
     fileTitle: string,
+    fileName: string,
     onClick: (fileTitle: string) => void,
     isDisabled: boolean,
 }
 
+/**
+ * List entry for a Learning File
+ * @param props FileListItemProps
+ * @returns a List element representing a LearningFile
+ */
 const FileListItem = (props: FileListItemProps) => {
     return (
-        <ListItem button onClick={(event) => props.onClick(props.fileTitle)} disabled={props.isDisabled}>
+        <ListItem button onClick={() => props.onClick(props.fileName)} disabled={props.isDisabled}>
             <ListItemIcon >
                 <Description />
             </ListItemIcon>
@@ -21,20 +29,37 @@ const FileListItem = (props: FileListItemProps) => {
     )
 }
 
+/**
+ * FileSelector Props Interface
+ */
 interface FileSelectorProps {
-    files: Promise<LearningFile[]>,
+    /**
+     * Files to display
+     */
+    files: LearningFile[],
+    /**
+     * Fires when the a file gets selected
+     */
     onChanged: (selectedFile: LearningFile) => void,
 }
 
+/**
+ * Displays a List of all Learning Files Specified in the props
+ * @param props FileSelectorProps Interface
+ * @returns A list displaying the LearningFiles
+ */
 export const FileSelector = (props: FileSelectorProps) => {
     const classes = useStyles();
-    const [values, setValues] = useState<LearningFile[]>([]);
+    const [values] = useState<LearningFile[]>(props.files);
     const [isDisabled, setDisabled] = useState<boolean>(false)
-    props.files.then((files: LearningFile[]) => setValues(files));
 
+    /**
+     * Relays The element to the Handler
+     * @param fileName selected fileName
+     */
     const onClickedHandler = (fileName: string) => {
         values.forEach(element => {
-            if (element.title === fileName) {
+            if (element.fileName === fileName) {
                 props.onChanged(element);
             }
         });
@@ -50,7 +75,7 @@ export const FileSelector = (props: FileSelectorProps) => {
             }>
                 {
                     values.map((file: LearningFile) => (
-                        <FileListItem fileTitle={file.title} key={file.title} onClick={onClickedHandler} isDisabled={isDisabled} />
+                        <FileListItem fileTitle={file.title} fileName={file.fileName} key={file.title} onClick={onClickedHandler} isDisabled={isDisabled} />
                     ))
                 }
             </List>

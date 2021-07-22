@@ -1,4 +1,4 @@
-import { LearningFile } from "../../fileHandling/LearningFile";
+import { LearningFile } from "../../learningFileHandling/LearningFile";
 
 /**
  * Returns a query suffix to add to the street Names to query them properly

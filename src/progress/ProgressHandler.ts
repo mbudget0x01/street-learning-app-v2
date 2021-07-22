@@ -1,4 +1,4 @@
-import { LearningFile } from "../fileHandling/LearningFile";
+import { LearningFile } from "../learningFileHandling/LearningFile";
 import { IQuestion } from "./IQuestion";
 
 export class ProgressHandler {
