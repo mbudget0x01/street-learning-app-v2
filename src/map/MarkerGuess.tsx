@@ -5,8 +5,17 @@ import { useMemo, useRef } from "react";
 
 
 interface Props {
+    /**
+     * The initial Markers position
+     */
     position: LatLngExpression,
+    /**
+     * The street Name to display as question, if undefined "No question loaded will" be displayed
+     */
     question: string | undefined,
+    /**
+     * Callback when the marker gets dragged
+     */
     onPositionUpdate:(position:LatLng) => void,
 }
 

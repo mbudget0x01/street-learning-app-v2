@@ -8,13 +8,39 @@ import { MarkerGuess } from "./MarkerGuess";
 import { Street } from "./Street";
 import IDrawableStreet from "../geocode/IDrawableStreet";
 
+/**
+ * Props interface for Map Object
+ */
 interface Props {
+    /**
+     * UiMode, in dark Mode there is a default dark map
+     */
     uiMode: ThemeType,
+    /**
+     * When the marker is set to a position
+     */
     onGuessLocationUpdate: (position: LatLng) => void,
+    /**
+     * Initial Coordinates to center the map on after loading
+     */
     initialCoordinates: LatLngExpression,
+    /**
+     * The street to display undefined if none
+     */
     displayedStreet: IDrawableStreet | undefined,
+    /**
+     * Active Question -> Street Name to display in guess Marker
+     */
     activeQuestion: string | undefined,
 }
+
+/**
+ * Representing a leaflet Map and displays it. Can display a Street. If polylines are supplied
+ * there wil be the a render of the street if only a Location is sopplied, a marker will be placed.
+ * Additionaly has a guess marker which can be dragged or placed by clicking. This location is supplied by the callback.
+ * @param props Props belonging to this object
+ * @returns A Leaflet Map representation
+ */
 export const Map = (props: Props) => {
 
     const [mapObject, setMapObject] = useState<LeafletMap>()

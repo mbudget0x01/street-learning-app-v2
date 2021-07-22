@@ -6,10 +6,24 @@ import IDrawableStreet from "../geocode/IDrawableStreet";
 import { MarkerPinpoint } from './MarkerPinpoint';
 
 interface Props {
+    /**
+     * Street to display if is undefined this will render nothing
+     */
     drawableStreet: IDrawableStreet | undefined
+    /**
+     * Callback when the Center of a Street has updated, e.g. the street has changed
+     */
     onCenterChanged: (pos: LatLngExpression) => void,
 }
 
+/**
+ * Renders a Street there a multiple cases how to render.
+ * 1. If the drawable street is undefined, there will be none
+ * 2. If the drawable street has a polyline this will be rendered as polyline
+ * 3. If the drawable street has no polyline but a center this will be rendered as approximate position
+ * @param props Props Object
+ * @returns displays a Street according to the critereas discribed in the main description
+ */
 export const Street = (props: Props) => {
 
     //needed to prevent subsequent zoom to center
@@ -31,6 +45,7 @@ export const Street = (props: Props) => {
     if (props.drawableStreet.polyLines !== undefined) {
         //render polylines
         let i: number = 0;
+        // goofy id creation
         const nextID = (polyLine: IDrawablePolyLine) => {
             i++
             return polyLine.wayPoints[0].toString() + i
