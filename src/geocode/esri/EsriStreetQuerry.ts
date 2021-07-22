@@ -2,7 +2,7 @@ import { LatLng } from "leaflet";
 import { EsriProvider } from "leaflet-geosearch";
 import { SearchResult } from "leaflet-geosearch/dist/providers/provider";
 import { GeocodeError } from "../GeocodeError";
-import IDrawableStreet from "../IDrawableStreet";
+import {IDrawableStreet} from "../IDrawableStreet";
 
 /**
  * Class representing a Street Query to the esri Provider

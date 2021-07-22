@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { LatLng, LatLngExpression, LeafletMouseEvent, LeafletMouseEventHandlerFn, Map as LeafletMap } from 'leaflet';
 import { MarkerGuess } from "./MarkerGuess";
 import { Street } from "./Street";
-import IDrawableStreet from "../geocode/IDrawableStreet";
+import {IDrawableStreet} from "../geocode";
 
 /**
  * Props interface for Map Object

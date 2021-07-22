@@ -1,7 +1,6 @@
 import { LatLng } from "leaflet";
+import { IDrawableStreet, IDrawablePolyLine } from "..";
 import { GeocodeError } from "../GeocodeError";
-import IDrawablePolyLine from "../IDrawablePolyLine";
-import IDrawableStreet from "../IDrawableStreet";
 import { Elements, fetchStreet } from "./OverpassApi";
 
 export class OverpassStreetQuery {

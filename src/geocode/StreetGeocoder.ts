@@ -1,6 +1,6 @@
+import { IDrawableStreet } from "."
 import { EsriStreetQuery } from "./esri"
 import { GeocodeError } from "./GeocodeError"
-import IDrawableStreet from "./IDrawableStreet"
 import { OverpassStreetQuery } from "./overpass"
 
 /**

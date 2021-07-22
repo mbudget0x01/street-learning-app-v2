@@ -1,8 +1,7 @@
 import { LatLng, LatLngExpression } from 'leaflet';
 import React from 'react';
 import { Polyline } from 'react-leaflet';
-import IDrawablePolyLine from '../geocode/IDrawablePolyLine';
-import IDrawableStreet from "../geocode/IDrawableStreet";
+import { IDrawableStreet, IDrawablePolyLine } from '../geocode';
 import { MarkerPinpoint } from './MarkerPinpoint';
 
 interface Props {
