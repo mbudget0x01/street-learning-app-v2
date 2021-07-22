@@ -13,11 +13,25 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
+/**
+ * Props needed to create a List entry
+ */
 interface QuestionListItemProps{
+    /**
+     * IQuestion to display
+     */
     question: IQuestion,
+    /**
+     * On Question Click Callback
+     */
     onClick: (question:IQuestion) => void,
 }
 
+/**
+ * List Item representing a Question
+ * @param props QuestionListItemProps
+ * @returns List Item representing a Question
+ */
 const QuestionListItem = (props: QuestionListItemProps) => {
     return (
         <ListItem button onClick={(_event) => props.onClick(props.question)}>
@@ -30,10 +44,22 @@ const QuestionListItem = (props: QuestionListItemProps) => {
 }
 
 interface Props{
+    /**
+     * List of Questions to display
+     */
     questions:IQuestion[]
+    /**
+     * Callback when a Question got clicked
+     * Has clicked the question as Parameter
+     */
     onQuestionClick: (question:IQuestion) => void,
 }
 
+/**
+ * List representing Questions and their progress
+ * @param props Props
+ * @returns List representing Questions and their progress
+ */
 export const ProgressList = (props:Props) =>{
     const classes = useStyles();
 
