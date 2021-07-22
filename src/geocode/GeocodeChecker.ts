@@ -1,5 +1,5 @@
 import { latLng, LatLng, LatLngExpression } from "leaflet";
-import { CustomNominatimResponse } from "./nominatim/CustomNominatimResponse";
+import { CustomNominatimResponse } from "./nominatim";
 import * as Nominatim from "nominatim-browser"
 import { GeocodeError } from "./GeocodeError";
 

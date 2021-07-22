@@ -16,28 +16,19 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { ThemeSwitch, ThemeType } from './theme';
-import { Map } from './map/Map'
-import { FileSelector } from './learningFileHandling/FileSelector';
-import { loadLearningFiles } from './learningFileHandling/FileHandler'
+import { Map } from './map'
 import { ProgressHandler } from './progress/ProgressHandler';
-import { LearningFile } from './learningFileHandling/LearningFile';
 import { version } from '../package.json'
 import CodeIcon from '@material-ui/icons/Code';
-import { QuestionDisplay } from './ui/QuestionDisplay';
-import { GitHubMaterialIcon } from './ui/GithubMaterialIcon';
 import { ProgressList } from './progress/ProgressList';
 import { IQuestion } from './progress/IQuestion';
 import { latLng, LatLng } from 'leaflet';
-import { isSameStreet } from './geocode/GeocodeChecker';
-import { ErrorDialog } from './ui/ErrorDialog';
-import { QuestionFeedbackDialog } from './ui/QuestionFeedbackDialog';
-import { GeneralDescriptionDialog } from './ui/GeneralDescriptionDialog';
-import IDrawableStreet from './geocode/IDrawableStreet';
-import { generateQuerySuffix } from './geocode/esri/EsriHelper';
-import { ManualDecisionDialog } from './ui/ManualDecisionDialog';
-import { ResetProgressDialog } from './ui/ResetProgressDialog';
-import { StreetGeocoder } from './geocode/StreetGeocoder';
+import { StreetGeocoder,isSameStreet, IDrawableStreet} from './geocode';
+import { generateQuerySuffix } from './geocode/esri';
 import { Hidden } from '@material-ui/core';
+import { FileSelector, LearningFile, loadLearningFiles } from './learningFileHandling';
+import { GitHubMaterialIcon, QuestionDisplay, QuestionFeedbackDialog, ErrorDialog, GeneralDescriptionDialog, ManualDecisionDialog, ResetProgressDialog } from './ui';
+
 
 //#region style
 const drawerWidth = 240;

@@ -1,7 +1,7 @@
-import { EsriStreetQuery } from "./esri/EsriStreetQuerry"
+import { EsriStreetQuery } from "./esri"
 import { GeocodeError } from "./GeocodeError"
 import IDrawableStreet from "./IDrawableStreet"
-import { OverpassStreetQuery } from "./overpass/OverpassStreetQuery"
+import { OverpassStreetQuery } from "./overpass"
 
 /**
  * Internal Interface to store streets with identifiers
