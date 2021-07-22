@@ -19,7 +19,7 @@ import { latLng, LatLng } from 'leaflet';
 import { StreetGeocoder, isSameStreet, IDrawableStreet } from './geocode';
 import { generateQuerySuffix } from './geocode/esri';
 import { Hidden } from '@material-ui/core';
-import { FileSelector, LearningFile, loadLearningFiles } from './learningFileHandling';
+import { fetchLearningFiles, FileSelector, LearningFile } from './learningFileHandling';
 import { ContentMain, AppProjectInfo } from './ui';
 import { DialogType } from './ui/ContentMainDialogeFactory';
 
@@ -122,7 +122,8 @@ export default function PersistentDrawerLeft() {
   //Dialog rebuild
   const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(true)
   const [dialogType, setDialogType] = useState<DialogType>("generalDescription")
-
+  const [appIsReady, setAppIsReady] = useState<boolean>(false)
+  const [learningFiles, setLearningFiles] = useState<LearningFile[]>([])
 
 
   const handleDrawerOpen = () => {
@@ -244,7 +245,7 @@ export default function PersistentDrawerLeft() {
         }
         break
       case "manualDecision":
-        if(dialogResult !== undefined){
+        if (dialogResult !== undefined) {
           setManualAnswerPending(false)
           setAnswer(dialogResult, false)
         }
@@ -257,6 +258,16 @@ export default function PersistentDrawerLeft() {
       type: themeType,
     },
   })
+
+  //if we need to load data first
+  if (!appIsReady) {
+    fetchLearningFiles().then((files: LearningFile[]) => {
+      setLearningFiles(files)
+      setAppIsReady(true)
+    })
+    //render after data is loaded
+    return null
+  }
 
   return (
     <div className={classes.root}>
@@ -314,7 +325,7 @@ export default function PersistentDrawerLeft() {
           <Divider />
           <AppProjectInfo />
           <Divider />
-          <FileSelector files={loadLearningFiles()} onChanged={chooseFileClickHandler} />
+          <FileSelector files={learningFiles} onChanged={chooseFileClickHandler} />
           <Divider />
           <ProgressList questions={streets} onQuestionClick={onQuestionClickHandler} />
         </Drawer>
@@ -341,7 +352,7 @@ export default function PersistentDrawerLeft() {
             lastError={errorDialogText}
             onDialogCloseClick={onDialogClickHandler}
           />
-          </main>
+        </main>
       </ThemeProvider>
     </div>
   );

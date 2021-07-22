@@ -50,15 +50,15 @@ interface FileSelectorProps {
  */
 export const FileSelector = (props: FileSelectorProps) => {
     const classes = useStyles();
-    const [values] = useState<LearningFile[]>(props.files);
     const [isDisabled, setDisabled] = useState<boolean>(false)
+    
 
     /**
      * Relays The element to the Handler
      * @param fileName selected fileName
      */
     const onClickedHandler = (fileName: string) => {
-        values.forEach(element => {
+        props.files.forEach(element => {
             if (element.fileName === fileName) {
                 props.onChanged(element);
             }
@@ -74,7 +74,7 @@ export const FileSelector = (props: FileSelectorProps) => {
                 </ListSubheader>
             }>
                 {
-                    values.map((file: LearningFile) => (
+                    props.files.map((file: LearningFile) => (
                         <FileListItem fileTitle={file.title} fileName={file.fileName} key={file.title} onClick={onClickedHandler} isDisabled={isDisabled} />
                     ))
                 }

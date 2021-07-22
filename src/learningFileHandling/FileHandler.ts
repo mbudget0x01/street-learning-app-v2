@@ -2,10 +2,10 @@ import { ILearningFile } from "./ILearningFile";
 import { LearningFile } from "./LearningFile";
 
 /**
- * Fetches all ILearningFiles specified in the descriptor.json
+ * Fetches all LearningFiles specified in the descriptor.json
  * @returns List of ILearningFiles
  */
-async function fetchILearningFiles(): Promise<LearningFile[]> {
+export async function fetchLearningFiles(): Promise<LearningFile[]> {
     let response = await fetch('assets/streets/descriptor.json')
     let text = await response.text()
 
@@ -29,20 +29,4 @@ export async function fetchStreets(fileName: string) {
     let a: string[] = JSON.parse(text);
 
     return a;
-}
-
-/**
- * Fetches all the file data from descriptor.json and returns a List of LearningFile
- * @returns List of LearningFile
- */
-export function loadLearningFiles(): LearningFile[] {
-    let learningFiles: LearningFile[] = []
-    fetchILearningFiles().then((intrfces: ILearningFile[]) => {
-        intrfces.forEach((intrfce: ILearningFile) => {
-            learningFiles.push(new LearningFile(intrfce))
-        }
-        )
-    }
-    )
-    return learningFiles
 }
