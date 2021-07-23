@@ -20,7 +20,7 @@ import { StreetGeocoder, isSameStreet, IDrawableStreet } from './geocode';
 import { generateQuerySuffix } from './geocode/esri';
 import { Hidden } from '@material-ui/core';
 import { fetchLearningFiles, FileSelector, LearningFile } from './learningFileHandling';
-import { ContentMain, AppProjectInfo } from './ui';
+import { ContentMain, AppProjectInfo, DisplayLoading } from './ui';
 import { DialogType } from './ui/ContentMainDialogeFactory';
 
 
@@ -266,7 +266,14 @@ export default function PersistentDrawerLeft() {
       setAppIsReady(true)
     })
     //render after data is loaded
-    return null
+    return (
+      <div className={classes.root}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <DisplayLoading />
+        </ThemeProvider>
+      </div>
+    )
   }
 
   return (
