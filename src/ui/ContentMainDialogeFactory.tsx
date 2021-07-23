@@ -1,4 +1,9 @@
-import { QuestionFeedbackDialog, ErrorDialog, GeneralDescriptionDialog, ManualDecisionDialog, ResetProgressDialog } from "."
+import { ErrorDialog } from "."
+import { GeneralDescriptionDialog } from "./dialog/GeneralDescriptionDialog"
+import { ManualDecisionDialog } from "./dialog/ManualDecisionDialog"
+import { QuestionFeedbackDialog } from "./dialog/QuestionFeedbackDialog"
+import { ResetProgressDialog } from "./dialog/ResetProgressDialog"
+
 
 export type DialogType = 'error' | 'questionFeedback' | 'generalDescription' | 'manualDecision' | 'resetProgress' | 'none'
 

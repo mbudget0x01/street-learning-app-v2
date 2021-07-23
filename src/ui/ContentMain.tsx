@@ -1,10 +1,11 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core"
 import { LatLng, LatLngExpression } from "leaflet"
-import { QuestionDisplay } from "."
+
 import { IDrawableStreet } from "../geocode"
 import { Map } from "../map"
 import { ThemeType } from "../theme"
 import { ContentMainDialogFactory, DialogType } from "./ContentMainDialogeFactory"
+import { QuestionDisplay } from "./QuestionDisplay"
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

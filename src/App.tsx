@@ -12,16 +12,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { ThemeSwitch, ThemeType } from './theme';
-import { ProgressHandler } from './progress/ProgressHandler';
-import { ProgressList } from './progress/ProgressList';
-import { IQuestion } from './progress/IQuestion';
 import { latLng, LatLng } from 'leaflet';
 import { StreetGeocoder, isSameStreet, IDrawableStreet } from './geocode';
 import { generateQuerySuffix } from './geocode/esri';
 import { Hidden } from '@material-ui/core';
 import { fetchLearningFiles, FileSelector, LearningFile } from './learningFileHandling';
-import { ContentMain, AppProjectInfo, DisplayLoading } from './ui';
-import { DialogType } from './ui/ContentMainDialogeFactory';
+import { ContentMain, AppProjectInfo, DisplayLoading, DialogType } from './ui';
+import { IQuestion, ProgressHandler, ProgressList } from './progress';
 
 
 //#region style
