@@ -17,9 +17,9 @@ import { StreetGeocoder, isSameStreet, IDrawableStreet } from './geocode';
 import { generateQuerySuffix } from './geocode/esri';
 import { Hidden } from '@material-ui/core';
 import { fetchLearningFiles, FileSelector, LearningFile } from './learningFileHandling';
-import { ContentMain, AppProjectInfo, DisplayLoading, DialogType } from './ui';
+import { ContentMain, AppProjectInfo, DisplayLoading, DialogType, UnsupportedBrowserDialog } from './ui';
 import { IQuestion, ProgressHandler, ProgressList } from './progress';
-
+import { isIE } from 'react-device-detect'
 
 //#region style
 const drawerWidth = 240;
@@ -118,8 +118,10 @@ export default function PersistentDrawerLeft() {
 
   //Dialog rebuild
   const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(true)
+  const [unsupportedBrowserDialogOpen, setUnsupportedBrowserDialogOpen] = useState<boolean>(isIE)
   const [dialogType, setDialogType] = useState<DialogType>("generalDescription")
   const [appIsReady, setAppIsReady] = useState<boolean>(false)
+  const [appIsInitializing, setAppIsInitializing] = useState<boolean>(false)
   const [learningFiles, setLearningFiles] = useState<LearningFile[]>([])
 
 
@@ -257,17 +259,24 @@ export default function PersistentDrawerLeft() {
   })
 
   //if we need to load data first
-  if (!appIsReady) {
+  if (!appIsReady && !appIsInitializing) {
+    setAppIsInitializing(true)
     fetchLearningFiles().then((files: LearningFile[]) => {
       setLearningFiles(files)
       setAppIsReady(true)
     })
-    //render after data is loaded
+  }
+  // render loading screen
+  if(!appIsReady || unsupportedBrowserDialogOpen){
     return (
       <div className={classes.root}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <DisplayLoading />
+          <UnsupportedBrowserDialog
+           buttonCloseClicked={() => setUnsupportedBrowserDialogOpen(false)}
+           isOpen={unsupportedBrowserDialogOpen}
+           />
         </ThemeProvider>
       </div>
     )
