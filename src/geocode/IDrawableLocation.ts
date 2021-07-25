@@ -1,6 +1,8 @@
 import { LatLng } from "leaflet";
-
-export default interface IDrawablePoint{
+/**
+ * Interface representing a drawable Location (e.g. Marker)
+ */
+export interface IDrawablePoint{
     name:string,
     position: LatLng,
 }

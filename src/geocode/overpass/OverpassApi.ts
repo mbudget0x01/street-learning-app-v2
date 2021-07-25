@@ -1,12 +1,14 @@
 import { GeocodeError } from "../GeocodeError";
 
 const BASE_URL = "https://overpass.osm.ch/api/interpreter";
-
+/**
+ * Representing an Element of the response fetched from the Overpass Api
+ */
 export type Elements = {
   //be aware way nodes don't have this
-  lat: number;
+  lat?: number;
   //be aware way nodes don't have this
-  lon: number;
+  lon?: number;
   id: number;
   type: string;
   tags: {
@@ -15,9 +17,15 @@ export type Elements = {
     public_transport: string;
   };
   //be aware not all have this
-  nodes: number[],
+  nodes?: number[],
 };
 
+/**
+ * Fetches a Street from the Overpass API
+ * @param streetName name of the street to fetch
+ * @param OverpassAreaId The overpass Area ID to look for in
+ * @returns List of Elements, Throws a GeocodeError if is not resolvable or request failed
+ */
 export const fetchStreet = async (
   streetName: string,
   OverpassAreaId: string
@@ -47,5 +55,3 @@ export const fetchStreet = async (
   }
   return elements;
 };
-
-// https://overpass-api.de/api/interpreter?data=[out:json];%20%20%20%20%20%20node%20%20%20%20%20%20%20%20[amenity=college]%20%20%20%20%20%20%20%20(48.835474119784756,2.3644745349884033,48.874784201649106,2.407475709915161);%20%20%20%20%20%20out;

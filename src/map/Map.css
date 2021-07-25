@@ -1,4 +1,4 @@
-/* This never ever changes*/
+/* This never ever changes, is nedded to render the map properly, is a leaflet thing*/
 
 .leaflet-container {
     height: 100%;

@@ -1,5 +1,8 @@
 //interafces to extract needed data
 
+/**
+ * Interface to parse the response given by the Nominatim Browser
+ */
 export interface CustomGeocodeAddress {
     "county": string;
     "city": string;
@@ -16,6 +19,11 @@ export interface CustomGeocodeAddress {
     "suburb": string;
     "road":string;
 }
+
+
+/**
+ * Interface to parse the response given by the Nominatim Browser
+ */
 export interface CustomNominatimResponse {
     address: CustomGeocodeAddress;
     boundingbox: string[];

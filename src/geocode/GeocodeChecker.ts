@@ -1,5 +1,5 @@
 import { latLng, LatLng, LatLngExpression } from "leaflet";
-import { CustomNominatimResponse } from "./nominatim/CustomNominatimResponse";
+import { CustomNominatimResponse } from "./nominatim";
 import * as Nominatim from "nominatim-browser"
 import { GeocodeError } from "./GeocodeError";
 
@@ -76,7 +76,18 @@ export async function isSameStreet(guessedPosition: LatLngExpression, streetGeom
 }
 
 
+/**
+ * Checks if 2 streets can be considered equal
+ * @param street1Name Name of the first street
+ * @param street2Name Name of the second street
+ * @param street1Center Central location of the first street
+ * @param street2Center Central location of the second street
+ * @returns 
+ */
 function streetsConsideredEqual(street1Name:string, street2Name:string, street1Center:LatLngExpression, street2Center:LatLngExpression):boolean{
+    /**
+     * Prefixes to street names which can be objected
+     */
     const objectablePrefixes:string[] = ["im "]
     const considerdEqualDistanceThreshold:number = 100.0
     

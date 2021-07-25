@@ -1,14 +1,12 @@
 import DarkThemeIcon from '@material-ui/icons/Brightness2'
 import LightThemeIcon from '@material-ui/icons/WbSunny'
-import * as React from 'react'
 import { Switch } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { ThemeType } from './model'
 
 const useStyles = makeStyles({
   root: {
-    display: 'grid',
-    gridTemplateColumns: 'auto auto auto',
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -21,7 +19,11 @@ interface Props {
   themeType: ThemeType
   onThemeChange: (themeType: ThemeType) => void
 }
-
+/**
+ * Theme switch to switch light and dark theme
+ * @param param0 
+ * @returns 
+ */
 export const ThemeSwitch = ({ themeType, onThemeChange }: Props) => {
   const classes = useStyles()
   const isDarkTheme = themeType === 'dark'

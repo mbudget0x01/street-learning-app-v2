@@ -1,5 +1,10 @@
 import { LatLng } from "leaflet";
-
-export default interface IDrawablePolyLine{
+/**
+ * Interface representing a polyline wich can be drawe on a map
+ */
+export interface IDrawablePolyLine{
+    /**
+     * Orderd list of waypoints
+     */
     wayPoints:LatLng[]
 }

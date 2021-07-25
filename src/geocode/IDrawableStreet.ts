@@ -1,9 +1,12 @@
 import { LatLng, PathOptions } from "leaflet";
-import IDrawablePolyLine from "./IDrawablePolyLine";
+import { IDrawablePolyLine } from "./IDrawablePolyLine";
 
-export default interface IDrawableStreet{
+/**
+ * Interface containing all values needed for the street element to display it
+ */
+export interface IDrawableStreet{
     name:string,
-    pathOption: PathOptions,
+    pathOption?: PathOptions,
     center:LatLng,
-    polyLines: IDrawablePolyLine[] | undefined,
+    polyLines?: IDrawablePolyLine[] | undefined,
 }
