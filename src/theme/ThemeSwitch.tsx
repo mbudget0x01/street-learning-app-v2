@@ -6,8 +6,7 @@ import { ThemeType } from './model'
 
 const useStyles = makeStyles({
   root: {
-    display: 'grid',
-    gridTemplateColumns: 'auto auto auto',
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
