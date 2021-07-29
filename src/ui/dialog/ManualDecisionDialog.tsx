@@ -3,8 +3,17 @@ import { TransitionProps } from "@material-ui/core/transitions";
 import React from "react";
 
 interface Props {
+    /**
+     * When an answer was chosen indicating if answer was Correct or not
+     */
     buttonAnswerClicked: (wasCorrect: boolean) => void,
+    /**
+     * On Close without answer
+     */
     buttonCloseClicked: () => void,
+    /**
+     * State if it is displayed
+     */
     isOpen: boolean
 }
 
@@ -15,6 +24,11 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * Displays a Dialog indicating a Manaual decision must be made for the game
+ * @param props Props
+ * @returns A Dialog
+ */
 export const ManualDecisionDialog = (props: Props) => {
     
     const buttonCorrectClicked = () => {

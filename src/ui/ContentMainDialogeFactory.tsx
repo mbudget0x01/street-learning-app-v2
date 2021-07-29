@@ -8,14 +8,37 @@ import { ResetProgressDialog } from "./dialog/ResetProgressDialog"
 export type DialogType = 'error' | 'questionFeedback' | 'generalDescription' | 'manualDecision' | 'resetProgress' | 'none'
 
 interface Props{
+    /**
+     * The Dialog Type to display
+     */
     dialogType:DialogType,
+    /**
+     * Dialog is Open State
+     */
     isOpen:boolean,
+    /**
+     * Returns a boolean if available or undefined if just a normal void
+     */
     onDialogCloseClick: (isTrue:boolean | undefined) => void,
+    /**
+     * Last error text
+     */
     lastError:string,
+    /**
+     * next Question to answer
+     */
     nextQuestion?:string,
+    /**
+     * True if last question was answerd right
+     */
     lastAnswerCorrect:boolean
 }
 
+/**
+ * Capsulates Dialogs for Main Content
+ * @param props Props
+ * @returns A Dialog according to props
+ */
 export const ContentMainDialogFactory = (props:Props) => {
     
     // I am not happy with this but can't think of a better capsulation

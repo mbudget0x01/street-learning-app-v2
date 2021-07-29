@@ -16,7 +16,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-
+/**
+ * Displays a Loading animation indicating the app is Loading
+ * @returns JSX.Element
+ */
 export const DisplayLoading = () => {
     const classes = useStyles();
 
