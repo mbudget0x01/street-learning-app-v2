@@ -111,6 +111,11 @@ interface Props {
     onThemeChange: (themeType: ThemeType) => void
 }
 
+var id = 0;
+function nextID():number{
+    id++
+    return id;
+}
 
 /**
  * Returns the Main App Drawer capsulated from the App
@@ -184,7 +189,7 @@ export const MainDrawer = (props: Props) => {
                     <AppProjectInfo />
                     {props.drawerContent.map((element) => {
                         return (
-                            <div>
+                            <div key={nextID().toString()}>
                                 <Divider />
                                 {element}
                             </div>

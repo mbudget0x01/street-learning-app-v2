@@ -10,11 +10,11 @@ import { GitHubMaterialIcon } from "."
 export const AppProjectInfo = () => {
     return (
         <List>
-        <ListItem button component="a" href="https://github.com/mbudget0x01/street-learning-app-v2" target="blank">
+        <ListItem button component="a" href="https://github.com/mbudget0x01/street-learning-app-v2" target="blank" key={"repo"}>
           <ListItemIcon><GitHubMaterialIcon /></ListItemIcon>
           <ListItemText primary={"Visit Project"} />
         </ListItem>
-        <ListItem>
+        <ListItem key={"version"}>
           <ListItemIcon><CodeIcon /></ListItemIcon>
           <ListItemText primary={"Version " + version} />
         </ListItem>

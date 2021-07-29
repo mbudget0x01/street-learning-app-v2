@@ -20,7 +20,7 @@ interface FileListItemProps {
  */
 const FileListItem = (props: FileListItemProps) => {
     return (
-        <ListItem button onClick={() => props.onClick(props.fileName)} disabled={props.isDisabled}>
+        <ListItem button onClick={() => props.onClick(props.fileName)} disabled={props.isDisabled} key={props.fileName}>
             <ListItemIcon >
                 <Description />
             </ListItemIcon>
