@@ -6,7 +6,7 @@ import { LearningFile } from "./LearningFile";
  * @returns List of ILearningFiles
  */
 export async function fetchLearningFiles(): Promise<LearningFile[]> {
-    let response = await fetch('assets/streets/descriptor.json')
+    let response = await fetch('/descriptor')
     let text = await response.text()
 
 
@@ -24,7 +24,7 @@ export async function fetchLearningFiles(): Promise<LearningFile[]> {
  * @returns Lits of String with all StreetNames specified in the json file
  */
 export async function fetchStreets(fileName: string) {
-    let response = await fetch('assets/streets/' + fileName)
+    let response = await fetch('/streets/' + fileName)
     let text = await response.text()
     let a: string[] = JSON.parse(text);
 

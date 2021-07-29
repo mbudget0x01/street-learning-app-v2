@@ -1,5 +1,5 @@
 {
-    "name": "street-learning-app-v2",
+    "name": "street-learning-app-v2-client",
     "version": "1.0.0",
     "private": true,
     "dependencies": {
@@ -46,5 +46,6 @@
         "@iconify-icons/mdi": "^1.1.15",
         "@iconify/react": "^1.1.4",
         "@types/leaflet": "^1.7.3"
-    }
+    },
+    "proxy": "http://localhost:3001"
 }
