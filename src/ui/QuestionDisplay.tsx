@@ -3,10 +3,25 @@ import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlin
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 
 interface Props {
+    /**
+     * The question that is active
+     */
     activeQuestion: string | undefined,
+    /**
+     * True if is disabled
+     */
     isDisabled: boolean,
+    /**
+     * Indicating the user clicked the button check
+     */
     onCheckCklickHandler: () => void,
+    /**
+     * Inidicating the Button Manual Answer was clicked
+     */
     onDisplayManualAnswerClickHandler: () => void,
+    /**
+     * True if there is need for a manual answer
+     */
     manualAnswerPending: boolean,
 }
 
@@ -38,7 +53,11 @@ const useStyles = makeStyles(() =>
         }
     }),
 );
-
+/**
+ * UI needed to interact with the game, buttons and display of the question
+ * @param props Props
+ * @returns A Card containing all necessary controls
+ */
 export const QuestionDisplay = (props: Props) => {
     const classes = useStyles()
 

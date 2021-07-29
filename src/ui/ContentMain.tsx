@@ -1,6 +1,5 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core"
 import { LatLng, LatLngExpression } from "leaflet"
-
 import { IDrawableStreet } from "../geocode"
 import { Map } from "../map"
 import { ThemeType } from "../theme"
@@ -17,22 +16,69 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 interface Props {
+    /**
+     * Indicates if controls are enabled
+     */
     isDisabled: boolean,
+    /**
+     * Inicates if a manual answer is pending -> some controls disabled
+     */
     manualAnswerIsPending: boolean,
+    /**
+     * The street to display at this moment
+     */
     displayedStreet: IDrawableStreet | undefined,
+    /**
+     * The active question
+     */
     activeQuestion: string | undefined,
+    /**
+     * The initial coordinates to zoom the map to at first render
+     */
     initialCoordinates: LatLngExpression,
+    /**
+     * The theme Type to display a dark or light map
+     */
     uiMode: ThemeType,
+    /**
+     * The Dialoge Type to Display
+     */
     dialogType: DialogType,
+    /**
+     * If the dialog is open
+     */
     dialogIsOpen: boolean,
+    /**
+     * Last error description
+     */
     lastError: string,
+    /**
+     * last answer was correct
+     */
     lastAnswerCorrect: boolean
+    /**
+     * On Dialog close Click
+     */
     onDialogCloseClick: (isTrue: boolean | undefined) => void,
+    /**
+     * When the marker loaction is updated
+     */
     onGuessLocationUpdate: (position: LatLng) => void,
+    /**
+     * User input to check the answer
+     */
     onButtonCheckClickHandler: () => void,
+    /**
+     * User input to display the manual answer dialog requiers manualAnswerIsPending = True
+     */
     onDisplayManualAnswerClickHandler: () => void
 }
 
+/**
+ * Main Game Content
+ * @param props Props
+ * @returns JSX.Element
+ */
 export const ContentMain = (props: Props) => {
 
     const classes = useStyles();

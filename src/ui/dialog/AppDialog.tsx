@@ -16,13 +16,33 @@ const Transition = React.forwardRef(function Transition(
 });
 
 interface Props {
+  /**
+   * Dialog Title
+   */
   title: string,
+  /**
+   * Either a String to display or a JSX.Element to display
+   */
   content: string | JSX.Element,
+  /**
+   * Text for the default one button
+   */
   buttonText: string
+  /**
+   * On Button clicked
+   */
   buttonCloseClicked: () => void
+  /**
+   * If is displayed usually a state
+   */
   isOpen: boolean
 }
 
+/**
+ * Base App Dialog Class
+ * @param props Props
+ * @returns An App Dialog
+ */
 export default function AppDialog(props: Props) {
 
   //if it is only a content string

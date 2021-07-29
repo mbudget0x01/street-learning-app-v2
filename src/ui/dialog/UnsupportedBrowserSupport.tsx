@@ -1,11 +1,22 @@
 import AppDialog from "./AppDialog"
 
 interface Props{
+    /**
+     * Is displayed state
+     */
     isOpen:boolean,
+    /**
+     * on Close clicked
+     */
     buttonCloseClicked:()=> void
 
 }
 
+/**
+ * Dialog indicating there is use of an unsupported Browser. Extends App Dialog 
+ * @param props Props
+ * @returns JSX.Element
+ */
 export const UnsupportedBrowserDialog = (props:Props) => {
     return( <AppDialog 
         buttonText={"Ok"}
