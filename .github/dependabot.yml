@@ -3,7 +3,7 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    target-branch: "develop"
+    target-branch: "main"
     directory: "/" # Location of package manifests
     schedule:
       interval: "monthly"
