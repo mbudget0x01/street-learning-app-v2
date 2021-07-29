@@ -1,5 +1,5 @@
-import { descriptorRoute } from "./descriptor";
-import { streetsRoute } from "./streets";
+import { descriptorRoute } from "./data/descriptor";
+import { streetsRoute } from "./data/streets";
 
 export const appRouter = (app, fs) => {
 
