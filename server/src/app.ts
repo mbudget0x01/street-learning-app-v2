@@ -1,13 +1,12 @@
 import express from 'express';
-//import bodyParser from 'body-parser';
 import fs from 'fs';
 import {appRouter} from "./routes/routes"
 
 const app = express();
 const port = 3001;
 
-//app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 appRouter(app,fs)
 

@@ -15,7 +15,6 @@
         "@types/react-dom": "^17.0.8",
         "leaflet": "^1.7.1",
         "leaflet-geosearch": "^3.3.2",
-        "nominatim-browser": "^2.1.0",
         "react": "^17.0.2",
         "react-app-polyfill": "^2.0.0",
         "react-device-detect": "^1.17.0",

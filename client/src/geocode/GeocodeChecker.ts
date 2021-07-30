@@ -1,6 +1,5 @@
 import { latLng, LatLng, LatLngExpression } from "leaflet";
 import { CustomNominatimResponse } from "./nominatim";
-import * as Nominatim from "nominatim-browser"
 import { GeocodeError } from "./GeocodeError";
 
 /**
@@ -19,11 +18,16 @@ async function isSameStreetNominatim(position: LatLng, streetName: string): Prom
             return false
         }
 
-        result = await Nominatim.reverseGeocode({
-            lat: position.lat.toString(),
-            lon: position.lng.toString(),
-            addressdetails: true
+        let req = { lat: position.lat.toString(), lng: position.lng.toString() }
+        let resposne = await fetch("/geocode/nominatim", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(req)
         })
+        result = await resposne.json()
+
 
     } catch (error) {
         throw new GeocodeError("Nominatim Client API request failed.", 'NetworkFailure')
@@ -32,19 +36,19 @@ async function isSameStreetNominatim(position: LatLng, streetName: string): Prom
     if (result.address.road === undefined) {
         throw new GeocodeError("Street Name is unknown to the Nominatim API.", 'NotResolvable')
     }
-    
-    return streetsConsideredEqual(result.address.road, streetName, [ Number(result.lat),Number(result.lon)],position)
+
+    return streetsConsideredEqual(result.address.road, streetName, [Number(result.lat), Number(result.lon)], position)
     //return result.address.road === streetName
 }
 /**
  * If distance of positions is greater then this returns false
  */
-const maxDistance:number = 1000.0;
+const maxDistance: number = 1000.0;
 
 /**
  * If distance is below this value then this returns true
  */
-const correctThreshold:number = 50.0;
+const correctThreshold: number = 50.0;
 
 /**
  * Compares if the guessed location is in the street provided
@@ -56,18 +60,18 @@ const correctThreshold:number = 50.0;
 export async function isSameStreet(guessedPosition: LatLngExpression, streetGeometricCenter: LatLngExpression, streetName: string): Promise<boolean | undefined> {
     try {
         return await isSameStreetNominatim(latLng(guessedPosition), streetName)
-    }catch(error){
-        
+    } catch (error) {
+
         //last effort calculating the distance to the supplied approximate position
-        let distance:number = latLng(guessedPosition).distanceTo(latLng(streetGeometricCenter))
-        
-        
+        let distance: number = latLng(guessedPosition).distanceTo(latLng(streetGeometricCenter))
+
+
         //as this usually concernes small roads, if distance > 1000m we return false per default
-        if( distance > maxDistance){
+        if (distance > maxDistance) {
             return false
         }
         //if is within 50m from marker its save to say its correct
-        if(distance <= correctThreshold){
+        if (distance <= correctThreshold) {
             return true
         }
         //not possible to identify
@@ -84,31 +88,31 @@ export async function isSameStreet(guessedPosition: LatLngExpression, streetGeom
  * @param street2Center Central location of the second street
  * @returns 
  */
-function streetsConsideredEqual(street1Name:string, street2Name:string, street1Center:LatLngExpression, street2Center:LatLngExpression):boolean{
+function streetsConsideredEqual(street1Name: string, street2Name: string, street1Center: LatLngExpression, street2Center: LatLngExpression): boolean {
     /**
      * Prefixes to street names which can be objected
      */
-    const objectablePrefixes:string[] = ["im "]
-    const considerdEqualDistanceThreshold:number = 100.0
-    
+    const objectablePrefixes: string[] = ["im "]
+    const considerdEqualDistanceThreshold: number = 100.0
+
     const internalStreet1Name = street1Name.toLocaleLowerCase()
     const internalStreet2Name = street2Name.toLocaleLowerCase()
-    if(internalStreet1Name === internalStreet2Name){
+    if (internalStreet1Name === internalStreet2Name) {
         return true
     }
-    
+
 
     for (let index = 0; index < objectablePrefixes.length; index++) {
         const prefix = objectablePrefixes[index];
-        
-        const s1:string = removeStreetNamePrefix(prefix, internalStreet1Name)
-        const s2:string = removeStreetNamePrefix(prefix, internalStreet2Name)
 
-        if(s1 === s2 && latLng(street1Center).distanceTo(street2Center) <= considerdEqualDistanceThreshold ){           
+        const s1: string = removeStreetNamePrefix(prefix, internalStreet1Name)
+        const s2: string = removeStreetNamePrefix(prefix, internalStreet2Name)
+
+        if (s1 === s2 && latLng(street1Center).distanceTo(street2Center) <= considerdEqualDistanceThreshold) {
             return true
         }
     }
-    
+
     return false
 }
 
@@ -118,9 +122,9 @@ function streetsConsideredEqual(street1Name:string, street2Name:string, street1C
  * @param streetName the streetName to remove the prefix from
  * @returns streetName without prefix or if street name doesn't start with prefix the original name
  */
-function removeStreetNamePrefix(prefix:string, streetName:string):string{
+function removeStreetNamePrefix(prefix: string, streetName: string): string {
     //if not starts with prefix return street name --- yes toLower.. is doubled but i might want to reuse this
-    if(!streetName.toLocaleLowerCase().startsWith(prefix.toLocaleLowerCase())){
+    if (!streetName.toLocaleLowerCase().startsWith(prefix.toLocaleLowerCase())) {
         return streetName
     }
     //remove length of prefix from start as we know the chars match
