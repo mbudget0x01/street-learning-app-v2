@@ -29,7 +29,7 @@ Or build it yourself an deploy it.
 
 ## Add new StreetFiles
 
-All the related files are loacted under `/public/assets/streets`.
+All the related files are loacted under `/server/data/streets`.
 
 1. If you want to provid this to everyone. Fork this repo.
 2. Add a new StreetFiles. You need to provide a `.json` file containing all the streets as simple list. The name of the file doesn't matter much. A reference can be found below.
