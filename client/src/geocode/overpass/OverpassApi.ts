@@ -1,6 +1,5 @@
 import { GeocodeError } from "../GeocodeError";
 
-const BASE_URL = "https://overpass.osm.ch/api/interpreter";
 /**
  * Representing an Element of the response fetched from the Overpass Api
  */
@@ -42,7 +41,7 @@ export const fetchStreet = async (
       },
       body: formBody
     };
-    const response = await fetch(`${BASE_URL}`, requestOptions);
+    const response = await fetch(`/geocode/proxy/overpass`, requestOptions);
     const data = await response.json();
     elements = data.elements
   } catch (err) {

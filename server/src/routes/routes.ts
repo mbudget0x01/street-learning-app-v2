@@ -1,5 +1,7 @@
 import { descriptorRoute } from "./data/descriptor";
 import { streetsRoute } from "./data/streets";
+import { overpassRoute } from "./geocode/overpass";
+import { overpassProxyRoute } from "./geocode/overpassProxy";
 
 export const appRouter = (app, fs) => {
 
@@ -9,4 +11,6 @@ export const appRouter = (app, fs) => {
 
       descriptorRoute(app, fs);
       streetsRoute(app,fs)
+      overpassRoute(app,fs)
+      overpassProxyRoute(app, fs)
 };
