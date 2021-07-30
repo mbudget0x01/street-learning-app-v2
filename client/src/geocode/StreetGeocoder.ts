@@ -40,10 +40,11 @@ export class StreetGeocoder {
      * @param streetName name of the street to geocode
      * @param overpassAreaId the overpass area id
      * @param esriQuerySuffix the esri query suffix
+     * @param fileName name of the file the street belongs to
      * @returns the street or undefined if an error occurs
      * @throws a GeocodeError if there are Network Issues or the request is denied
      */
-    public async geocodeStreet(streetName: string, overpassAreaId: string, esriQuerySuffix: string): Promise<IDrawableStreet | undefined> {
+    public async geocodeStreet(streetName: string, overpassAreaId: string, esriQuerySuffix: string, fileName:string): Promise<IDrawableStreet | undefined> {
         //check if cached
         let lookup: GeocodedStreet | undefined = this.geocodedStreets.find((element: GeocodedStreet) => element.streetName === streetName)
         if (lookup) {
@@ -53,7 +54,7 @@ export class StreetGeocoder {
         //geocode
         let geocodedStreet: IDrawableStreet | undefined = undefined
         try {
-            geocodedStreet = await this.geocodeStreetOverpass(streetName, overpassAreaId)
+            geocodedStreet = await this.geocodeStreetOverpass(streetName, overpassAreaId, fileName)
             if (geocodedStreet) {
                 return geocodedStreet
             }
@@ -71,12 +72,13 @@ export class StreetGeocoder {
      * Geocodes a given street to an IDrawableStreet
      * @param streetName name of the street to geocode
      * @param overpassAreaId the overpass area id
+     * @param fileName name of the file the street belongs to
      * @returns the street or undefined if an error occurs
      * @throws a GeocodeError if there are Network Issues or the request is denied
      */
-    async geocodeStreetOverpass(streetName: string, overpassAreaId: string): Promise<IDrawableStreet | undefined> {
+    async geocodeStreetOverpass(streetName: string, overpassAreaId: string, fileName:string): Promise<IDrawableStreet | undefined> {
 
-        let opQuery = new OverpassStreetQuery(streetName, overpassAreaId)
+        let opQuery = new OverpassStreetQuery(streetName, overpassAreaId, fileName)
         try {
             await opQuery.execute()
             return opQuery.getDrawableStreet()

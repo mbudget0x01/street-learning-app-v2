@@ -1,7 +1,7 @@
 import { LatLng } from "leaflet";
 import { IDrawableStreet, IDrawablePolyLine } from "..";
 import { GeocodeError } from "../GeocodeError";
-import { Elements, fetchStreet } from "./OverpassApi";
+import { Elements, fetchStreetV2 } from "./OverpassApi";
 
 export class OverpassStreetQuery {
     private streetName: string;
@@ -10,10 +10,12 @@ export class OverpassStreetQuery {
     private wayPointElements: Elements[] = []
     private center: LatLng | undefined;
     private executed: boolean = false
+    private fileName:string
 
-    constructor(streetName: string, overpassAreaID: string) {
+    constructor(streetName: string, overpassAreaID: string, fileName:string) {
         this.streetName = streetName;
         this.overpassAreaID = overpassAreaID;
+        this.fileName = fileName
     }
 
     /**
@@ -38,7 +40,7 @@ export class OverpassStreetQuery {
             return this.drawableWayPoints;
         }
 
-        let resp: Elements[] = await fetchStreet(this.streetName, this.overpassAreaID)
+        let resp: Elements[] = await fetchStreetV2(this.streetName, this.overpassAreaID, this.fileName)
 
 
         let wayNodes: Elements[] = [];

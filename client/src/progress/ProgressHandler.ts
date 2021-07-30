@@ -6,7 +6,7 @@ import { IQuestion } from "./IQuestion";
  */
 export class ProgressHandler {
 
-    private baseFile: LearningFile;
+    public baseFile: LearningFile;
     private onReadyHandler:(caller:ProgressHandler) => void;
     public allQuestions:IQuestion[] = []
 

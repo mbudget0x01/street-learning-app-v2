@@ -11,6 +11,6 @@ export const appRouter = (app, fs) => {
 
       descriptorRoute(app, fs);
       streetsRoute(app,fs)
-      overpassRoute(app,fs)
-      overpassProxyRoute(app, fs)
+      overpassRoute(app)
+      overpassProxyRoute(app)
 };

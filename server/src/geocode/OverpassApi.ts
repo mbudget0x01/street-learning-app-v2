@@ -1,4 +1,4 @@
-import { getCachedObject, setCachedObject } from "../cache/cachedObject";
+import { getCachedObjectValue, ICachedObject, setCachedObject } from "../cache/cachedObject";
 import { CachedStreet, ICachedStreet } from "./cachedStreet";
 import fetch from "node-fetch"
 
@@ -25,22 +25,27 @@ const fetchStreet = async (
       body: formBody
     };
     const response = await fetch(`${BASE_URL}`, requestOptions);
-    const data = await response.json();
+    const data = await response.text();
     return data
   
 };
 
-export async function getStreet(cachedStreet:ICachedStreet, overpassAreaID:string){
+/**
+ * Retrieves a street from cache if available or fetches it from the api
+ * @param cachedStreet street you are looking for
+ * @param overpassAreaID The overpass area id to look for
+ * @returns ICachedStreet with data
+ */
+export async function getStreet(cachedStreet:ICachedStreet, overpassAreaID:string):Promise<ICachedStreet>{
   let streetObject = new CachedStreet(cachedStreet)
-  let data:string | undefined = getCachedObject(streetObject)
-  console.log(data);
+  let data:string | undefined = await getCachedObjectValue(streetObject)
   
   if(data !== undefined){
     cachedStreet.data = data
     return cachedStreet;
   }
   data = await fetchStreet(cachedStreet.streetName, overpassAreaID)
-  cachedStreet.data = data
+  streetObject.data = data
   setCachedObject(streetObject)
-  return cachedStreet
+  return streetObject
 }

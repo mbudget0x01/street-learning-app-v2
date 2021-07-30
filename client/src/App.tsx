@@ -132,7 +132,9 @@ export default function App() {
 
         //catch network issues
         try {
-            displStrt = await streetGeocoder.geocodeStreet(streetName, overpassAreaId, esriQuerySuffix)
+            if (progressHandler) {
+                displStrt = await streetGeocoder.geocodeStreet(streetName, overpassAreaId, esriQuerySuffix, progressHandler?.baseFile.fileName)
+            }
         } catch {
             displayError("There is an network issue. Could not reach the API(s)")
             return undefined
