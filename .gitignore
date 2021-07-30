@@ -40,3 +40,6 @@ yarn-error.log*
 #as i use npm/npx and ci uses yarn
 package-lock.json
 yarn.lock
+
+#misc
+docker-compose-dev.yml
