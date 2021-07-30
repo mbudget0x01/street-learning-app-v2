@@ -1,7 +1,7 @@
 import { LatLng } from "leaflet";
 import { IDrawableStreet, IDrawablePolyLine } from "..";
 import { GeocodeError } from "../GeocodeError";
-import { Elements, fetchStreetV2 } from "./OverpassApi";
+import { Elements, fetchStreet } from "./OverpassApi";
 
 export class OverpassStreetQuery {
     private streetName: string;
@@ -40,7 +40,7 @@ export class OverpassStreetQuery {
             return this.drawableWayPoints;
         }
 
-        let resp: Elements[] = await fetchStreetV2(this.streetName, this.overpassAreaID, this.fileName)
+        let resp: Elements[] = await fetchStreet(this.streetName, this.overpassAreaID, this.fileName)
 
 
         let wayNodes: Elements[] = [];
