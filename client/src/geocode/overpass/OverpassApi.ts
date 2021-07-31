@@ -35,8 +35,9 @@ export const fetchStreet = async (
     let elements: Elements[] = []
     let url:string  = `/geocode/overpass/${fileName}/${overpassAreaId}/${streetName}`
 
-    let rawData:string = await fetchStreetCache(url)
-    elements = JSON.parse(rawData).elements
+    let rawData:any = await fetchStreetCache(url)
+    elements = rawData.elements
+    
     if (elements.length === 0) {
       throw new GeocodeError("Street Name is unknown to the Overpass API.", 'NotResolvable')
     }
