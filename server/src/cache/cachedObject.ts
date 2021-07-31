@@ -1,16 +1,12 @@
 import { existsAsync, getAsync, setAsync } from "./redisClient";
 
 /**
- * Expiration date 30 days
- */
-const expirationTime:number = 60 * 60 * 24 * 30
-
-/**
  * Representing a cachable Object
  */
-export interface ICachedObject{
-    getRedisKey: () => string,
-    data?:string
+export interface ICachedObject {
+    redisKey: string,
+    data?: string
+    expirationTime: number
 }
 
 /**
@@ -18,22 +14,22 @@ export interface ICachedObject{
  * @param object ICached Object to look for
  * @returns string value if found or undefined if not cached
  */
-export async function getCachedObjectValue(object:ICachedObject):Promise<string | undefined>{
-    let objectExists:boolean = await cachedObjectExists(object)
-        
-    if(objectExists){
-        return await getAsync(object.getRedisKey())
+export async function getCachedObjectValue(object: ICachedObject): Promise<string | undefined> {
+    let objectExists: boolean = await cachedObjectExists(object)
+
+    if (objectExists) {
+        return await getAsync(object.redisKey)
     }
     return undefined
-    
+
 }
 /**
  * Returns true if object exists
  * @param object Object to look for
  * @returns true if exists
  */
-async function cachedObjectExists(object:ICachedObject):Promise<boolean>{
-    let rawExists:number = await existsAsync(object.getRedisKey())
+async function cachedObjectExists(object: ICachedObject): Promise<boolean> {
+    let rawExists: number = await existsAsync(object.redisKey)
     return Boolean(rawExists).valueOf()
 }
 /**
@@ -41,9 +37,14 @@ async function cachedObjectExists(object:ICachedObject):Promise<boolean>{
  * @param object Object to write to cache
  * @returns void
  */
-export function setCachedObject(object:ICachedObject):void{
-    if(!object.data){        
+export function setCachedObject(object: ICachedObject): void {
+    //don't cache no data
+    if (!object.data) {
         return
     }
-    setAsync(object.getRedisKey(),object.data, 'EX', expirationTime)
+    if (object.expirationTime > 0) {
+        setAsync(object.redisKey, object.data)
+    } else {
+        setAsync(object.redisKey, object.data, 'EX', object.expirationTime)
+    }
 }

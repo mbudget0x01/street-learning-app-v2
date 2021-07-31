@@ -14,19 +14,16 @@ export class CachedStreet implements ICachedStreet, ICachedObject{
     api: CachedStreetApi;
     fileName: string;
     data:string;
-    private redisKey:string = "";
+    redisKey:string = "";
+    //30 days
+    expirationTime: number= 60 * 60 * 24 * 30;
 
     constructor(intrfce:ICachedStreet){
         this.streetName = intrfce.streetName;
         this.fileName = intrfce.fileName;
         this.api = intrfce.api;
+        this.redisKey = this.fileName + ":" + this.api + ":" + this.streetName
     }
-
-    getRedisKey():string {
-        if(this.redisKey === ""){
-            this.redisKey = this.fileName + ":" + this.api + ":" + this.streetName
-        }
-        return this.redisKey
-    }
+    
 }
 
