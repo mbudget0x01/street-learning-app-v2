@@ -1,5 +1,5 @@
-import { getCachedObjectValue, ICachedObject, setCachedObject } from "../cache/cachedObject";
-import { CachedStreet, ICachedStreet } from "./cachedStreet";
+import { getCachedObjectValue, setCachedObject } from "../cache/cachedObject";
+import { CachedStreet } from "./cachedStreet";
 import fetch from "node-fetch"
 
 const BASE_URL = "https://overpass.osm.ch/api/interpreter";
@@ -36,16 +36,15 @@ const fetchStreet = async (
  * @param overpassAreaID The overpass area id to look for
  * @returns ICachedStreet with data
  */
-export async function getStreet(cachedStreet:ICachedStreet, overpassAreaID:string):Promise<ICachedStreet>{
-  let streetObject = new CachedStreet(cachedStreet)
-  let data:string | undefined = await getCachedObjectValue(streetObject)
+export async function getStreet(cachedStreet:CachedStreet, overpassAreaID:string):Promise<CachedStreet>{
+  let data:string | undefined = await getCachedObjectValue(cachedStreet)
   
   if(data !== undefined){
     cachedStreet.data = data
     return cachedStreet;
   }
   data = await fetchStreet(cachedStreet.streetName, overpassAreaID)
-  streetObject.data = data
-  setCachedObject(streetObject)
-  return streetObject
+  cachedStreet.data = data
+  setCachedObject(cachedStreet)
+  return cachedStreet
 }

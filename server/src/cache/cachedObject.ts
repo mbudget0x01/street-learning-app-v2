@@ -23,6 +23,16 @@ export async function getCachedObjectValue(object: ICachedObject): Promise<strin
     return undefined
 
 }
+
+/**
+ * Returns the value of a cachable object if object is unknown returns undefined
+ * @param object ICached Object to look for
+ * @returns object with data property, data is undefined if not existing
+ */
+export async function getCachedObject(object:ICachedObject):Promise<ICachedObject> {
+    object.data = await getCachedObjectValue(object)
+    return object
+}
 /**
  * Returns true if object exists
  * @param object Object to look for
