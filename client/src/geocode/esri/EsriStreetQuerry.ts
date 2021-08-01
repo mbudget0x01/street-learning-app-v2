@@ -1,37 +1,28 @@
 import { LatLng } from "leaflet";
-import { EsriProvider } from "leaflet-geosearch";
-import { SearchResult } from "leaflet-geosearch/dist/providers/provider";
+import { LearningFile } from "../../learningFileHandling";
 import { GeocodeError } from "../GeocodeError";
 import {IDrawableStreet} from "../IDrawableStreet";
+import { fetchFromServer } from "./EsriHelper";
+import { EsriCandidate, EsriResponse } from "./esriResponse";
 
 /**
  * Class representing a Street Query to the esri Provider
  */
 export class EsriStreetQuery {
-    private querySuffix: string;
-    private provider: EsriProvider = new EsriProvider();
     private location: LatLng | undefined
     private streetName: string;
     private executed: boolean = false;
+    private learningFile:LearningFile;
 
     /**
      * 
      * @param streetName The Name of the Street to query
      * @param querySuffix The esri query suffix
      */
-    constructor(streetName: string, querySuffix: string) {
+    constructor(streetName: string, learningFile:LearningFile) {
         this.streetName = streetName;
-        this.querySuffix = querySuffix;
+        this.learningFile = learningFile
     }
-
-    /**
-     * Assembles the query string for the ersi api
-     * @returns The query string for the esri provider
-     */
-    private getQueryString(): string {
-        return `${this.streetName} ${this.querySuffix}`
-    }
-
     /**
      * Executes the query
      * @returns The approximate Location
@@ -42,18 +33,24 @@ export class EsriStreetQuery {
         }
 
         this.executed = true;
-        let response: SearchResult<any>[]
-        let result
+        let response: EsriResponse
+        //let response: SearchResult<any>
+        let result:EsriCandidate | undefined
         try {
-            response = await this.provider.search({ query: this.getQueryString() });
-            result = response.pop();
+            response = await fetchFromServer(this.learningFile,this.streetName);
+            console.log(response);
+        
+            result = response.candidates.pop()
+            if (!result) {
+                throw new GeocodeError("Street Name is unknown to the ESRI API.", 'NotResolvable')
+            }    
+            
+            console.log(result);
+            
         } catch (err) {
             throw new GeocodeError("ESRI Client API request failed.", 'NetworkFailure')
         }
-        if (result === undefined) {
-            throw new GeocodeError("Street Name is unknown to the ESRI API.", 'NotResolvable')
-        }
-        this.location = new LatLng(result.y, result.x)
+        this.location = new LatLng(result.location.y, result.location.x)
         return this.location
     }
 

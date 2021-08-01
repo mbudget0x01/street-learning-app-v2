@@ -17,3 +17,5 @@ If no specified otherwise only `GET` requests are supported.
 - `/geocode/overpass` queries the overpass api use following schema: `/geocode/overpass/<FileName>/<overpassAreaID>/<streetName>`
   - The `FileName` is required for caching
 - `/geocode/proxy/overpass` proxies just the url, will be removed soon.
+- `/geocode/esri` queries the arcgis api use following schema: `/geocode/esri/<FileName>/<countryCode>/<city>/<zip>/<streetName>`
+  - The `FileName` is required for caching
