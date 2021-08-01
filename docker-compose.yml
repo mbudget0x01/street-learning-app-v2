@@ -1,0 +1,30 @@
+services:
+    redis:
+        image: redis:latest
+        container_name: redis
+        restart: always
+        command: ["--databases", "1"]
+        healthcheck:
+          test: ["CMD", "redis-cli", "ping"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
+    web_client:
+        build:
+          context: .
+          dockerfile: Dockerfile-client
+        container_name: web_client
+        restart: always
+    web_api:
+        build:
+          context: .
+          dockerfile: Dockerfile-api
+        container_name: web_api
+        restart: always
+        ports: 
+          - 8080:80
+        environment:
+          - APP_PORT=80
+          - REDIS_HOST=redis
+          - IS_PROXY=true
+          - PROXY_HOST=web_client
