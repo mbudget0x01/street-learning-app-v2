@@ -5,5 +5,4 @@ RUN git clone -b develop-docker https://github.com/mbudget0x01/street-learning-a
 WORKDIR /app/server
 RUN npm install 
 RUN npm run build
-WORKDIR /app/server/dist
-CMD [ "node", "app.js" ]
+CMD [ "node", "dist/app.js" ]
