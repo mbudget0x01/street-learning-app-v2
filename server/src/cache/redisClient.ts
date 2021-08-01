@@ -2,7 +2,7 @@ import redis from 'redis';
 import { promisify } from 'util';
 
 export const redisClient = redis.createClient({
-    host: 'localhost',
+    host: 'redis',
     port: 6379
 });
 
