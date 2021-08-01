@@ -4,6 +4,11 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     target-branch: "main"
-    directory: "/" # Location of package manifests
+    directory: "/client"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "npm"
+    target-branch: "main"
+    directory: "/server"
     schedule:
       interval: "monthly"
