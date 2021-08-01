@@ -1,6 +1,6 @@
 {
     "name": "street-learning-app-v2-server",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Server side code",
     "main": "dist/app.js",
     "scripts": {
