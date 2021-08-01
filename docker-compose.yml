@@ -9,9 +9,17 @@ services:
           interval: 10s
           timeout: 5s
           retries: 5
-    web:
-        build: .
-        container_name: web
+    web_client:
+        build:
+          context: .
+          dockerfile: Dockerfile-client
+        container_name: web_client
+        restart: always
+    web_api:
+        build:
+          context: .
+          dockerfile: Dockerfile-api
+        container_name: web_api
         restart: always
         ports: 
           - 8080:80

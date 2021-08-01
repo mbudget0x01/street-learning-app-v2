@@ -1,10 +1,10 @@
-import path from "node:path";
 import { descriptorRoute } from "./data/descriptor";
 import { streetsRoute } from "./data/streets";
 import { esriRoute } from "./geocode/esri";
 import { nominatimRoute } from "./geocode/nominatim";
 import { overpassRoute } from "./geocode/overpass";
 import { overpassProxyRoute } from "./geocode/overpassProxy";
+import proxy from "express-http-proxy"
 
 export const appRouter = (app, fs) => {
 
@@ -22,7 +22,5 @@ export const appRouter = (app, fs) => {
   esriRoute(app)
 
   
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, './client', 'index.html'));
-  });
+  app.use('/', proxy('web_client'));
 };
