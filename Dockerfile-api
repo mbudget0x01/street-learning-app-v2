@@ -1,7 +1,7 @@
 FROM node:latest as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
-RUN git clone -b develop-docker https://github.com/mbudget0x01/street-learning-app-v2.git ./
+RUN git clone -b main https://github.com/mbudget0x01/street-learning-app-v2.git ./
 WORKDIR /app/server
 RUN npm install 
 RUN npm run build
