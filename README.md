@@ -20,12 +20,18 @@ There are two options how you can use this app.
 Use the normal npm package manager and run `npm install` and then `npm start`.
 Or build it yourself an deploy it.
 
+Be aware that there is a `redis` instance needed and the server and client must be run symultaniously.
+As of now the redis instance is looked under `localhost` or a hostname specified as environement variable.
+A config file will follow.
+
 ### docker (recommended)
 
-1. Download or copy just the `Dockerfile`
-2. Build the docker container. The container will clone this repo itself in the build stage.
-3. After the build you are left with a `nginx` container, containing the built app
-4. you are ready to go.
+1. Download or copy the `Dockerfile-api`, `Dockerfile-client` and the `docker-compose.yml`. Or clone this repo.
+2. Make sure they are all in the same folder.
+3. In case you use a separate `redis` instance adjust the variables in the `docker-compose.yml`
+4. Build the docker containers using `docker-compose`.
+5. After the build run `docker-compose up`
+6. you are ready to go.
 
 ## Add new StreetFiles
 
