@@ -21,6 +21,6 @@ export const appRouter = (app, fs) => {
   //if none of the routes proxy to react app
   if (isProxy) {
     console.log(`Redirecting traffic to Host: ${proxiedHost} `);
-    app.use('*', proxy(proxiedHost));
+    app.use('/', proxy(proxiedHost));
   }
 };
