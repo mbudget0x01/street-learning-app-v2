@@ -42,7 +42,7 @@
     ],
     "devDependencies": {
         "@iconify-icons/mdi": "^1.1.15",
-        "@iconify/react": "^1.1.4",
+        "@iconify/react": "^3.0.1",
         "@types/leaflet": "^1.7.3"
     },
     "proxy": "http://localhost:3001"
