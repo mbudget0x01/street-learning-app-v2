@@ -15,6 +15,20 @@ Pretty simple ;-)
 
 There are two options how you can use this app.
 
+### configuration
+
+The server side config can be changed using the `server/app-config.json` file or using the environement variables.
+If enviromenet variables are set, those overrule always those specified in the file.
+
+
+| config        | env variable           | use  |
+| ------------- |-------------| -----|
+| isProxy | IS_PROXY | if true client app will be proxied as root |
+| clientHostName | PROXY_HOST | name or IP of the client app host |
+| apiPort | APP_PORT | Port to expose the app to |
+| redisHostName | REDIS_HOST | Redis host for caching |
+| redisPort | REDIS_PORT | Port to use for the redis host |
+
 ### npm
 
 Use the normal npm package manager and run `npm install` and then `npm start`.

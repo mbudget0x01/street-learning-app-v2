@@ -1,9 +1,13 @@
 import express from 'express';
 import fs from 'fs';
+import { getApiPort, logSettings } from './config';
 import {appRouter} from "./routes/routes"
 
 const app = express();
-const port = process.env.APP_PORT || 3001;
+//printing settings
+logSettings();
+
+const port = getApiPort();
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded

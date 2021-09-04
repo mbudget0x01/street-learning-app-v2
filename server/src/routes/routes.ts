@@ -5,9 +5,10 @@ import { nominatimRoute } from "./geocode/nominatim";
 import { overpassRoute } from "./geocode/overpass";
 import { overpassProxyRoute } from "./geocode/overpassProxy";
 import proxy from "express-http-proxy"
+import { getClientHostName, getIsProxy } from "../config";
 
-const isProxy = process.env.IS_PROXY || false;
-const proxiedHost = process.env.PROXY_HOST || "false";
+const isProxy = getIsProxy();
+const proxiedHost = getClientHostName();
 
 export const appRouter = (app, fs) => {
 
