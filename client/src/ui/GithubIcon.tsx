@@ -1,5 +1,5 @@
 import githubIcon from '@iconify-icons/mdi/github';
-import Icon from '@iconify/react';
+import { Icon } from '@iconify/react';
 
 
 //both icons named Icon I need to split
