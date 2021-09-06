@@ -153,6 +153,10 @@ export default function App() {
     }
 
     const onQuestionClickHandler = async (question: IQuestion) => {
+        if(question.street === activeQuestion){
+            //no no no, no cheating ;-)
+            return
+        }
         let street: IDrawableStreet | undefined = await geocodeStreet(question.street)
         setDisplayedStreet(street)
     }
