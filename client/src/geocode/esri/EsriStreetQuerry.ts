@@ -38,14 +38,11 @@ export class EsriStreetQuery {
         let result:EsriCandidate | undefined
         try {
             response = await fetchFromServer(this.learningFile,this.streetName);
-            console.log(response);
-        
+            
             result = response.candidates.pop()
             if (!result) {
                 throw new GeocodeError("Street Name is unknown to the ESRI API.", 'NotResolvable')
             }    
-            
-            console.log(result);
             
         } catch (err) {
             throw new GeocodeError("ESRI Client API request failed.", 'NetworkFailure')
