@@ -1,8 +1,9 @@
 import { LatLng, LatLngExpression } from 'leaflet';
 import React from 'react';
 import { Polyline } from 'react-leaflet';
-import { IDrawableStreet, IDrawablePolyLine } from '../geocode';
+import { IDrawableStreet, IDrawablePolyLine, IDrawableStreetProperty } from '../geocode';
 import { MarkerPinpoint } from './MarkerPinpoint';
+import { MarkerStreetPoi } from './MarkerStreetPoi';
 
 interface Props {
     /**
@@ -49,11 +50,21 @@ export const Street = (props: Props) => {
             i++
             return polyLine.wayPoints[0].toString() + i
         }
+        // goofy id creation
+        const nextIDMarker = (property: IDrawableStreetProperty) => {
+            i++
+            return property.type.toString() + i
+        }
         return (
             <div>
                 {
                     props.drawableStreet.polyLines.map((polyLine) =>
                         <Polyline pathOptions={{ color: 'red' }} positions={polyLine.wayPoints} key={nextID(polyLine)} />
+                    )
+
+                }{
+                    props.drawableStreet.specialProperties?.map((location) =>
+                        <MarkerStreetPoi data={location} key={nextIDMarker(location)} />
                     )
                 }
             </div>

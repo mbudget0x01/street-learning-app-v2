@@ -15,6 +15,8 @@ export type Elements = {
     name: string;
     website: string;
     public_transport: string;
+    //nodes usually don't have this can be "yes" or "no"
+    oneway: string
   };
   //be aware not all have this
   nodes?: number[],
@@ -30,16 +32,16 @@ export type Elements = {
 export const fetchStreet = async (
   streetName: string,
   overpassAreaId: string,
-  fileName:string): 
+  fileName: string):
   Promise<Elements[]> => {
-    let elements: Elements[] = []
-    let url:string  = `/geocode/overpass/${fileName}/${overpassAreaId}/${streetName}`
+  let elements: Elements[] = []
+  let url: string = `/geocode/overpass/${fileName}/${overpassAreaId}/${streetName}`
 
-    let rawData:any = await fetchStreetCache(url)
-    elements = rawData.elements
-    
-    if (elements.length === 0) {
-      throw new GeocodeError("Street Name is unknown to the Overpass API.", 'NotResolvable')
-    }
-    return elements
+  let rawData: any = await fetchStreetCache(url)
+  elements = rawData.elements
+
+  if (elements.length === 0) {
+    throw new GeocodeError("Street Name is unknown to the Overpass API.", 'NotResolvable')
   }
+  return elements
+}
