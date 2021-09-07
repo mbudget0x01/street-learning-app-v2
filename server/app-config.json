@@ -1,0 +1,7 @@
+{
+    "isProxy": false,
+    "clientHostName": "web_client",
+    "apiPort": 3001,
+    "redisHostName": "localhost",
+    "redisPort": 6379
+}

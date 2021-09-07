@@ -1,0 +1,39 @@
+[{
+        "correct": true,
+        "text": "Your answer was right. Keep up the good work!",
+        "isQuote": false
+    }, {
+        "correct": false,
+        "text": "Your answer was wrong. Use the app to memorize the right answer. So next time you know it. Don't give up!",
+        "isQuote": false
+    }, {
+        "correct": true,
+        "text": "“Success is like pregancy. Everybody congratulates you but nobody knows, how many times you got fucked to achieve it.”",
+        "isQuote": true,
+        "quoteFrom": "unknown"
+    }, {
+        "correct": false,
+        "text": "“He knows all the answers, has not been asked all the questions.”",
+        "isQuote": true,
+        "quoteFrom": "Confucius"
+    }, {
+        "correct": false,
+        "text": "“Everyone has a photographic memory, some people just don’t have film!”",
+        "isQuote": true,
+        "quoteFrom": "Confucius"
+    },
+    {
+        "correct": false,
+        "text": "“Sometimes you succeed, and other times you learn.”",
+        "isQuote": true,
+        "quoteFrom": "Robert Kiyosaki"
+    }, {
+        "correct": true,
+        "text": "Goood Job! High Five!",
+        "isQuote": false
+    }, {
+        "correct": true,
+        "text": "Nicely Done! You earned your gold star for today ⭐",
+        "isQuote": false
+    }
+]

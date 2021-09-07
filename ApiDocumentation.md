@@ -8,6 +8,7 @@ If no specified otherwise only `GET` requests are supported.
 
 - `/descriptor` returns the descriptor file.
 - `/streets/<file-name.json>` returns the street file.
+- `/feedback/text` returns the file containing the various feedback texts.
 
 ## Geocoding
 

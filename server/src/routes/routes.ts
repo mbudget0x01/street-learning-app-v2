@@ -5,13 +5,16 @@ import { nominatimRoute } from "./geocode/nominatim";
 import { overpassRoute } from "./geocode/overpass";
 import { overpassProxyRoute } from "./geocode/overpassProxy";
 import proxy from "express-http-proxy"
+import { getClientHostName, getIsProxy } from "../config";
+import { feedbackTextRoute } from "./data/questionFeedbackText";
 
-const isProxy = process.env.IS_PROXY || false;
-const proxiedHost = process.env.PROXY_HOST || "false";
+const isProxy = getIsProxy();
+const proxiedHost = getClientHostName();
 
 export const appRouter = (app, fs) => {
 
   descriptorRoute(app, fs);
+  feedbackTextRoute(app,fs)
   streetsRoute(app, fs)
   overpassRoute(app)
   overpassProxyRoute(app)

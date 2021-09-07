@@ -1,5 +1,5 @@
 import { DialogContent, DialogContentText } from "@material-ui/core"
-import AppDialog from "./AppDialog"
+import AppDialog from "../AppDialog"
 
 interface Props {
     /**

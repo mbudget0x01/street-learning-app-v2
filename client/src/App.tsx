@@ -4,7 +4,7 @@ import { isIE } from "react-device-detect";
 import { IDrawableStreet, isSameStreet, StreetGeocoder } from "./geocode";
 import { generateQuerySuffix } from "./geocode/esri";
 import { fetchLearningFiles, FileSelector, LearningFile } from "./learningFileHandling";
-import { IQuestion, ProgressHandler, ProgressList } from "./progress";
+import { IQuestion, ProgressHandler, ProgressList, ProgressManipulation } from "./progress";
 import { ThemeType } from "./theme";
 import { ContentMain, DialogType, DisplayLoading, MainDrawer, UnsupportedBrowserDialog } from "./ui";
 
@@ -61,7 +61,7 @@ export default function App() {
         }
         if (displayFeedbackDialog) {
             setDialogIsOpen(true)
-            setDialogType("questionFeedback")
+            setDialogType("questionFeedbackRandom")
         }
 
     }
@@ -77,7 +77,7 @@ export default function App() {
 
     const afterProgressHandlerLoadEventHandler = (instance: ProgressHandler) => {
         setGameIsReady(true);
-        setStreets(instance.allQuestions)
+        setStreets(instance.questions)
         //we can set it already via instance
         setActiveQuestion(instance.getNextStreet())
     }
@@ -118,6 +118,16 @@ export default function App() {
         setDialogIsOpen(true)
     }
 
+    const displayForceReset = () => {
+        setDialogType("resetProgressForce")
+        setDialogIsOpen(true)
+    }
+
+    const displayNoCheating = () => {
+        setDialogType("noExploit")
+        setDialogIsOpen(true)
+    }
+
     /**
      * Geocodes the street using StreetGeocoder
      * @param streetName Name of the Street to display
@@ -148,6 +158,11 @@ export default function App() {
     }
 
     const onQuestionClickHandler = async (question: IQuestion) => {
+        if(question.street === activeQuestion){
+            //no no no, no cheating ;-)
+            displayNoCheating();
+            return
+        }
         let street: IDrawableStreet | undefined = await geocodeStreet(question.street)
         setDisplayedStreet(street)
     }
@@ -156,7 +171,9 @@ export default function App() {
     const onDialogClickHandler = (dialogResult: boolean | undefined) => {
         setDialogIsOpen(false)
         switch (dialogType) {
+            //diffrent dialog same result
             case "resetProgress":
+            case "resetProgressForce":
                 if (progressHandler !== null) {
                     progressHandler.resetProgress()
                 }
@@ -209,6 +226,7 @@ export default function App() {
             drawerContent={
                 [
                     <FileSelector files={learningFiles} onChanged={chooseFileClickHandler} />,
+                    <ProgressManipulation onResetClick={displayForceReset} isDisabled={!gameIsReady} />,
                     <ProgressList questions={streets} onQuestionClick={onQuestionClickHandler} />
                 ]
             }

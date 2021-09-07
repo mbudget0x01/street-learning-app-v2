@@ -1,5 +1,5 @@
 import { LatLng } from "leaflet";
-import { IDrawableStreet, IDrawablePolyLine } from "..";
+import { IDrawableStreet, IDrawablePolyLine, IDrawableStreetProperty } from "..";
 import { LearningFile } from "../../learningFileHandling";
 import { GeocodeError } from "../GeocodeError";
 import { Elements, fetchStreet } from "./OverpassApi";
@@ -8,11 +8,12 @@ export class OverpassStreetQuery {
     private streetName: string;
     private drawableWayPoints: LatLng[][] | undefined
     private wayPointElements: Elements[] = []
+    private streetPoi: IDrawableStreetProperty[] = []
     private center: LatLng | undefined;
     private executed: boolean = false
-    private learningFile:LearningFile
+    private learningFile: LearningFile
 
-    constructor(streetName: string, learningFile:LearningFile) {
+    constructor(streetName: string, learningFile: LearningFile) {
         this.streetName = streetName;
         this.learningFile = learningFile
     }
@@ -55,24 +56,66 @@ export class OverpassStreetQuery {
             }
         });
 
+
         //order waypoints to multiple arrays representing a polygon line
         wayNodes.forEach(n => {
             let nodeWaypoints: LatLng[] = [];
-            if (!n.nodes) { 
+            if (!n.nodes) {
                 return
             }
-                n.nodes.forEach(element => {
-                    let searchedElement = this.wayPointElements.find((s) => s.id === element)
-                    if (searchedElement !== undefined && searchedElement.lat && searchedElement.lon) {
-                        nodeWaypoints.push(new LatLng(searchedElement.lat, searchedElement.lon))
-                    }
+
+            n.nodes.forEach(element => {
+                let searchedElement = this.wayPointElements.find((s) => s.id === element)
+                if (searchedElement !== undefined && searchedElement.lat && searchedElement.lon) {
+                    nodeWaypoints.push(new LatLng(searchedElement.lat, searchedElement.lon))
+                }
+            })
+
+
+            //check if oneway
+            if (n.tags.oneway === "yes") {
+
+                this.streetPoi.push({
+                    name: "oneWay",
+                    position: new LatLng(nodeWaypoints[0].lat, nodeWaypoints[0].lng),
+                    type: "oneWayEntrance"
                 })
+
+
+
+                this.streetPoi.push({
+                    name: "oneWay",
+                    position: new LatLng(nodeWaypoints[nodeWaypoints.length - 1].lat, nodeWaypoints[nodeWaypoints.length - 1].lng),
+                    type: "oneWayExit"
+                })
+            }
 
             tmpArray.push(nodeWaypoints)
 
         }
         );
+
         this.drawableWayPoints = tmpArray
+
+        if (this.streetPoi.length > 2) {
+
+
+            let toDelete: IDrawableStreetProperty[] = [];
+            for (let index = 0; index < this.streetPoi.length; index++) {
+                
+                for (let index2 = 0; index2 < this.streetPoi.length; index2++) {
+                    if(this.streetPoi[index].position.distanceTo(this.streetPoi[index2].position) < 30 && index !== index2){
+                        toDelete.push(this.streetPoi[index])
+                    }
+                    
+                }
+                
+                
+                
+            }            
+            this.streetPoi = this.streetPoi.filter((value) => !toDelete.includes(value))
+        }
+
         return this.drawableWayPoints;
     }
 
@@ -143,9 +186,16 @@ export class OverpassStreetQuery {
             )
         })
 
+        let poi: IDrawableStreetProperty[] | undefined;
+        if (this.streetPoi.length === 0) {
+            poi = undefined;
+        } else {
+            poi = this.streetPoi
+        }
 
 
-        return { name: this.streetName, pathOption: {}, center: center, polyLines: polyLines }
+
+        return { name: this.streetName, pathOption: {}, center: center, polyLines: polyLines, specialProperties: poi }
     }
 
 }

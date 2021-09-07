@@ -1,9 +1,10 @@
 import redis from 'redis';
 import { promisify } from 'util';
+import { getRedisHostName, getRedisPort } from '../config';
 
 export const redisClient = redis.createClient({
-    host: process.env.REDIS_HOST || 'localhost',
-    port: 6379
+    host: getRedisHostName(),
+    port: getRedisPort()
 });
 
 redisClient.on('error', err => {

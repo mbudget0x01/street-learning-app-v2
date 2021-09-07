@@ -1,4 +1,4 @@
-![GitHub package.json version](https://img.shields.io/badge/Version-v1.0.1-informational?style=for-the-badge) ![GitHub](https://img.shields.io/github/license/mbudget0x01/street-learning-app-v2?style=for-the-badge) ![GitHub top language](https://img.shields.io/github/languages/top/mbudget0x01/street-learning-app-v2?style=for-the-badge)
+![GitHub package.json version](https://img.shields.io/badge/Version-v1.0.2-informational?style=for-the-badge) ![GitHub](https://img.shields.io/github/license/mbudget0x01/street-learning-app-v2?style=for-the-badge) ![GitHub top language](https://img.shields.io/github/languages/top/mbudget0x01/street-learning-app-v2?style=for-the-badge)
 
 # Street Learning App V2
 
@@ -14,6 +14,20 @@ Pretty simple ;-)
 ## Getting started
 
 There are two options how you can use this app.
+
+### configuration
+
+The server side config can be changed using the `server/app-config.json` file or using the environement variables.
+If enviromenet variables are set, those overrule always those specified in the file.
+
+
+| config        | env variable           | use  |
+| ------------- |-------------| -----|
+| isProxy | IS_PROXY | if true client app will be proxied as root |
+| clientHostName | PROXY_HOST | name or IP of the client app host |
+| apiPort | APP_PORT | Port to expose the app to |
+| redisHostName | REDIS_HOST | Redis host for caching |
+| redisPort | REDIS_PORT | Port to use for the redis host |
 
 ### npm
 
@@ -59,6 +73,13 @@ All the related files are loacted under `/server/data/streets`.
 ```
 
 4. If you want to provide this for everyone create a pull request😉. I would appreciate this.
+
+
+## Add new Feedback Texts
+
+As for the streets you can also add more texts. The file can be found and modified under `/server/data/text/question-feedback.json`.
+As always pull requests are welcome
+
 
 ## Bugs and Requests
 
