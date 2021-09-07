@@ -1,12 +1,13 @@
 import { ErrorDialog } from "."
 import { GeneralDescriptionDialog } from "./dialog/GeneralDescriptionDialog"
 import { ManualDecisionDialog } from "./dialog/ManualDecisionDialog"
-import { QuestionFeedbackDialog } from "./dialog/QuestionFeedbackDialog"
+import { QuestionFeedbackDialog } from "./dialog/feedback/QuestionFeedbackDialog"
 import { ResetProgressDialog } from "./dialog/ResetProgressDialog"
 import { ResetProgressDialogForce } from "./dialog/ResetProgressForceDialog"
+import { QuestionFeedbackDialogRandom } from "./dialog/feedback/QuestionFeedbackDialogRandom"
 
 
-export type DialogType = 'error' | 'questionFeedback' | 'generalDescription' | 'manualDecision' | 'resetProgress' | 'resetProgressForce' | 'none'
+export type DialogType = 'error' | 'questionFeedback' | 'questionFeedbackRandom' | 'generalDescription' | 'manualDecision' | 'resetProgress' | 'resetProgressForce' | 'none'
 
 interface Props {
     /**
@@ -59,6 +60,12 @@ export const ContentMainDialogFactory = (props: Props) => {
                 buttonCloseClicked={() => props.onDialogCloseClick(undefined)}
                 isOpen={props.isOpen} wasCorrect={props.lastAnswerCorrect}
                 nextQuestion={props.nextQuestion} />
+        }
+        case "questionFeedbackRandom": {
+            return <QuestionFeedbackDialogRandom
+                buttonCloseClicked={() => props.onDialogCloseClick(undefined)}
+                isOpen={props.isOpen} wasCorrect={props.lastAnswerCorrect}
+                nextQuestion={props.nextQuestion}/>
         }
         case "generalDescription": {
             return <GeneralDescriptionDialog

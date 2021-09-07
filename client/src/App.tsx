@@ -61,7 +61,7 @@ export default function App() {
         }
         if (displayFeedbackDialog) {
             setDialogIsOpen(true)
-            setDialogType("questionFeedback")
+            setDialogType("questionFeedbackRandom")
         }
 
     }

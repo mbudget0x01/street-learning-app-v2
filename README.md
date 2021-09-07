@@ -74,6 +74,13 @@ All the related files are loacted under `/server/data/streets`.
 
 4. If you want to provide this for everyone create a pull request😉. I would appreciate this.
 
+
+## Add new Feedback Texts
+
+As for the streets you can also add more texts. The file can be found and modified under `/server/data/text/question-feedback.json`.
+As always pull requests are welcome
+
+
 ## Bugs and Requests
 
 If you find a bug or have a request. Just open an issue here on github.
