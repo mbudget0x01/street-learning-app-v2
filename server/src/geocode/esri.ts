@@ -31,9 +31,7 @@ function createParametrisizedURL(cachedStreet: CachedStreet, countryCode: string
     return url;
 }
 
-async function fetchFromApi(cachedStreet: CachedStreet, countryCode: string, city: string, zip: string): Promise<CachedStreet> {
-    console.log("fetch from api");
-    
+async function fetchFromApi(cachedStreet: CachedStreet, countryCode: string, city: string, zip: string): Promise<CachedStreet> {    
     let url:URL = createParametrisizedURL(cachedStreet, countryCode, city, zip)
     let response = await fetch(url.href);
     //use first
