@@ -5,9 +5,10 @@ import { QuestionFeedbackDialog } from "./dialog/feedback/QuestionFeedbackDialog
 import { ResetProgressDialog } from "./dialog/ResetProgressDialog"
 import { ResetProgressDialogForce } from "./dialog/ResetProgressForceDialog"
 import { QuestionFeedbackDialogRandom } from "./dialog/feedback/QuestionFeedbackDialogRandom"
+import { NoCheatingDialog } from "./dialog/NoCheatingDialog"
 
 
-export type DialogType = 'error' | 'questionFeedback' | 'questionFeedbackRandom' | 'generalDescription' | 'manualDecision' | 'resetProgress' | 'resetProgressForce' | 'none'
+export type DialogType = 'error' | 'questionFeedback' | 'questionFeedbackRandom' | 'generalDescription' | 'manualDecision' | 'resetProgress' | 'resetProgressForce' | 'noExploit' | 'none'
 
 interface Props {
     /**
@@ -65,7 +66,7 @@ export const ContentMainDialogFactory = (props: Props) => {
             return <QuestionFeedbackDialogRandom
                 buttonCloseClicked={() => props.onDialogCloseClick(undefined)}
                 isOpen={props.isOpen} wasCorrect={props.lastAnswerCorrect}
-                nextQuestion={props.nextQuestion}/>
+                nextQuestion={props.nextQuestion} />
         }
         case "generalDescription": {
             return <GeneralDescriptionDialog
@@ -85,6 +86,11 @@ export const ContentMainDialogFactory = (props: Props) => {
         }
         case "resetProgressForce": {
             return <ResetProgressDialogForce
+                buttonCloseClicked={() => props.onDialogCloseClick(undefined)}
+                isOpen={props.isOpen} />
+        }
+        case "noExploit": {
+            return <NoCheatingDialog
                 buttonCloseClicked={() => props.onDialogCloseClick(undefined)}
                 isOpen={props.isOpen} />
         }

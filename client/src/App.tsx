@@ -123,6 +123,11 @@ export default function App() {
         setDialogIsOpen(true)
     }
 
+    const displayNoCheating = () => {
+        setDialogType("noExploit")
+        setDialogIsOpen(true)
+    }
+
     /**
      * Geocodes the street using StreetGeocoder
      * @param streetName Name of the Street to display
@@ -155,6 +160,7 @@ export default function App() {
     const onQuestionClickHandler = async (question: IQuestion) => {
         if(question.street === activeQuestion){
             //no no no, no cheating ;-)
+            displayNoCheating();
             return
         }
         let street: IDrawableStreet | undefined = await geocodeStreet(question.street)
