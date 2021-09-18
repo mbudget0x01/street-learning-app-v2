@@ -1,5 +1,5 @@
 import { LatLng, latLng } from "leaflet";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { isIE } from "react-device-detect";
 import { IDrawableStreet, isSameStreet, StreetGeocoder } from "./geocode";
 import { generateQuerySuffix } from "./geocode/esri";
@@ -24,7 +24,7 @@ export default function App() {
     const [activeQuestion, setActiveQuestion] = useState<string | undefined>(undefined)
     const [lastGuessedPosition, setLastGuessedPosition] = useState<LatLng>(new LatLng(0, 0))
     const [answerWasCorrect, setAnswerWasCorrect] = useState<boolean>(false)
-    const [errorDialogText, setErrorDialogText] = useState<string>("")
+    const [errorDialogTextKey, setErrorDialogTextKey] = useState<string>("")
     const [manualAnswerPending, setManualAnswerPending] = useState<boolean>(false)
     const [startCoordinates, setStartCoordinates] = useState<[number, number]>([48.858093, 2.294694])
     //does this belong here?
@@ -114,7 +114,7 @@ export default function App() {
 
     const displayError = (errorText: string) => {
         setDialogType("error")
-        setErrorDialogText(errorText)
+        setErrorDialogTextKey(errorText)
         setDialogIsOpen(true)
     }
 
@@ -135,7 +135,7 @@ export default function App() {
      */
     const geocodeStreet = async (streetName: string): Promise<IDrawableStreet | undefined> => {
         if (!overpassAreaId || !esriQuerySuffix) {
-            displayError("Can't geocode! Check descriptor.json.")
+            displayError("ErrorDialog.error.invalidDescriptorJson")
             return undefined
         }
         let displStrt: IDrawableStreet | undefined = undefined;
@@ -146,19 +146,19 @@ export default function App() {
                 displStrt = await streetGeocoder.geocodeStreet(streetName, progressHandler.baseFile)
             }
         } catch {
-            displayError("There is an network issue. Could not reach the API(s)")
+            displayError("ErrorDialog.error.apiNotReachable")
             return undefined
         }
 
         if (!displStrt) {
-            displayError(`Unfortunatly the App was not able to resolve ${streetName}. The primary and secondary Geocoder are exhausted.`)
+            displayError("ErrorDialog.error.apiStreetNotFound")
             return undefined
         }
         return displStrt
     }
 
     const onQuestionClickHandler = async (question: IQuestion) => {
-        if(question.street === activeQuestion){
+        if (question.street === activeQuestion) {
             //no no no, no cheating ;-)
             displayNoCheating();
             return
@@ -203,11 +203,13 @@ export default function App() {
                 drawerContent={[]}
                 mainContent={
                     <div>
-                        <DisplayLoading />
-                        <UnsupportedBrowserDialog
-                            buttonCloseClicked={() => setUnsupportedBrowserDialogOpen(false)}
-                            isOpen={unsupportedBrowserDialogOpen}
-                        />
+                        <Suspense fallback="loading">
+                            <DisplayLoading />
+                            <UnsupportedBrowserDialog
+                                buttonCloseClicked={() => setUnsupportedBrowserDialogOpen(false)}
+                                isOpen={unsupportedBrowserDialogOpen}
+                            />
+                        </Suspense>
                     </div>
                 }
                 drawerIsOpen={false}
@@ -244,7 +246,7 @@ export default function App() {
                     dialogIsOpen={dialogIsOpen}
                     dialogType={dialogType}
                     lastAnswerCorrect={answerWasCorrect}
-                    lastError={errorDialogText}
+                    lastError={errorDialogTextKey}
                     onDialogCloseClick={onDialogClickHandler}
                 />
             }

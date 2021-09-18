@@ -1,4 +1,5 @@
 import { CircularProgress, createStyles, makeStyles, Theme, Typography } from "@material-ui/core"
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,12 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 export const DisplayLoading = () => {
     const classes = useStyles();
+    const { t } = useTranslation("general");
 
     return (
         <div className={classes.contentWrapper}>
             <CircularProgress size={'20%'} />
             <Typography >
-                App is Loading. Please stand by...
+               {t("DisplayLoading.loadingText")}
             </Typography>
         </div>
     )

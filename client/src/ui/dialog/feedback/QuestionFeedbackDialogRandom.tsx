@@ -1,5 +1,6 @@
 import { DialogContent, DialogContentText } from "@material-ui/core"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import AppDialog from "../AppDialog"
 import { FeedbackTextHandler, IFeedbackText } from "./FeedbackTextHandler"
 
@@ -28,6 +29,8 @@ interface Props {
  * @returns 
  */
 export const QuestionFeedbackDialogRandom = (props: Props) => {
+
+    const { t } = useTranslation("dialog");
 
     const [feedbackText, setFeedbackText] = useState<IFeedbackText>()
     const [fbHandlerIsLoading, setFbHandlerIsLoading] = useState<boolean>(false)
@@ -58,12 +61,12 @@ export const QuestionFeedbackDialogRandom = (props: Props) => {
 
     //const feedbackTextJSX: JSX.Element = <DialogContentText >{feedbackText?.text}</DialogContentText>
 
-    const nextQuestionText: JSX.Element = props.nextQuestion ? <DialogContentText >The next street is: <b>{props.nextQuestion}</b></DialogContentText> : <div />
+    const nextQuestionText: JSX.Element = props.nextQuestion ? <DialogContentText >{t("feedback.nextQuestionText")}<b>{props.nextQuestion}</b></DialogContentText> : <div />
 
     return <AppDialog
         isOpen={props.isOpen}
         buttonCloseClicked={() => { setFeedbackTextSet(false); props.buttonCloseClicked(); }}
-        title={props.wasCorrect ? "Right Answer" : "Wrong Answer"}
+        title={props.wasCorrect ? t("feedback.titleRight") : t("feedback.titleWrong")}
         buttonText={"Ok"}
         content={
             <DialogContent>

@@ -1,39 +1,91 @@
 [{
         "correct": true,
         "text": "Your answer was right. Keep up the good work!",
-        "isQuote": false
+        "isQuote": false,
+        "locale": "en"
     }, {
         "correct": false,
         "text": "Your answer was wrong. Use the app to memorize the right answer. So next time you know it. Don't give up!",
-        "isQuote": false
+        "isQuote": false,
+        "locale": "en"
     }, {
         "correct": true,
         "text": "“Success is like pregancy. Everybody congratulates you but nobody knows, how many times you got fucked to achieve it.”",
         "isQuote": true,
-        "quoteFrom": "unknown"
+        "quoteFrom": "unknown",
+        "locale": "en"
     }, {
         "correct": false,
         "text": "“He knows all the answers, has not been asked all the questions.”",
         "isQuote": true,
-        "quoteFrom": "Confucius"
+        "quoteFrom": "Confucius",
+        "locale": "en"
     }, {
         "correct": false,
         "text": "“Everyone has a photographic memory, some people just don’t have film!”",
         "isQuote": true,
-        "quoteFrom": "Confucius"
+        "quoteFrom": "Confucius",
+        "locale": "en"
     },
     {
         "correct": false,
         "text": "“Sometimes you succeed, and other times you learn.”",
         "isQuote": true,
-        "quoteFrom": "Robert Kiyosaki"
+        "quoteFrom": "Robert Kiyosaki",
+        "locale": "en"
     }, {
         "correct": true,
         "text": "Goood Job! High Five!",
-        "isQuote": false
+        "isQuote": false,
+        "locale": "en"
     }, {
         "correct": true,
         "text": "Nicely Done! You earned your gold star for today ⭐",
-        "isQuote": false
+        "isQuote": false,
+        "locale": "en"
+    }, {
+        "correct": true,
+        "text": "Ihre Antwort war richtig. Weiter so!",
+        "isQuote": false,
+        "locale": "de"
+    }, {
+        "correct": false,
+        "text": "Ihre Antwort war falsch. Nächstes mal haben Sie sicherlich mehr Glück.",
+        "isQuote": false,
+        "locale": "de"
+    }, {
+        "correct": true,
+        "text": "“Gut gemacht du hast.”",
+        "isQuote": true,
+        "quoteFrom": "Joda",
+        "locale": "de"
+    }, {
+        "correct": false,
+        "text": "Du weisst die Antwort, dir wurde nur die falsche Frage gestellt",
+        "isQuote": false,
+        "locale": "de"
+    }, {
+        "correct": false,
+        "text": "“Jeder hat ein fotografisches Gedächtnis, manche haben nur keinen Film dafür.”",
+        "isQuote": true,
+        "quoteFrom": "unbekannt",
+        "locale": "de"
+    },
+    {
+        "correct": false,
+        "text": "“Machmal hast du erfolg, andernfalls lernst du.”",
+        "isQuote": true,
+        "quoteFrom": "Robert Kiyosaki",
+        "locale": "de"
+    }, {
+        "correct": true,
+        "text": "Gute Arbeit! High Five! ✋",
+        "isQuote": false,
+        "locale": "de"
+    }, {
+        "correct": true,
+        "text": "Gut gemacht! Du hast dir deinen heutigen Goldstern verdient ⭐",
+        "isQuote": false,
+        "locale": "de"
     }
 ]

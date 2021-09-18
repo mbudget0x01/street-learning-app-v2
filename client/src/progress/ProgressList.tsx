@@ -1,5 +1,6 @@
 import { createStyles, List, ListItem, ListItemIcon, ListItemText, ListSubheader, makeStyles, Theme } from "@material-ui/core";
 import { Check, Clear } from "@material-ui/icons";
+import { useTranslation } from "react-i18next";
 import { IQuestion } from "./IQuestion";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -62,12 +63,13 @@ interface Props{
  */
 export const ProgressList = (props:Props) =>{
     const classes = useStyles();
+    const { t } = useTranslation("main");
 
     return (
         <div className={classes.root}>
             <List component="nav" aria-label="main question-list" subheader={
                 <ListSubheader component="div" id="question-list-subheader" disableSticky={true}>
-                    Questions
+                    {t("ProgressList.header")}
                 </ListSubheader>
             }>
                 {

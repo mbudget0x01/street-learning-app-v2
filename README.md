@@ -1,4 +1,4 @@
-![GitHub package.json version](https://img.shields.io/badge/Version-v1.0.2-informational?style=for-the-badge) ![GitHub](https://img.shields.io/github/license/mbudget0x01/street-learning-app-v2?style=for-the-badge) ![GitHub top language](https://img.shields.io/github/languages/top/mbudget0x01/street-learning-app-v2?style=for-the-badge)
+![GitHub package.json version](https://img.shields.io/badge/Version-v1.0.3-informational?style=for-the-badge) ![GitHub](https://img.shields.io/github/license/mbudget0x01/street-learning-app-v2?style=for-the-badge) ![GitHub top language](https://img.shields.io/github/languages/top/mbudget0x01/street-learning-app-v2?style=for-the-badge)
 
 # Street Learning App V2
 
@@ -77,7 +77,7 @@ All the related files are loacted under `/server/data/streets`.
 
 ## Add new Feedback Texts
 
-As for the streets you can also add more texts. The file can be found and modified under `/server/data/text/question-feedback.json`.
+As for the streets you can also add more texts. The file can be found and modified under `/server/data/text/question-feedback.json`. Be aware you must always provide a locale.
 As always pull requests are welcome
 
 
@@ -103,6 +103,7 @@ Thanks in advance.😊
 * OpenStreetMaps
 * leaflet ESRI geocoder
 * Nominatim Browser
+* i18next
 
 ### Icons
 

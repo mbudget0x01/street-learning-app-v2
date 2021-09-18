@@ -1,0 +1,49 @@
+{
+    "Ok": "Ok",
+    "ErrorDialog": {
+        "title": "Error",
+        "contentPrefix": "The following Error occured: ",
+        "error": {
+            "invalidDescriptorJson": "Can't geocode! Check descriptor.json.",
+            "apiNotReachable": "There is an network issue. Could not reach the API(s)",
+            "apiStreetNotFound": "`Unfortunatly the App was not able to resolve this Street. The primary and secondary Geocoder are exhausted.`"
+        }
+    },
+    "GeneralDescriptionDialog": {
+        "title": "Welcome",
+        "buttonOk": "Let's go!",
+        "content": "Welcome to the Street Learning App. Here you can learn some streets. Before you will be able to start learning, you must choose a learning file. All available files can be found in the drawer on the left side. To make a guess, just click on the map to place your Marker. Then you can adjust the markers position by dragging it. Finally, click on the check Button to validate your guess. Have fun!"
+    },
+    "ManualDecisionDialog": {
+        "title": "Manual Answer",
+        "content1": "Unfortunately the App is not able to resolve if the question was answerd correct.",
+        "content2": "Please Answer this yourself, by pressing the corresponding button.",
+        "content3": "You can close this Window and review your Guess according to the approximate Position we found for the solution.",
+        "buttonWrong": "Wrong",
+        "buttonRight": "I knew it!",
+        "buttonHide": "Let me check again!"
+
+    },
+    "NoCheatingDialog": {
+        "title": "No Exploits!",
+        "buttonOk": "I promise!",
+        "content": "It seems as you tried to use an exploit. This is a big No No! Do not cheat ;-)"
+    },
+    "ResetProgressDialog": {
+        "title": "Congratulation!",
+        "content": "You answerd all Questions correct. Congratulations! The app will now reset your progress and you can start over with your training."
+    },
+    "ResetProgressDialogForce": {
+        "title": "Reset",
+        "content": "The app will now reset your progress and you can start over with your training."
+    },
+    "UnsupportedBrowserDialog": {
+        "title": "Unsupported Browser.",
+        "content": "You are running an unsupported Browser Version. If possible please change to a diffrent browser!(e.g. Firefox, Chrome,...). Continuing with this browser can lead to a bad experience."
+    },
+    "feedback": {
+        "titleRight": "Right Answer",
+        "titleWrong": "Wrong Answer",
+        "nextQuestionText": "The next street is: "
+    }
+}

@@ -1,6 +1,7 @@
 import { List, ListItem, ListItemIcon, ListItemText, createStyles, makeStyles, Theme, ListSubheader } from "@material-ui/core";
 import { Description } from '@material-ui/icons';
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { LearningFile } from "./LearningFile";
 
 /**
@@ -51,6 +52,7 @@ interface FileSelectorProps {
 export const FileSelector = (props: FileSelectorProps) => {
     const classes = useStyles();
     const [isDisabled, setDisabled] = useState<boolean>(false)
+    const { t } = useTranslation("main");
     
 
     /**
@@ -70,7 +72,7 @@ export const FileSelector = (props: FileSelectorProps) => {
         <div className={classes.root}>
             <List component="nav" aria-label="main file-list" subheader={
                 <ListSubheader component="div" id="file-list-subheader" disableSticky={true}>
-                    Available Files
+                    {t("FileSelector.header")}
                 </ListSubheader>
             }>
                 {

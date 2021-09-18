@@ -1,0 +1,18 @@
+{
+    "QuestionDisplay": {
+        "activeQuestionCaption": "Aktuelle Frage:",
+        "buttonCheckText": "Prüfen",
+        "buttonManualText": "Manuell Prüfen",
+        "noFileLoadedText": "Nichts geladen."
+    },
+    "FileSelector": {
+        "header": "Vefügbare Programme"
+    },
+    "ProgressManipulation": {
+        "header": "Fortschritt",
+        "buttonResetText": "Fortschritt löschen"
+    },
+    "ProgressList": {
+        "header": "Fragen"
+    }
+}

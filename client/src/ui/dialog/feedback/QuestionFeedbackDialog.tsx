@@ -22,6 +22,7 @@ interface Props {
 
 /**
  * Displays a response to the user if the last guess was right, extends AppDialog
+ * Note: Legacy Object, has no translation
  * @param props 
  * @returns 
  */
