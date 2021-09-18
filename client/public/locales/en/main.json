@@ -1,0 +1,18 @@
+{
+    "QuestionDisplay": {
+        "activeQuestionCaption": "Active Question:",
+        "buttonCheckText": "Check",
+        "buttonManualText": "Answer Manually",
+        "noFileLoadedText": "No file loaded."
+    },
+    "FileSelector": {
+        "header": "Available Files"
+    },
+    "ProgressManipulation": {
+        "header": "Progress",
+        "buttonResetText": "Reset Progress"
+    },
+    "ProgressList": {
+        "header": "Questions"
+    }
+}

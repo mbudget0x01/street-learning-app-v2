@@ -1,13 +1,14 @@
+import { useTranslation } from "react-i18next";
 import AppDialog from "./AppDialog"
-interface Props{
+interface Props {
     /**
      * On Close Clicked
      */
-    buttonCloseClicked:()=> void
+    buttonCloseClicked: () => void
     /**
      * Is displayed state
      */
-    isOpen:boolean
+    isOpen: boolean
 }
 
 /**
@@ -15,12 +16,15 @@ interface Props{
  * @param props Props
  * @returns The Dialog (JSX.Element)
  */
-export const ResetProgressDialogForce = (props:Props) =>{
+export const ResetProgressDialogForce = (props: Props) => {
+
+    const { t } = useTranslation("dialog");
+
     return <AppDialog
-    isOpen={props.isOpen}
-    buttonCloseClicked={props.buttonCloseClicked} 
-    title={"Reset"} 
-    buttonText={"Ok"}
-    content={"The app will now reset your progress and you can start over with your training."}
+        isOpen={props.isOpen}
+        buttonCloseClicked={props.buttonCloseClicked}
+        title={t("ResetProgressDialogForce.title")}
+        buttonText={t("Ok")}
+        content={t("ResetProgressDialogForce.content")}
     />
 }

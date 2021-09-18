@@ -1,5 +1,6 @@
 import { createStyles, List, ListItem, ListItemIcon, ListItemText, ListSubheader, makeStyles, Theme } from "@material-ui/core";
 import { HighlightOff } from "@material-ui/icons";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,19 +25,20 @@ interface Props {
 
 export const ProgressManipulation = (props: Props) => {
     const classes = useStyles();
+    const { t } = useTranslation("main");
 
     return (
         <div className={classes.root}>
             <List component="nav" aria-label="main question-list" subheader={
                 <ListSubheader component="div" id="question-list-subheader" disableSticky={true}>
-                    Progress
+                    {t("ProgressManipulation.header")}
                 </ListSubheader>
             }>
                 <ListItem button onClick={(_event) => props.onResetClick()} disabled={props.isDisabled}>
                     <ListItemIcon >
                         <HighlightOff />
                     </ListItemIcon>
-                    <ListItemText primary={"Reset Progress"} />
+                    <ListItemText primary={t("ProgressManipulation.header")} />
                 </ListItem>
             </List>
         </div>

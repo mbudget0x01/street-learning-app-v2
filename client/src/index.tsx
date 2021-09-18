@@ -5,6 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'react-app-polyfill/ie9';
 import 'react-app-polyfill/stable';
+///bundle translations
+import './i18n'
 
 ReactDOM.render(
   <React.StrictMode>

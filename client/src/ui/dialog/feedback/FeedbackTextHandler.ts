@@ -1,5 +1,10 @@
+import "../../../i18n"
+import i18n from "../../../i18n";
+
 export class FeedbackTextHandler{
     
+    private loacle:string = i18n.language
+
     private static uri:string = "/feedback/text/"
 
     private static instance:FeedbackTextHandler | null;
@@ -37,6 +42,27 @@ export class FeedbackTextHandler{
      * @param rawList unsorted List
      */
     private populateData(rawList:IFeedbackText[]){
+        //check by locale
+        rawList.forEach(element => {
+            //yes I really hate double intendation even it would make sense here
+            let isSameLocale = element.locale.toLowerCase() === this.loacle.toLowerCase()
+
+            if(element.correct && isSameLocale){
+                this.positiveAnswers.push(element)
+            } else if(isSameLocale){
+                this.negativeAnswers.push(element)
+            }
+        });
+
+        
+        
+        //check if there are any
+        if(this.negativeAnswers.length > 0 && this.positiveAnswers.length > 0){
+            return
+        }
+        //fallback to english
+        this.negativeAnswers = [];
+        this.positiveAnswers = [];
         rawList.forEach(element => {
             if(element.correct){
                 this.positiveAnswers.push(element)
@@ -44,6 +70,8 @@ export class FeedbackTextHandler{
                 this.negativeAnswers.push(element)
             }
         });
+        console.log(this.positiveAnswers);
+        console.log(this.negativeAnswers);
     }
 
     /**
@@ -93,4 +121,8 @@ export interface IFeedbackText{
      * Author of the quote, might not be present
      */
     quoteFrom: string | undefined
+    /**
+     * Locale for translation purposes
+     */
+     locale: string
 }

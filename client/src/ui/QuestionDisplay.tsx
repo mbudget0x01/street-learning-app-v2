@@ -1,6 +1,7 @@
 import { Button, Card, createStyles, Hidden, makeStyles, Typography } from "@material-ui/core"
 import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
+import { useTranslation } from "react-i18next";
 
 interface Props {
     /**
@@ -61,13 +62,15 @@ const useStyles = makeStyles(() =>
 export const QuestionDisplay = (props: Props) => {
     const classes = useStyles()
 
+    const { t } = useTranslation("main");
+
     return (
         <Card variant="outlined" className={classes.card}>
             <div className={classes.cardDivText}>
                 <Hidden xsDown>
-                    <Typography variant="h6">{"Active Question:"}</Typography>
+                    <Typography variant="h6">{t("QuestionDisplay.activeQuestionCaption")}</Typography>
                 </Hidden>
-                <Typography variant="h6">{props.activeQuestion ? props.activeQuestion : "No file loaded."}</Typography>
+                <Typography variant="h6">{props.activeQuestion ? props.activeQuestion : t("QuestionDisplay.noFileLoadedText")}</Typography>
             </div>
             <div className={classes.cardDivButton}>
                 <Button variant="contained"
@@ -77,7 +80,7 @@ export const QuestionDisplay = (props: Props) => {
                     className={classes.button}
                     startIcon={<Hidden xsDown><CheckCircleOutlineOutlinedIcon /></Hidden>}>
                     <Hidden smUp><CheckCircleOutlineOutlinedIcon /></Hidden>
-                    <Hidden xsDown>Check</Hidden>
+                    <Hidden xsDown>{t("QuestionDisplay.buttonCheckText")}</Hidden>
                 </Button>
                 <Button variant="contained"
                     color="primary"
@@ -86,7 +89,7 @@ export const QuestionDisplay = (props: Props) => {
                     className={classes.button}
                     startIcon={<Hidden xsDown><WebAssetIcon /></Hidden>}>
                     <Hidden smUp><WebAssetIcon /></Hidden>
-                    <Hidden xsDown>Answer Manually</Hidden>
+                    <Hidden xsDown>{t("QuestionDisplay.buttonManualText")}</Hidden>
                 </Button>
             </div>
         </Card>

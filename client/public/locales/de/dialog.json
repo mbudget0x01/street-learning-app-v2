@@ -1,0 +1,49 @@
+{
+    "Ok": "Ok",
+    "ErrorDialog": {
+        "title": "Fehler",
+        "contentPrefix": "Folgendes Problem ist aufgetreten: ",
+        "error": {
+            "invalidDescriptorJson": "Geocoding nicht möglich. Prüfen Sie descriptor.json",
+            "apiNotReachable": "Netzwerkfehler, API(s) nicht erreichbar",
+            "apiStreetNotFound": "Leider ist diese Adresse bei den Geocoding providern nicht bekannt. Eine Auflösung ist nicht möglich."
+        }
+    },
+    "GeneralDescriptionDialog": {
+        "title": "Willkommen",
+        "buttonOk": "Los gehts!",
+        "content": "Willkommen zu der Street Learning App V2. Diese Applikation hilft Ihnen beim Lernen von Strassen. Bevor Sie aber mit dem Lernen beginnen können, müssen Sie das Lernprogramm wählen. Alle verfügbare Lernprogramme finden Sie im aufklappbaren Bereich auf der linken Seite. Um den Marker für Ihren Tipp, wo sich die Strasse befindet zu platzieren, klicken Sie auf die Karte. Anschliessend können Sie die finale Position des Markers durch Ziehen anpassen. Zum Schluss, klicken Sie auf den Button zur Validierung ihrer Angabe. Viel Spass!"
+    },
+    "ManualDecisionDialog": {
+        "title": "Manuelle Antwort",
+        "content1": "Leider ist die Applikation nicht in der Lage, festzustellen ob Ihre Antwort richtig oder falsch ist.",
+        "content2": "Bitte beantworten Sie selbst ob Sie richtig lagen. Drücken Sie dazu den entsprechenden Knopf.",
+        "content3": "Sie können das Fenster auch schliessen, die angezeigte Position überprüfen und anschliessend eine Antwort abgeben.",
+        "buttonWrong": "Falsch",
+        "buttonRight": "Richtig!",
+        "buttonHide": "Dann lass mal sehen!"
+
+    },
+    "NoCheatingDialog": {
+        "title": "Nicht Schummeln!",
+        "buttonOk": "Ich verspreche es!",
+        "content": "Es sieht so aus als versuchten Sie zu schummeln. Leider bin ich selbst schon darauf gestossen. Nicht schummeln!"
+    },
+    "ResetProgressDialog": {
+        "title": "Gratulation!",
+        "content": "Sie haben alle Fragen richtig beantwortet. Herzliche Gratulation! Die Applikation wird nun Ihren Fortschritt zurücksetzen und sie können mit dem Training neu beginnen."
+    },
+    "ResetProgressDialogForce": {
+        "title": "Zurücksetzen",
+        "content": "Die Applikation wird nun Ihren Fortschritt zurücksetzen und sie können mit dem Training neu beginnen."
+    },
+    "UnsupportedBrowserDialog": {
+        "title": "Nicht unterstütztet Browser.",
+        "content": "Sie nutzen einen nicht unterstützten Webbrowser. Wenn möglich nutzen Sie einen anderen Browser (z.B. Firefox, Chrome,...)! Wenn Sie mit diesem Browser fortfahren, kann dies zu einer eingeschränkten oder schleten Benutzererfahrung führen."
+    },
+    "feedback": {
+        "titleRight": "Richtige Antwort",
+        "titleWrong": "Falsche Antwort",
+        "nextQuestionText": "Die nächste Strasse ist: "
+    }
+}

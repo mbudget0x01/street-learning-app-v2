@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import AppDialog from "./AppDialog"
 
 interface Props{
@@ -21,11 +22,14 @@ interface Props{
  * @returns An Error Dialog
  */
 export const ErrorDialog = (props:Props) => {
+
+    const { t } = useTranslation("dialog");
+
     return <AppDialog
     isOpen={props.isOpen}
     buttonCloseClicked={props.buttonCloseClicked} 
-    title={"Error"} 
-    buttonText={"Ok"}
-    content={`The following Error occured: ${props.errorFriendlyDescription}`}
+    title={t("ErrorDialog.title")} 
+    buttonText={t("Ok")}
+    content={ t("ErrorDialog.contentPrefix") + t(props.errorFriendlyDescription)}
     />
 }

@@ -1,0 +1,11 @@
+{
+    "AppTitle": "Street Learning App V2",
+    "AppTitleShort": "SLA V2",
+    "DisplayLoading": {
+        "loadingText": "Applikation wird geladen..."
+    },
+    "AppProjectInfo": {
+        "VisitGithub": "Github Repo",
+        "Version": "Version"
+    }
+}

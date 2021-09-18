@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import { Suspense } from "react"
 
 
 const drawerWidth = 240;
@@ -112,7 +113,7 @@ interface Props {
 }
 
 var id = 0;
-function nextID():number{
+function nextID(): number {
     id++
     return id;
 }
@@ -155,15 +156,17 @@ export const MainDrawer = (props: Props) => {
                         </IconButton>
                         <div className={classes.toolbar}>
                             <div>
-                                <Hidden smUp><Typography variant="h6" noWrap>
-                                    SLA V2
-                                </Typography>
-                                </Hidden>
-                                <Hidden xsDown>
-                                    <Typography variant="h6" noWrap>
-                                        Street Learning App V2
+                                <Suspense fallback="loading">
+                                    <Hidden smUp><Typography variant="h6" noWrap>
+                                        SLA V2
                                     </Typography>
-                                </Hidden>
+                                    </Hidden>
+                                    <Hidden xsDown>
+                                        <Typography variant="h6" noWrap>
+                                            Street Learning App V2
+                                        </Typography>
+                                    </Hidden>
+                                </Suspense>
                             </div>
                             <div>
                                 <ThemeSwitch themeType={props.themeType} onThemeChange={props.onThemeChange} />
@@ -185,16 +188,18 @@ export const MainDrawer = (props: Props) => {
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>
                     </div>
-                    <Divider />
-                    <AppProjectInfo />
-                    {props.drawerContent.map((element) => {
-                        return (
-                            <div key={nextID().toString()}>
-                                <Divider />
-                                {element}
-                            </div>
-                        )
-                    })}
+                    <Suspense fallback="loading">
+                        <Divider />
+                        <AppProjectInfo />
+                        {props.drawerContent.map((element) => {
+                            return (
+                                <div key={nextID().toString()}>
+                                    <Divider />
+                                    {element}
+                                </div>
+                            )
+                        })}
+                    </Suspense>
                 </Drawer>
                 <main
                     className={clsx(classes.content, {
