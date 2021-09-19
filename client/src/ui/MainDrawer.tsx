@@ -156,17 +156,15 @@ export const MainDrawer = (props: Props) => {
                         </IconButton>
                         <div className={classes.toolbar}>
                             <div>
-                                <Suspense fallback="loading">
-                                    <Hidden smUp><Typography variant="h6" noWrap>
-                                        SLA V2
+                                <Hidden smUp><Typography variant="h6" noWrap>
+                                    SLA V2
+                                </Typography>
+                                </Hidden>
+                                <Hidden xsDown>
+                                    <Typography variant="h6" noWrap>
+                                        Street Learning App V2
                                     </Typography>
-                                    </Hidden>
-                                    <Hidden xsDown>
-                                        <Typography variant="h6" noWrap>
-                                            Street Learning App V2
-                                        </Typography>
-                                    </Hidden>
-                                </Suspense>
+                                </Hidden>
                             </div>
                             <div>
                                 <ThemeSwitch themeType={props.themeType} onThemeChange={props.onThemeChange} />
@@ -188,18 +186,20 @@ export const MainDrawer = (props: Props) => {
                             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                         </IconButton>
                     </div>
-                    <Suspense fallback="loading">
-                        <Divider />
-                        <AppProjectInfo />
-                        {props.drawerContent.map((element) => {
-                            return (
+
+                    <Divider />
+                    <AppProjectInfo />
+                    {props.drawerContent.map((element) => {
+                        return (
+                            <Suspense fallback="loading">
                                 <div key={nextID().toString()}>
                                     <Divider />
                                     {element}
                                 </div>
-                            )
-                        })}
-                    </Suspense>
+                            </Suspense>
+                        )
+                    })}
+
                 </Drawer>
                 <main
                     className={clsx(classes.content, {

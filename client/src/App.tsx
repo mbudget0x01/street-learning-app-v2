@@ -1,5 +1,5 @@
 import { LatLng, latLng } from "leaflet";
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import { isIE } from "react-device-detect";
 import { IDrawableStreet, isSameStreet, StreetGeocoder } from "./geocode";
 import { generateQuerySuffix } from "./geocode/esri";
@@ -203,13 +203,11 @@ export default function App() {
                 drawerContent={[]}
                 mainContent={
                     <div>
-                        <Suspense fallback="loading">
-                            <DisplayLoading />
-                            <UnsupportedBrowserDialog
-                                buttonCloseClicked={() => setUnsupportedBrowserDialogOpen(false)}
-                                isOpen={unsupportedBrowserDialogOpen}
-                            />
-                        </Suspense>
+                        <DisplayLoading />
+                        <UnsupportedBrowserDialog
+                            buttonCloseClicked={() => setUnsupportedBrowserDialogOpen(false)}
+                            isOpen={unsupportedBrowserDialogOpen}
+                        />
                     </div>
                 }
                 drawerIsOpen={false}

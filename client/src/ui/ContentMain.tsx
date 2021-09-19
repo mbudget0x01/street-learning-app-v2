@@ -1,6 +1,5 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core"
 import { LatLng, LatLngExpression } from "leaflet"
-import { Suspense } from "react"
 import { IDrawableStreet } from "../geocode"
 import { Map } from "../map"
 import { ThemeType } from "../theme"
@@ -87,15 +86,13 @@ export const ContentMain = (props: Props) => {
     return (
         <div id="main-content-game">
             <div>
-                <Suspense fallback="loading">
-                    <QuestionDisplay
-                        activeQuestion={props.activeQuestion}
-                        isDisabled={props.isDisabled}
-                        onCheckCklickHandler={props.onButtonCheckClickHandler}
-                        onDisplayManualAnswerClickHandler={props.onDisplayManualAnswerClickHandler}
-                        manualAnswerPending={props.manualAnswerIsPending}
-                    />
-                </Suspense>
+                <QuestionDisplay
+                    activeQuestion={props.activeQuestion}
+                    isDisabled={props.isDisabled}
+                    onCheckCklickHandler={props.onButtonCheckClickHandler}
+                    onDisplayManualAnswerClickHandler={props.onDisplayManualAnswerClickHandler}
+                    manualAnswerPending={props.manualAnswerIsPending}
+                />
             </div>
             <div id="map-wrapper" className={classes.map}>
                 <Map
@@ -106,16 +103,14 @@ export const ContentMain = (props: Props) => {
                     activeQuestion={props.activeQuestion}
                 />
             </div>
-            <Suspense fallback="loading">
-                <ContentMainDialogFactory
-                    dialogType={props.dialogType}
-                    isOpen={props.dialogIsOpen}
-                    lastAnswerCorrect={props.lastAnswerCorrect}
-                    lastError={props.lastError}
-                    onDialogCloseClick={props.onDialogCloseClick}
-                    nextQuestion={props.activeQuestion}
-                />
-            </Suspense>
+            <ContentMainDialogFactory
+                dialogType={props.dialogType}
+                isOpen={props.dialogIsOpen}
+                lastAnswerCorrect={props.lastAnswerCorrect}
+                lastError={props.lastError}
+                onDialogCloseClick={props.onDialogCloseClick}
+                nextQuestion={props.activeQuestion}
+            />
         </div>
     )
 }
