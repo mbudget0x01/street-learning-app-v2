@@ -1,4 +1,5 @@
 import { LatLngExpression} from "leaflet"
+import { useTranslation } from "react-i18next";
 import { Marker, Popup } from "react-leaflet"
 import { IconPinpoint } from "./MarkerIcons"
 
@@ -18,9 +19,12 @@ interface Props {
  * @returns a Leaflet Marker to add to a Map
  */
 export const MarkerPinpoint = (props: Props) => {
+
+    const { t } = useTranslation("main");
+
     return (
         <Marker position={props.position} draggable={false} icon={IconPinpoint}>
-            <Popup>{`Approximate position for ${props.streetName}`}</Popup>
+            <Popup>{t("MarkerPinpoint.textPinpointPrefix") + " " + props.streetName + "."}</Popup>
         </Marker>
     )
 }

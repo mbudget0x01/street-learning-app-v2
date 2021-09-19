@@ -14,5 +14,12 @@
     },
     "ProgressList": {
         "header": "Questions"
+    },
+    "MarkerGuess": {
+        "textUndefined": "No question loaded",
+        "textStreetPrefix": "Your guess for:"
+    },
+    "MarkerPinpoint": {
+        "textPinpointPrefix": "Approximate position for"
     }
 }
